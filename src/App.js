@@ -48,7 +48,7 @@ function App() {
     useEffect(() => {
         window.localStorage.setItem("loggedIn", loggedIn);
     }, [loggedIn]);
-
+    console.log(process.env.PUBLIC_URL);
     return (
         <div className="app">
             <Router basename={process.env.PUBLIC_URL}>

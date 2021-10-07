@@ -1,0 +1,161 @@
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import buttonStyles from "../../Modules/Button.module.css";
+import tableStyles from "../../Modules/Table.module.css";
+import inputStyles from "../../Modules/Input.module.css";
+import axios from "../../axios.js";
+import catchAxiosError from "../../Util/catchAxiosError.js";
+
+function Design() {
+    const [designs, setDesigns] = useState([]);
+    const [searchedDesigns, setSearchedDesigns] = useState([]);
+    const [load, setLoad] = useState(false);
+
+    const deleteRequest = async (e) => {
+        try {
+            let designno = e;
+            if (
+                window.confirm("Are you sure you want to delete this design?")
+            ) {
+                setLoad(true);
+                await axios
+                    .delete(`/design/${designno}`)
+                    .then(() => {
+                        setLoad(false);
+                        window.location.reload();
+                    })
+                    .catch(catchAxiosError);
+            }
+        } catch (err) {
+            alert(err.message);
+        }
+    };
+
+    useEffect(() => {
+        try {
+            document.title = "Design";
+            document.addEventListener("wheel", function (event) {
+                if (document.activeElement.type === "number")
+                    document.activeElement.blur();
+            });
+            setLoad(true);
+            axios
+                .get(`/design/`)
+                .then(({ data }) => {
+                    setLoad(false);
+                    setDesigns(data);
+                    setSearchedDesigns(data);
+                })
+                .catch(catchAxiosError);
+        } catch (err) {
+            alert(err.message);
+        }
+    }, []);
+
+    const onSearchChange = (e) => {
+        let str = e.target.value;
+        str = str.toUpperCase();
+        let tempDesigns = [];
+        designs.map((design) => {
+            if (
+                design.designno.includes(str) ||
+                design.qualityname.includes(str)
+            )
+                tempDesigns.push(design);
+        });
+        setSearchedDesigns([...tempDesigns]);
+    };
+
+    return (
+        <div className="margin">
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    margin: "10px auto",
+                    minWidth: "30%",
+                }}
+            >
+                <input
+                    type="text"
+                    onChange={onSearchChange}
+                    className={inputStyles.textInput}
+                    placeholder="Search Design"
+                    autoFocus
+                />
+                <Link to="/design/add">
+                    <button type="button" className={buttonStyles.inputbutton}>
+                        Add new Design
+                    </button>
+                </Link>
+            </div>
+            {load && <div>Loading...</div>}
+            {!load && (
+                <table border="1" className={tableStyles.table}>
+                    <tbody>
+                        <tr>
+                            <th>Design No</th>
+                            <th>Quality</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        {searchedDesigns.length === 0 && (
+                            <tr className={tableStyles.notfound}>
+                                <td colSpan="4">No Design Found yet</td>
+                            </tr>
+                        )}
+                        {searchedDesigns.length !== 0 &&
+                            searchedDesigns.map((design) => {
+                                return (
+                                    <tr key={design.designno}>
+                                        <td>{design.designno}</td>
+                                        <td>{design.qualityname}</td>
+                                        <td className={tableStyles.tableButton}>
+                                            <Link
+                                                style={{ color: "white" }}
+                                                to={{
+                                                    pathname: "/design/detail",
+                                                    state: {
+                                                        designno:
+                                                            design.designno,
+                                                    },
+                                                }}
+                                            >
+                                                Details
+                                            </Link>
+                                        </td>
+                                        <td
+                                            className={tableStyles.tableButton}
+                                            onClick={() => {
+                                                deleteRequest(design.designno);
+                                            }}
+                                        >
+                                            Delete
+                                        </td>
+                                        <td className={tableStyles.tableButton}>
+                                            <Link
+                                                style={{ color: "white" }}
+                                                to={{
+                                                    pathname: "/design/update",
+                                                    state: {
+                                                        designno:
+                                                            design.designno,
+                                                    },
+                                                }}
+                                            >
+                                                Update
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                    </tbody>
+                </table>
+            )}{" "}
+        </div>
+    );
+}
+
+export default Design;

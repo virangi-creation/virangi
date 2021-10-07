@@ -1,0 +1,25 @@
+.row1 {
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding: 20px;
+}
+
+.row2 {
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: space-between;
+
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+legend {
+    margin: auto;
+}
+
+article {
+    width: fit-content;
+    margin: 0px auto;
+}

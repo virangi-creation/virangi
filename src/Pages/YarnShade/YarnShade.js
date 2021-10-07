@@ -1,0 +1,176 @@
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import buttonStyles from "../../Modules/Button.module.css";
+import tableStyles from "../../Modules/Table.module.css";
+import inputStyles from "../../Modules/Input.module.css";
+import axios from "../../axios.js";
+import catchAxiosError from "../../Util/catchAxiosError.js";
+
+function YarnShade() {
+    const [yarnshades, setYarnShades] = useState([]);
+    const [searchedShades, setSearchedShades] = useState([]);
+    const [load, setLoad] = useState(false);
+
+    const deleteRequest = (shadeno, colour, partyid, qualityid) => {
+        try {
+            if (window.confirm("Are you sure you want to delete this shade?")) {
+                setLoad(true);
+                axios
+                    .delete(`/yarnshade`, {
+                        data: {
+                            shadeno,
+                            colour,
+                            partyid,
+                            qualityid,
+                        },
+                    })
+                    .then(() => {
+                        setLoad(false);
+                        window.location.reload();
+                    })
+                    .catch(catchAxiosError);
+            }
+        } catch (err) {
+            alert(err.message);
+        }
+    };
+
+    useEffect(() => {
+        try {
+            let date = new Date();
+            let strDate = date.toLocaleString().substr(0, 10);
+            document.title = "Yarn Shade " + strDate;
+            document.addEventListener("wheel", function (event) {
+                if (document.activeElement.type === "number")
+                    document.activeElement.blur();
+            });
+            setLoad(true);
+            axios
+                .get(`/yarnshade`)
+                .then(({ data }) => {
+                    setSearchedShades(data);
+                    setYarnShades(data);
+                    setLoad(false);
+                })
+                .catch(catchAxiosError);
+        } catch (err) {
+            alert(err.message);
+        }
+    }, []);
+
+    const onSearchChange = (e) => {
+        let str = e.target.value;
+        str = str.toUpperCase();
+        let tempShades = [];
+        yarnshades.map((shade) => {
+            if (
+                shade.colour.includes(str) ||
+                shade.shadeno.includes(str) ||
+                shade.qualityname.includes(str) ||
+                shade.partyname.includes(str)
+            )
+                tempShades.push(shade);
+        });
+        setSearchedShades([...tempShades]);
+    };
+
+    return (
+        <div className="margin">
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    margin: "10px auto",
+                    minWidth: "30%",
+                }}
+            >
+                <input
+                    type="text"
+                    onChange={onSearchChange}
+                    className={inputStyles.textInput}
+                    placeholder="Search Yarn Shade"
+                    autoFocus
+                />
+                <Link to="/yarnshade/add">
+                    <button className={buttonStyles.inputbutton}>
+                        Add new Yarn Shade
+                    </button>
+                </Link>
+            </div>
+            {load && <div>Loading...</div>}
+            {!load && (
+                <table border="1" className={tableStyles.table}>
+                    <tbody>
+                        <tr>
+                            <th>Quality</th>
+                            <th>Shade No</th>
+                            <th>Colour</th>
+                            <th>Company</th>
+                            <th>Virtual Stock</th>
+                            <th>Actual Stock</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        {searchedShades.length === 0 && (
+                            <tr className={tableStyles.notfound}>
+                                <td colSpan="8">No Yarn Shade Found yet</td>
+                            </tr>
+                        )}
+                        {searchedShades.length !== 0 &&
+                            searchedShades.map((shade) => {
+                                return (
+                                    <tr
+                                        key={`${shade.shadeno}${shade.qualityname}${shade.partyname}`}
+                                    >
+                                        <td>{shade.qualityname}</td>
+                                        <td>{shade.shadeno}</td>
+                                        <td>{shade.colour}</td>
+                                        <td>{shade.partyname}</td>
+                                        <td>{shade.virtualstock}</td>
+                                        <td>{shade.actualstock}</td>
+                                        <td
+                                            className={tableStyles.tableButton}
+                                            onClick={() => {
+                                                deleteRequest(
+                                                    shade.shadeno,
+                                                    shade.colour,
+                                                    shade.partyid,
+                                                    shade.qualityid
+                                                );
+                                            }}
+                                        >
+                                            Delete
+                                        </td>
+                                        <td className={tableStyles.tableButton}>
+                                            <Link
+                                                style={{ color: "white" }}
+                                                to={{
+                                                    pathname:
+                                                        "/yarnshade/update",
+                                                    state: {
+                                                        quality:
+                                                            shade.qualityname,
+                                                        shadeno: shade.shadeno,
+                                                        qualityid:
+                                                            shade.qualityid,
+                                                        colour: shade.colour,
+                                                        partyid: shade.partyid,
+                                                        party: shade.partyname,
+                                                    },
+                                                }}
+                                            >
+                                                Update
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                    </tbody>
+                </table>
+            )}
+        </div>
+    );
+}
+
+export default YarnShade;

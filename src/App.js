@@ -7,7 +7,7 @@ import Bank from "./Pages/Bank/Bank";
 import InputBank from "./Pages/Bank/InputBank";
 import UpdateBank from "./Pages/Bank/UpdateBank";
 import {
-    BrowserRouter as Router,
+    HashRouter as Router,
     Redirect,
     Route,
     Switch,
@@ -51,7 +51,7 @@ function App() {
     console.log(process.env.PUBLIC_URL);
     return (
         <div className="app">
-            <Router basename={process.env.PUBLIC_URL}>
+            <Router>
                 <Switch>
                     <Route path="/quality" exact>
                         <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} />

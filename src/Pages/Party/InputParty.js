@@ -46,7 +46,7 @@ function InputParty() {
     const [agentid, setAgentid] = useState(0);
     // Final Variables
 
-    useEffect(() => {
+    useEffect(async () => {
         document.title = "Input Party";
         document.addEventListener("wheel", function (event) {
             if (document.activeElement.type === "number") {
@@ -54,11 +54,17 @@ function InputParty() {
             }
         });
         setLoad(true);
-        axios.get("/party/add").then(({ data }) => {
-            setAgents(data.agents);
-            setBanks(data.banks);
-            setLoad(false);
-        });
+        await axios
+            .get("/party/add")
+            .then(({ data }) => {
+                setAgents(data.agents);
+                setBanks(data.banks);
+                setLoad(false);
+            })
+            .catch((err) => {
+                setLoad(false);
+                catchAxiosError(err);
+            });
     }, []);
 
     const handleFocus = (event) => {
@@ -68,7 +74,7 @@ function InputParty() {
     const onSubmitEvent = async () => {
         try {
             setLoad(true);
-            axios
+            await axios
                 .post(`/party/`, {
                     partyname,
                     partytype,
@@ -99,7 +105,10 @@ function InputParty() {
                     setLoad(false);
                     history.push("/party");
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             console.log(err);
             alert(err.message);

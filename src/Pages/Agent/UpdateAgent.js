@@ -22,13 +22,13 @@ const UpdateAgent = () => {
     const [address, setAddress] = useState(-1);
     const history = useHistory();
 
-    useEffect(() => {
+    useEffect(async () => {
         try {
             document.title = "Add Agent";
             if (location.state) {
                 setAgentid(location.state.agentid);
                 setLoad(true);
-                axios
+                await axios
                     .get(`/agent/${location.state.agentid}`)
                     .then(({ data }) => {
                         let a = data[0];
@@ -43,6 +43,10 @@ const UpdateAgent = () => {
                         setPincode(a.pincode);
                         setAddress(a.address);
                         setLoad(false);
+                    })
+                    .catch((err) => {
+                        setLoad(false);
+                        catchAxiosError(err);
                     });
             }
         } catch (err) {
@@ -54,8 +58,7 @@ const UpdateAgent = () => {
     const onSubmitEvent = async () => {
         try {
             setLoad(true);
-
-            axios
+            await axios
                 .put("/agent/", {
                     agentid,
                     agentname,
@@ -73,7 +76,10 @@ const UpdateAgent = () => {
                     setLoad(false);
                     history.push(`/agent`);
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             alert(err.message);
         }

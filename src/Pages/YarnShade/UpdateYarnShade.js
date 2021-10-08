@@ -22,7 +22,7 @@ function UpdateYarnShade() {
     const [qualities, setQualities] = useState([]);
     // Final Variables
 
-    useEffect(() => {
+    useEffect(async () => {
         try {
             if (location.state) {
                 setQuality(location.state.quality);
@@ -39,14 +39,17 @@ function UpdateYarnShade() {
                     document.activeElement.blur();
                 }
             });
-            axios
+            await axios
                 .get(`/yarnshade/${shadeno}/update`)
                 .then(({ data }) => {
                     setParties(data.party);
                     setQualities(data.quality);
                     setLoad(false);
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             alert(err.message);
         }
@@ -59,7 +62,7 @@ function UpdateYarnShade() {
     const onSubmitEvent = async () => {
         try {
             setLoad(true);
-            axios
+            await axios
                 .put(`/yarnshade/`, {
                     shadeno: shadeno,
                     qualityid: qualityid,
@@ -74,7 +77,10 @@ function UpdateYarnShade() {
                     setLoad(false);
                     history.push("/yarnshade");
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             alert(err.message);
         }

@@ -17,7 +17,7 @@ function InputYarnShade() {
     // Final Variables
     const [load, setLoad] = useState(false);
 
-    useEffect(() => {
+    useEffect(async () => {
         try {
             setLoad(true);
             document.title = "Input Yarn Shade";
@@ -25,14 +25,17 @@ function InputYarnShade() {
                 if (document.activeElement.type === "number")
                     document.activeElement.blur();
             });
-            axios
+            await axios
                 .get(`/yarnshade/add`)
                 .then(({ data }) => {
                     setParties(data.party);
                     setQualities(data.quality);
                     setLoad(false);
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             alert(err.message);
         }
@@ -45,7 +48,7 @@ function InputYarnShade() {
     const onSubmitEvent = async () => {
         try {
             setLoad(true);
-            axios
+            await axios
                 .post(`/yarnshade/`, {
                     shadeno: shadeno,
                     qualityid: qualityid,
@@ -56,7 +59,10 @@ function InputYarnShade() {
                     setLoad(false);
                     history.push("/yarnshade");
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             alert(err.message);
         }

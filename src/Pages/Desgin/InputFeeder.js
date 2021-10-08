@@ -3,7 +3,7 @@ const InputFeeder = ({
     setFeeder,
     role,
     length,
-    weftwastage,
+    // weftwastage,
     rs,
     yarnQualities,
     captureEnter,
@@ -11,9 +11,13 @@ const InputFeeder = ({
 }) => {
     const onUpdateYarnQuality = (e) => {
         let q = e.target.value;
+        setFeeder((prevState) => ({
+            ...prevState,
+            yarnqualityname: q,
+        }));
         yarnQualities.map((quality) => {
             if (quality.qualityname === q) {
-                let tempAvgPick = feeder.pick / (length * 39.37);
+                let tempAvgPick = feeder.designpick / (length * 39.37);
                 let tempWeight = (tempAvgPick * rs * quality.denier) / 90000;
                 let tempAmount = tempWeight * quality.totalprice;
                 setFeeder((prevState) => ({
@@ -29,7 +33,7 @@ const InputFeeder = ({
                         : parseFloat(tempAmount.toFixed(2)),
                     yarnqualityid: quality.qualityid,
                     denier: quality.denier,
-                    rate: quality.totalprice,
+                    yarnprice: quality.totalprice,
                 }));
             }
         });
@@ -38,17 +42,17 @@ const InputFeeder = ({
     const updateRate = (e) => {
         setFeeder((prevState) => ({
             ...prevState,
-            rate: e.target.value,
+            yarnprice: e.target.value,
             amount: (e.target.value * feeder.weight).toFixed(2),
         }));
     };
     const updatePick = (e) => {
         let tempAvgPick = e.target.value / (length * 39.37);
         let tempWeight = (tempAvgPick * rs * feeder.denier) / 90000;
-        let tempAmount = tempWeight * feeder.rate;
+        let tempAmount = tempWeight * feeder.yarnprice;
         setFeeder((prevState) => ({
             ...prevState,
-            pick: e.target.value,
+            designpick: e.target.value,
             averagepick: isNaN(tempAvgPick)
                 ? 0
                 : parseFloat(tempAvgPick.toFixed(3)),
@@ -63,17 +67,20 @@ const InputFeeder = ({
             <td>
                 <input
                     type="text"
-                    list={`${role}yarnquality`}
+                    id={`${role}yarnquality`}
+                    list={`${role}yarnqualitylist`}
+                    value={feeder.yarnqualityname}
                     onChange={onUpdateYarnQuality}
                     autoCapitalize
+                    onFocus={handleFocus}
                     placeholder="Yarn Quality"
                     onKeyDown={captureEnter}
                 />
-                <datalist id={`${role}yarnquality`}>
+                <datalist id={`${role}yarnqualitylist`}>
                     {yarnQualities.length > 0 &&
-                        yarnQualities.map((quality, key) => (
-                            <option value={quality.qualityname} />
-                        ))}
+                        yarnQualities.map((quality) => {
+                            return <option value={quality.qualityname} />;
+                        })}
                 </datalist>
             </td>
             <td>{feeder.denier}</td>
@@ -82,7 +89,7 @@ const InputFeeder = ({
                     type="number"
                     placeholder="Pick"
                     count="0.01"
-                    value={feeder.pick}
+                    value={feeder.designpick}
                     onChange={updatePick}
                     onKeyDown={captureEnter}
                     onFocus={handleFocus}
@@ -95,7 +102,7 @@ const InputFeeder = ({
                     type="number"
                     placeholder="Rate"
                     count="0.01"
-                    value={feeder.rate}
+                    value={feeder.yarnprice}
                     onChange={updateRate}
                     onKeyDown={captureEnter}
                     onFocus={handleFocus}

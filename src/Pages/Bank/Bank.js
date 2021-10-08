@@ -22,14 +22,17 @@ function Bank() {
                         setLoad(false);
                         window.location.reload();
                     })
-                    .catch(catchAxiosError);
+                    .catch((err) => {
+                        setLoad(false);
+                        catchAxiosError(err);
+                    });
             }
         } catch (err) {
             alert(err.message);
         }
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         try {
             let date = new Date();
             let strDate = date.toLocaleString().substr(0, 10);
@@ -39,14 +42,17 @@ function Bank() {
                     document.activeElement.blur();
             });
             setLoad(true);
-            axios
+            await axios
                 .get(`/bank/`)
                 .then((res) => {
                     setLoad(false);
                     setBanks(res.data);
                     setSearchedBanks(res.data);
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             alert(err.message);
         }

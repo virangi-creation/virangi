@@ -24,14 +24,17 @@ function Design() {
                         setLoad(false);
                         window.location.reload();
                     })
-                    .catch(catchAxiosError);
+                    .catch((err) => {
+                        setLoad(false);
+                        catchAxiosError(err);
+                    });
             }
         } catch (err) {
             alert(err.message);
         }
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         try {
             document.title = "Design";
             document.addEventListener("wheel", function (event) {
@@ -39,14 +42,17 @@ function Design() {
                     document.activeElement.blur();
             });
             setLoad(true);
-            axios
+            await axios
                 .get(`/design/`)
                 .then(({ data }) => {
                     setLoad(false);
                     setDesigns(data);
                     setSearchedDesigns(data);
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             alert(err.message);
         }

@@ -11,7 +11,7 @@ function YarnQuality() {
     const [searchedQualities, setSearchedQualities] = useState([]);
     const [load, setLoad] = useState(false);
 
-    const deleteRequest = (e) => {
+    const deleteRequest = async (e) => {
         try {
             let qualityid = e;
             if (
@@ -20,20 +20,23 @@ function YarnQuality() {
                 )
             ) {
                 setLoad(true);
-                axios
+                await axios
                     .delete(`/yarnquality/${qualityid}`)
                     .then(() => {
                         setLoad(false);
                         window.location.reload();
                     })
-                    .catch(catchAxiosError);
+                    .catch((err) => {
+                        setLoad(false);
+                        catchAxiosError(err);
+                    });
             }
         } catch (err) {
             alert(err.message);
         }
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         try {
             let date = new Date();
             let strDate = date.toLocaleString().substr(0, 10);
@@ -42,13 +45,16 @@ function YarnQuality() {
                 if (document.activeElement.type === "number")
                     document.activeElement.blur();
             });
-            axios
+            await axios
                 .get(`/yarnquality/`)
                 .then(({ data }) => {
                     setSearchedQualities(data);
                     setYarnQualities(data);
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             alert(err.message);
         }

@@ -10,8 +10,6 @@ function Login({ setLoggedIn, loggedIn, validateLogin }) {
         validateLogin(emailAddress, password);
     };
 
-    console.log();
-
     return (
         <article>
             <main>

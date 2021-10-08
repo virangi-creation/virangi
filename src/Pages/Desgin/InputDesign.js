@@ -73,18 +73,24 @@ function InputDesign() {
 
     // Final Variables
 
-    useEffect(() => {
+    useEffect(async () => {
         document.title = "Input Design";
         document.addEventListener("wheel", function (event) {
             if (document.activeElement.type === "number")
                 document.activeElement.blur();
         });
         setLoad(true);
-        axios.get("/design/add").then(({ data }) => {
-            setYarnQualities(data.yarnQualities);
-            setQualities(data.qualities);
-            setLoad(false);
-        });
+        await axios
+            .get("/design/add")
+            .then(({ data }) => {
+                setYarnQualities(data.yarnQualities);
+                setQualities(data.qualities);
+                setLoad(false);
+            })
+            .catch((err) => {
+                setLoad(false);
+                catchAxiosError(err);
+            });
     }, []);
 
     const handleFocus = (event) => {
@@ -94,7 +100,7 @@ function InputDesign() {
     const onSubmitEvent = async () => {
         try {
             setLoad(true);
-            axios
+            await axios
                 .post(`/design/`, {
                     qualityid,
                     designno,
@@ -129,7 +135,10 @@ function InputDesign() {
                     setLoad(false);
                     history.push("/design");
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             console.log(err);
             alert(err.message);
@@ -150,9 +159,7 @@ function InputDesign() {
         qualities.map((quality) => {
             if (quality.qualityname === q) {
                 setQuality(quality);
-                console.log(quality.qualityid, quality);
                 setQualityid(quality.qualityid);
-                console.log(quality.qualityid);
                 setAgentCharge(
                     parseFloat(quality.agentcharge ? quality.agentcharge : 0)
                 );
@@ -248,8 +255,6 @@ function InputDesign() {
     useEffect(() => {
         if (isNaN(rs)) setRS(0);
     }, [rs]);
-
-    console.log("HEllo");
 
     useEffect(() => {
         feeders.map((feedername, index) => {

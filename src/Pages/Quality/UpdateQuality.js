@@ -4,6 +4,7 @@ import buttonStyles from "../../Modules/Button.module.css";
 import axios from "../../axios.js";
 import catchAxiosError from "../../Util/catchAxiosError";
 import InputWarp from "./InputWarp.js";
+import InputFeeder from "../Desgin/InputFeeder";
 
 function UpdateQuality() {
     let history = useHistory();
@@ -30,13 +31,33 @@ function UpdateQuality() {
         yarncost: 0,
     };
 
-    const [qualityid] = useState(location.state.qualityid);
+    const [qualityid, setQualityid] = useState();
+    let feederTemplate = {
+        feederid: 1,
+        yarnqualityid: 1,
+        yarnqualityname: "",
+        designpick: 0,
+        averagepick: 0,
+        weftwastage: 0,
+        weight: 0,
+        amount: 0,
+    };
+    const [feeder1, setFeeder1] = useState(feederTemplate);
+    const [feeder2, setFeeder2] = useState(feederTemplate);
+    const [feeder3, setFeeder3] = useState(feederTemplate);
+    const [feeder4, setFeeder4] = useState(feederTemplate);
+    const [feeder5, setFeeder5] = useState(feederTemplate);
+    const [feeder6, setFeeder6] = useState(feederTemplate);
+    const [feeder7, setFeeder7] = useState(feederTemplate);
+    const [feeder8, setFeeder8] = useState(feederTemplate);
+
     const [qualityname, setQualityname] = useState("");
     const [jobcharge, setJobcharge] = useState(0);
     const [bodywarp, setBodywarp] = useState(templateWarpObject);
     const [borderwarp, setBorderwarp] = useState(templateWarpObject);
     const [topwarp, setTopwarp] = useState(templateWarpObject);
     const [pickonloom, setPickonloom] = useState(0);
+    const [rs, setRS] = useState(0);
     const [buttacharge, setButtacharge] = useState(0);
     const [lasercharge, setLasercharge] = useState(0);
     const [designcharge, setDesigncharge] = useState(0);
@@ -49,99 +70,110 @@ function UpdateQuality() {
     const [length, setLength] = useState(0);
     const [weftwastage, setWeftWastage] = useState(0);
 
+    const [feeders] = useState([
+        ["feeder1", "setFeeder1"],
+        ["feeder2", "setFeeder2"],
+        ["feeder3", "setFeeder3"],
+        ["feeder4", "setFeeder4"],
+        ["feeder5", "setFeeder5"],
+        ["feeder6", "setFeeder6"],
+        ["feeder7", "setFeeder7"],
+        ["feeder8", "setFeeder8"],
+    ]);
+
     const [yarnQualities, setYarnqualities] = useState([]);
 
     useEffect(() => {
-        try {
-            setLoad(true);
-            axios
-                .get(`/quality/${qualityid}/update`)
-                .then(async ({ data }) => {
-                    console.log(data);
-                    setYarnqualities(data.yarnQualities);
-                    let quality = data.quality[0];
-                    setQualityname(quality.qualityname);
-                    setJobcharge(quality.jobcharge);
-                    setBodywarp({
-                        warpid: quality.bodywarpid,
-                        warpqualityid: quality.bodywarpqualityid,
-                        yarnprice: quality.bodyyarnprice,
-                        denier: quality.bodydenier,
-                        warplength: quality.bodywarplength,
-                        warpshortage: quality.bodywarpshortage,
-                        totalwarplength: quality.bodytotalwarplength,
-                        ends: quality.bodyends,
-                        reed: quality.bodyreed,
-                        endsperden: quality.bodyendsperden,
-                        selvedgeden: quality.bodyselvedgeden,
-                        selvedgeendsperden: quality.bodyselvedgeden,
-                        rs: quality.bodyrs,
-                        warpweight: quality.bodywarpweight,
-                        warpwastage: quality.bodywarpwastage,
-                        totalweight: quality.bodytotalweight,
-                        yarncost: quality.bodyyarncost,
-                    });
-                    setBorderwarp({
-                        warpid: quality.borderwarpid,
-                        warpqualityid: quality.borderwarpqualityid,
-                        yarnprice: quality.borderyarnprice,
-                        denier: quality.borderdenier,
-                        warplength: quality.borderwarplength,
-                        warpshortage: quality.borderwarpshortage,
-                        totalwarplength: quality.bordertotalwarplength,
-                        ends: quality.borderends,
-                        reed: quality.borderreed,
-                        endsperden: quality.borderendsperden,
-                        selvedgeden: quality.borderselvedgeden,
-                        selvedgeendsperden: quality.borderselvedgeden,
-                        rs: quality.borderrs,
-                        warpweight: quality.borderwarpweight,
-                        warpwastage: quality.borderwarpwastage,
-                        totalweight: quality.bordertotalweight,
-                        yarncost: quality.borderyarncost,
-                    });
-                    setTopwarp({
-                        warpid: quality.topbeamid,
-                        warpqualityid: quality.topbeamwarpqualityid,
-                        yarnprice: quality.topbeamyarnprice,
-                        denier: quality.topbeamdenier,
-                        warplength: quality.topbeamwarplength,
-                        warpshortage: quality.topbeamwarpshortage,
-                        totalwarplength: quality.topbeamtotalwarplength,
-                        ends: quality.topbeamends,
-                        reed: quality.topbeamreed,
-                        endsperden: quality.topbeamendsperden,
-                        selvedgeden: quality.topbeamselvedgeden,
-                        selvedgeendsperden: quality.topbeamselvedgeden,
-                        rs: quality.topbeamrs,
-                        warpweight: quality.topbeamwarpweight,
-                        warpwastage: quality.topbeamwarpwastage,
-                        totalweight: quality.topbeamtotalweight,
-                        yarncost: quality.topbeamyarncost,
-                    });
-                    setPickonloom(quality.pickonloom);
-                    setButtacharge(quality.buttacharge);
-                    setLasercharge(quality.lasercharge);
-                    setDesigncharge(quality.designcharge);
-                    setFinishingcharge(quality.finishingcharge);
-                    setPackingcharge(quality.packingcharge);
-                    setAgentcharge(quality.agentcharge);
-                    setDyeingCharge(quality.dyeingcharge);
-                    setMarketMargin(quality.marketmargin);
-                    setDiscount(quality.discount);
-                    setLength(quality.length);
-                    setWeftWastage(quality.weftwastage);
-                    setLoad(false);
+        feeders.map((feedername) => {
+            let feeder = eval(feedername[0]);
+            let setFeeder = eval(feedername[1]);
+            let tempAvgPick = feeder.designpick / (length * 39.37);
+            let tempWeight = (tempAvgPick * rs * feeder.denier) / 90000;
+            let tempAmount = tempWeight * feeder.yarnprice;
+            setFeeder((prevState) => ({
+                ...prevState,
+                averagepick: isNaN(tempAvgPick)
+                    ? 0
+                    : parseFloat(tempAvgPick).toFixed(2),
+                weight: isNaN(tempWeight)
+                    ? 0
+                    : parseFloat(tempWeight).toFixed(3),
+                amount: isNaN(tempAmount)
+                    ? 0
+                    : parseFloat(tempAmount).toFixed(2),
+            }));
+        });
+    }, [length, weftwastage]);
 
-                    firstRender.current = false;
-                })
-                .catch(catchAxiosError);
-            document.title = "Update Quality";
-            document.addEventListener("wheel", function (event) {
-                if (document.activeElement.type === "number") {
-                    document.activeElement.blur();
-                }
-            });
+    useEffect(() => {
+        let tempRS =
+            parseFloat(bodywarp.rs) +
+            (bodywarp.rs ? parseFloat(bodywarp.rs) : 0) +
+            2;
+        setRS(isNaN(tempRS) ? 0 : tempRS);
+    }, []);
+
+    useEffect(async () => {
+        try {
+            if (location.state) {
+                setQualityid(location.state.qualityid);
+                console.log(`/quality/${location.state.qualityid}/update`);
+                setLoad(true);
+                await axios
+                    .get(`/quality/${location.state.qualityid}/update`)
+                    .then(async ({ data }) => {
+                        console.log(data);
+                        setYarnqualities(data.yarnQualities);
+                        let quality = data.quality;
+                        setQualityname(quality.qualityname);
+                        setJobcharge(quality.jobcharge);
+                        setBodywarp(data.bodywarp);
+                        setBorderwarp(data.borderwarp);
+                        setTopwarp(data.topbeam);
+                        setPickonloom(quality.pickonloom);
+                        setButtacharge(quality.buttacharge);
+                        setLasercharge(quality.lasercharge);
+                        setDesigncharge(quality.designcharge);
+                        setFinishingcharge(quality.finishingcharge);
+                        setPackingcharge(quality.packingcharge);
+                        setAgentcharge(quality.agentcharge);
+                        setDyeingCharge(quality.dyeingcharge);
+                        setMarketMargin(quality.marketmargin);
+                        setDiscount(quality.discount);
+                        setLength(quality.length);
+                        setWeftWastage(quality.weftwastage);
+                        setFeeder1(data.feeder1);
+                        setFeeder2(data.feeder2);
+                        setFeeder3(data.feeder3);
+                        setFeeder4(data.feeder4);
+                        setFeeder5(data.feeder5);
+                        setFeeder6(data.feeder6);
+                        setFeeder7(data.feeder7);
+                        setFeeder8(data.feeder8);
+                        // console.log(feeder1);
+                        // console.log(feeder2);
+                        // console.log(feeder3);
+                        // console.log(feeder4);
+                        // console.log(feeder5);
+                        // console.log(feeder6);
+                        // console.log(feeder7);
+                        // console.log(feeder8);
+
+                        setLoad(false);
+
+                        firstRender.current = false;
+                    })
+                    .catch((err) => {
+                        setLoad(false);
+                        catchAxiosError(err);
+                    });
+                document.title = "Update Quality";
+                document.addEventListener("wheel", function (event) {
+                    if (document.activeElement.type === "number") {
+                        document.activeElement.blur();
+                    }
+                });
+            }
         } catch (err) {
             console.log(err);
             alert(err.message);
@@ -149,28 +181,20 @@ function UpdateQuality() {
     }, []);
 
     useEffect(() => {
-        console.log(
-            bodywarp.warpqualityid,
-            borderwarp.warpqualityid,
-            topwarp.warpqualityid
-        );
         yarnQualities.map((yq) => {
             if (yq.qualityid === bodywarp.warpqualityid) {
-                console.log(yq.qualityname);
                 setBodywarp((prevState) => ({
                     ...prevState,
                     warpqualityname: yq.qualityname,
                 }));
             }
             if (yq.qualityid === borderwarp.warpqualityid) {
-                console.log(yq.qualityname);
                 setBorderwarp((prevState) => ({
                     ...prevState,
                     warpqualityname: yq.qualityname,
                 }));
             }
             if (yq.qualityid === topwarp.warpqualityid) {
-                console.log(yq.qualityname);
                 setTopwarp((prevState) => ({
                     ...prevState,
                     warpqualityname: yq.qualityname,
@@ -183,16 +207,53 @@ function UpdateQuality() {
         topwarp.warpqualityid,
     ]);
 
+    useEffect(() => {
+        yarnQualities.map((yq) => {
+            feeders.map((feedername, index) => {
+                let feeder = eval(feedername[0]);
+                if (yq.qualityid === feeder.yarnqualityid) {
+                    let tempSet = eval(feedername[1]);
+                    tempSet((prevState) => {
+                        console.log(prevState);
+                        return {
+                            ...prevState,
+                            yarnqualityname: yq.qualityname,
+                        };
+                    });
+                }
+            });
+        });
+    }, [
+        feeder1.yarnqualityid,
+        feeder2.yarnqualityid,
+        feeder3.yarnqualityid,
+        feeder4.yarnqualityid,
+        feeder5.yarnqualityid,
+        feeder6.yarnqualityid,
+        feeder7.yarnqualityid,
+        feeder8.yarnqualityid,
+    ]);
+
     const onSubmitEvent = async () => {
         try {
             setLoad(true);
-            axios
+            console.log(feeder1);
+            await axios
                 .put(`/quality/`, {
+                    qualityid,
                     qualityname,
                     jobcharge,
                     bodywarp,
                     borderwarp,
                     topbeam: topwarp,
+                    feeder1,
+                    feeder2,
+                    feeder3,
+                    feeder4,
+                    feeder5,
+                    feeder6,
+                    feeder7,
+                    feeder8,
                     pickonloom,
                     buttacharge,
                     lasercharge,
@@ -210,7 +271,10 @@ function UpdateQuality() {
                     setLoad(false);
                     history.push("/quality");
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             console.log(err);
             alert(err.message);
@@ -336,180 +400,222 @@ function UpdateQuality() {
                                 captureEnter={captureEnter}
                                 handleFocus={handleFocus}
                             />
-                            <tr>
-                                <td colSpan="2">Pick on loom</td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Pick on Loom ..."
-                                        value={pickonloom}
-                                        onChange={(e) => {
-                                            setPickonloom(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2">Butta Charge</td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Butta Charge..."
-                                        value={buttacharge}
-                                        onChange={(e) => {
-                                            setButtacharge(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2">Laser Charge</td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Laser Charge..."
-                                        value={lasercharge}
-                                        onChange={(e) => {
-                                            setLasercharge(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2">Design Charge</td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Design Charge..."
-                                        value={designcharge}
-                                        onChange={(e) => {
-                                            setDesigncharge(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2">Finishing Charge</td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Finishing Charge..."
-                                        value={finishingcharge}
-                                        onChange={(e) => {
-                                            setFinishingcharge(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2">Packing Charge</td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Paching Charge..."
-                                        value={packingcharge}
-                                        onChange={(e) => {
-                                            setPackingcharge(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2">Agent Charge</td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter ..."
-                                        value={agentcharge}
-                                        onChange={(e) => {
-                                            setAgentcharge(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2">Dyeing Charge</td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Dyeing Charge..."
-                                        value={dyeingcharge}
-                                        onChange={(e) => {
-                                            setDyeingCharge(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2">Market Margin</td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Market Margin..."
-                                        value={marketmargin}
-                                        onChange={(e) => {
-                                            setMarketMargin(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colSpan="2">Discount</td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Discount..."
-                                        value={discount}
-                                        onChange={(e) => {
-                                            setDiscount(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td colSpan="2">
-                                    <button
-                                        type="button"
-                                        className={buttonStyles.inputbutton}
-                                        onClick={onSubmitEvent}
-                                    >
-                                        Update Quality
-                                    </button>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th width="5%">Sr. No</th>
+                                <th width="15%">Quality</th>
+                                <th width="10%">Denier</th>
+                                <th width="15%">Pick</th>
+                                <th width="15%">Avg. Pick</th>
+                                <th width="10%">Weight</th>
+                                <th width="15%">Rate</th>
+                                <th width="15%">Amount</th>
+                            </tr>
+                            {feeders.map((feeder, index) => (
+                                <InputFeeder
+                                    role={index + 1}
+                                    feeder={eval(feeder[0])}
+                                    length={length}
+                                    rs={rs}
+                                    weftwastage={weftwastage}
+                                    setFeeder={eval(feeder[1])}
+                                    yarnQualities={yarnQualities}
+                                    captureEnter={captureEnter}
+                                    handleFocus={handleFocus}
+                                />
+                            ))}
+                        </tbody>
+                    </table>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <table style={{ marginTop: "50px" }}>
+                            <tbody>
+                                <tr>
+                                    <td colSpan="2">Pick on loom</td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Pick on Loom ..."
+                                            value={pickonloom}
+                                            onChange={(e) => {
+                                                setPickonloom(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan="2">Butta Charge</td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Butta Charge..."
+                                            value={buttacharge}
+                                            onChange={(e) => {
+                                                setButtacharge(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan="2">Laser Charge</td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Laser Charge..."
+                                            value={lasercharge}
+                                            onChange={(e) => {
+                                                setLasercharge(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan="2">Design Charge</td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Design Charge..."
+                                            value={designcharge}
+                                            onChange={(e) => {
+                                                setDesigncharge(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan="2">Finishing Charge</td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Finishing Charge..."
+                                            value={finishingcharge}
+                                            onChange={(e) => {
+                                                setFinishingcharge(
+                                                    e.target.value
+                                                );
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan="2">Packing Charge</td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Paching Charge..."
+                                            value={packingcharge}
+                                            onChange={(e) => {
+                                                setPackingcharge(
+                                                    e.target.value
+                                                );
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan="2">Agent Charge</td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter ..."
+                                            value={agentcharge}
+                                            onChange={(e) => {
+                                                setAgentcharge(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan="2">Dyeing Charge</td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Dyeing Charge..."
+                                            value={dyeingcharge}
+                                            onChange={(e) => {
+                                                setDyeingCharge(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan="2">Market Margin</td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Market Margin..."
+                                            value={marketmargin}
+                                            onChange={(e) => {
+                                                setMarketMargin(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan="2">Discount</td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Discount..."
+                                            value={discount}
+                                            onChange={(e) => {
+                                                setDiscount(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colSpan="2">
+                                        <button
+                                            type="button"
+                                            className={buttonStyles.inputbutton}
+                                            onClick={onSubmitEvent}
+                                        >
+                                            Update Quality
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </form>
             )}
         </div>

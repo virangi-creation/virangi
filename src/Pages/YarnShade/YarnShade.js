@@ -11,11 +11,11 @@ function YarnShade() {
     const [searchedShades, setSearchedShades] = useState([]);
     const [load, setLoad] = useState(false);
 
-    const deleteRequest = (shadeno, colour, partyid, qualityid) => {
+    const deleteRequest = async (shadeno, colour, partyid, qualityid) => {
         try {
             if (window.confirm("Are you sure you want to delete this shade?")) {
                 setLoad(true);
-                axios
+                await axios
                     .delete(`/yarnshade`, {
                         data: {
                             shadeno,
@@ -28,14 +28,17 @@ function YarnShade() {
                         setLoad(false);
                         window.location.reload();
                     })
-                    .catch(catchAxiosError);
+                    .catch((err) => {
+                        setLoad(false);
+                        catchAxiosError(err);
+                    });
             }
         } catch (err) {
             alert(err.message);
         }
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         try {
             let date = new Date();
             let strDate = date.toLocaleString().substr(0, 10);
@@ -45,14 +48,17 @@ function YarnShade() {
                     document.activeElement.blur();
             });
             setLoad(true);
-            axios
+            await axios
                 .get(`/yarnshade`)
                 .then(({ data }) => {
                     setSearchedShades(data);
                     setYarnShades(data);
                     setLoad(false);
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             alert(err.message);
         }

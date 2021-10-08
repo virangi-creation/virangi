@@ -22,14 +22,17 @@ function Party() {
                         setLoad(false);
                         window.location.reload();
                     })
-                    .catch(catchAxiosError);
+                    .catch((err) => {
+                        setLoad(false);
+                        catchAxiosError(err);
+                    });
             }
         } catch (err) {
             alert(err.message);
         }
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         try {
             let date = new Date();
             let strDate = date.toLocaleString().substr(0, 10);
@@ -39,14 +42,17 @@ function Party() {
                     document.activeElement.blur();
             });
             setLoad(true);
-            axios
+            await axios
                 .get(`/party/`)
                 .then((res) => {
                     setParties(res.data);
                     setSearchedParties(res.data);
                     setLoad(false);
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             alert(err.message);
         }

@@ -32,7 +32,7 @@ function InputYarnQuality() {
     const onSubmitEvent = async () => {
         try {
             setLoad(true);
-            axios
+            await axios
                 .post(`/yarnquality/`, {
                     qualityname,
                     denier,
@@ -45,7 +45,10 @@ function InputYarnQuality() {
                     setLoad(false);
                     history.push("/yarnquality");
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             console.log(err);
             alert(err.message);

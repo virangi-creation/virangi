@@ -6,6 +6,7 @@ import Login from "./Pages/Login/Login";
 import Bank from "./Pages/Bank/Bank";
 import InputBank from "./Pages/Bank/InputBank";
 import UpdateBank from "./Pages/Bank/UpdateBank";
+import { createHashHistory } from "history";
 import {
     HashRouter as Router,
     Redirect,
@@ -31,13 +32,15 @@ import Design from "./Pages/Desgin/Design";
 import InputDesign from "./Pages/Desgin/InputDesign";
 
 function App() {
+    const history = createHashHistory();
+
     const [loggedIn, setLoggedIn] = useState(false);
 
     const validateLogin = (emailAddress, password) => {
         if (emailAddress === "admin" && password === "v7c8") {
             setLoggedIn(true);
             window.localStorage.setItem("loggedIn", loggedIn);
-            window.location.href = "/";
+            history.push("/");
         }
     };
 
@@ -48,7 +51,6 @@ function App() {
     useEffect(() => {
         window.localStorage.setItem("loggedIn", loggedIn);
     }, [loggedIn]);
-    console.log(process.env.PUBLIC_URL);
     return (
         <div className="app">
             <Router>

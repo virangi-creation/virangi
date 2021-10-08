@@ -48,7 +48,10 @@ const InputAgent = () => {
                     setLoad(false);
                     history.push(`/agent`);
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             alert(err.message);
         }

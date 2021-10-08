@@ -11,19 +11,22 @@ function Quality() {
     const [searchedQualities, setSearchedQualities] = useState([]);
     const [load, setLoad] = useState(false);
 
-    const deleteRequest = (qualityid) => {
+    const deleteRequest = async (qualityid) => {
         try {
             if (
                 window.confirm("Are you sure you want to delete this Quality?")
             ) {
                 setLoad(true);
-                axios
+                await axios
                     .delete(`/quality/${qualityid}`)
                     .then(() => {
                         window.location.reload();
                         setLoad(false);
                     })
-                    .catch(catchAxiosError);
+                    .catch((err) => {
+                        setLoad(false);
+                        catchAxiosError(err);
+                    });
             }
         } catch (err) {
             console.log(err);
@@ -31,7 +34,7 @@ function Quality() {
         }
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         try {
             let date = new Date();
             let strDate = date.toLocaleString().substr(0, 10);
@@ -41,7 +44,7 @@ function Quality() {
                     document.activeElement.blur();
             });
             setLoad(true);
-            axios
+            await axios
                 .get(`/quality/`)
                 .then(({ data }) => {
                     setLoad(false);
@@ -50,7 +53,10 @@ function Quality() {
                         setQualities(data);
                     }
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             console.log(err);
             alert(err.message);
@@ -100,16 +106,20 @@ function Quality() {
                             <th rowSpan="2"></th>
                             <th rowSpan="2">Quality</th>
                             <th rowSpan="2">Job Charge</th>
+                            <th rowSpan="2">Length</th>
                             <th colSpan="15">Body Warp Details</th>
-                            <th colSpan="15">Border Warp Details</th>
-                            <th colSpan="15">Top Beam Warp Details</th>
+                            <th colSpan="5">Border Warp Details</th>
+                            <th colSpan="5">Top Beam Warp Details</th>
                             <th rowSpan="2">Pick On Loom</th>
-                            <th rowSpan="2">Butta Charge</th>
-                            <th rowSpan="2">Laser Charge</th>
-                            <th rowSpan="2">Design Charge</th>
-                            <th rowSpan="2">Finishing Charge</th>
-                            <th rowSpan="2">Packing Charge</th>
-                            <th rowSpan="2">Agent Charge</th>
+                            <th rowSpan="2">Butta Charge / MTR</th>
+                            <th rowSpan="2">Laser Charge / MTR</th>
+                            <th rowSpan="2">Design Charge / MTR</th>
+                            <th rowSpan="2">Dyeing Charge / MTR</th>
+                            <th rowSpan="2">Finishing Charge / Piece</th>
+                            <th rowSpan="2">Packing Charge / Piece</th>
+                            <th rowSpan="2">Market Margin %</th>
+                            <th rowSpan="2">Discount %</th>
+                            <th rowSpan="2">Agent Charge %</th>
                         </tr>
                         <tr>
                             <th>Warp Yarn Quality</th>
@@ -128,33 +138,13 @@ function Quality() {
                             <th>Total Weight</th>
                             <th>Yarn Cost</th>
                             <th>Warp Yarn Quality</th>
-                            <th>Denier</th>
-                            <th>Length</th>
-                            <th>Shortage</th>
-                            <th>Total Length</th>
                             <th>Ends</th>
                             <th>Reed</th>
-                            <th>Ends Per Den</th>
-                            <th>Selvedge Den</th>
-                            <th>Selvedge Ends per Den</th>
-                            <th>RS</th>
-                            <th>Warp Weight</th>
-                            <th>Warp Wastage</th>
                             <th>Total Weight</th>
                             <th>Yarn Cost</th>
                             <th>Warp Yarn Quality</th>
-                            <th>Denier</th>
-                            <th>Length</th>
-                            <th>Shortage</th>
-                            <th>Total Length</th>
                             <th>Ends</th>
                             <th>Reed</th>
-                            <th>Ends Per Den</th>
-                            <th>Selvedge Den</th>
-                            <th>Selvedge Ends per Den</th>
-                            <th>RS</th>
-                            <th>Warp Weight</th>
-                            <th>Warp Wastage</th>
                             <th>Total Weight</th>
                             <th>Yarn Cost</th>
                         </tr>
@@ -193,6 +183,7 @@ function Quality() {
                                         </td>
                                         <td>{quality.qualityname}</td>
                                         <th>{quality.jobcharge}</th>
+                                        <th>{quality.length}</th>
                                         <td>{quality.bodyqualityname}</td>
                                         <td>{quality.bodydenier}</td>
                                         <td>{quality.bodywarplength}</td>
@@ -202,50 +193,33 @@ function Quality() {
                                         <td>{quality.bodyreed}</td>
                                         <td>{quality.bodyendsperden}</td>
                                         <td>{quality.bodyselvedgeden}</td>
-                                        <td>{quality.bodyselvedgeden}</td>
+                                        <td>
+                                            {quality.bodyselvedgeendsperden}
+                                        </td>
                                         <td>{quality.bodyrs}</td>
                                         <td>{quality.bodywarpweight}</td>
                                         <td>{quality.bodywarpwastage}</td>
                                         <td>{quality.bodytotalweight}</td>
                                         <td>{quality.bodyyarncost}</td>
                                         <td>{quality.borderqualityname}</td>
-                                        <td>{quality.borderdenier}</td>
-                                        <td>{quality.borderwarplength}</td>
-                                        <td>{quality.borderwarpshortage}</td>
-                                        <td>{quality.bordertotalwarplength}</td>
                                         <td>{quality.borderends}</td>
                                         <td>{quality.borderreed}</td>
-                                        <td>{quality.borderendsperden}</td>
-                                        <td>{quality.borderselvedgeden}</td>
-                                        <td>{quality.borderselvedgeden}</td>
-                                        <td>{quality.borderrs}</td>
-                                        <td>{quality.borderwarpweight}</td>
-                                        <td>{quality.borderwarpwastage}</td>
                                         <td>{quality.bordertotalweight}</td>
                                         <td>{quality.borderyarncost}</td>
                                         <td>{quality.topbeamqualityname}</td>
-                                        <td>{quality.topbeamdenier}</td>
-                                        <td>{quality.topbeamwarplength}</td>
-                                        <td>{quality.topbeamwarpshortage}</td>
-                                        <td>
-                                            {quality.topbeamtotalwarplength}
-                                        </td>
                                         <td>{quality.topbeamends}</td>
                                         <td>{quality.topbeamreed}</td>
-                                        <td>{quality.topbeamendsperden}</td>
-                                        <td>{quality.topbeamselvedgeden}</td>
-                                        <td>{quality.topbeamselvedgeden}</td>
-                                        <td>{quality.topbeamrs}</td>
-                                        <td>{quality.topbeamwarpweight}</td>
-                                        <td>{quality.topbeamwarpwastage}</td>
                                         <td>{quality.topbeamtotalweight}</td>
                                         <td>{quality.topbeamyarncost}</td>
                                         <td>{quality.pickonloom}</td>
                                         <td>{quality.buttacharge}</td>
                                         <td>{quality.lasercharge}</td>
                                         <td>{quality.designcharge}</td>
+                                        <td>{quality.dyeingcharge}</td>
                                         <td>{quality.finishingcharge}</td>
                                         <td>{quality.packingcharge}</td>
+                                        <td>{quality.marketmargin}</td>
+                                        <td>{quality.discount}</td>
                                         <td>{quality.agentcharge}</td>
                                     </tr>
                                 );

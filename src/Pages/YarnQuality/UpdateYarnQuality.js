@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router";
 import buttonStyles from "../../Modules/Button.module.css";
 import catchError from "../../Util/catchAxiosError.js";
+import catchAxiosError from "../../Util/catchAxiosError.js";
 
 function UpdateYarnQuality() {
     let history = useHistory();
@@ -21,7 +22,6 @@ function UpdateYarnQuality() {
         try {
             document.title = "Update Yarn Quality";
             if (location.state) {
-                console.log(location.state);
                 setQualityid(location.state.qualityid);
                 setQualityname(location.state.qualityname);
                 setDenier(location.state.denier);
@@ -41,7 +41,7 @@ function UpdateYarnQuality() {
 
     const onSubmitEvent = async () => {
         setLoad(true);
-        axios
+        await axios
             .put(`/yarnquality/${qualityid}`, {
                 qualityid,
                 qualityname,
@@ -55,7 +55,10 @@ function UpdateYarnQuality() {
                 setLoad(false);
                 history.push("/yarnquality");
             })
-            .catch(catchError);
+            .catch((err) => {
+                setLoad(false);
+                catchAxiosError(err);
+            });
     };
 
     function captureEnter(event) {

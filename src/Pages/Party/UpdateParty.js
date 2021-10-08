@@ -52,7 +52,7 @@ function UpdateParty() {
     const [tempagentname, setTempagentname] = useState("");
     const [tempbankname, setTempbankname] = useState("");
 
-    useEffect(() => {
+    useEffect(async () => {
         try {
             document.title = "Update Party";
             document.addEventListener("wheel", function (event) {
@@ -65,7 +65,7 @@ function UpdateParty() {
                 setTempagentname(location.state.agentname);
                 setTempbankname(location.state.bankname);
                 setLoad(true);
-                axios
+                await axios
                     .get(`/party/${location.state.partyid}/update`)
                     .then(({ data }) => {
                         setAgents(data.agents);
@@ -96,6 +96,10 @@ function UpdateParty() {
                         setDApincode(p.dapincode);
                         setAgentid(p.agentid);
                         setLoad(false);
+                    })
+                    .catch((err) => {
+                        setLoad(false);
+                        catchAxiosError(err);
                     });
             }
         } catch (err) {
@@ -111,7 +115,7 @@ function UpdateParty() {
     const onSubmitEvent = async () => {
         try {
             setLoad(true);
-            axios
+            await axios
                 .put(`/party/${partyid}`, {
                     partyid,
                     partyname,
@@ -143,7 +147,10 @@ function UpdateParty() {
                     history.push("/party");
                     setLoad(false);
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             console.log(err);
             alert(err.message);

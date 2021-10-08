@@ -16,7 +16,7 @@ function InputBank() {
     const onSubmitEvent = async () => {
         try {
             setLoad(true);
-            axios
+            await axios
                 .post("/bank/", {
                     bankName: bankName,
                 })
@@ -24,7 +24,10 @@ function InputBank() {
                     setLoad(false);
                     history.push(`/bank`);
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             alert(err.message);
         }

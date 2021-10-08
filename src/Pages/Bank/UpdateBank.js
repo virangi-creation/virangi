@@ -12,17 +12,20 @@ function UpdateBank() {
     const [load, setLoad] = useState(false);
     const [bankid] = useState(location.state.bankid);
 
-    useEffect(() => {
+    useEffect(async () => {
         try {
             setLoad(true);
             document.title = "Update Bank";
-            axios
+            await axios
                 .get(`/bank/${bankid}`)
                 .then((res) => {
                     setLoad(false);
                     setBankName(res.data[0].bankname);
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             alert(err.message);
         }
@@ -30,7 +33,7 @@ function UpdateBank() {
 
     const onSubmitEvent = async () => {
         try {
-            axios
+            await axios
                 .put(`/bank/${bankid}`, {
                     bankName: bankName,
                     bankid: bankid,
@@ -40,7 +43,10 @@ function UpdateBank() {
                         console.log(res);
                     } else history.push(`/bank`);
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
             alert(err.message);
         }

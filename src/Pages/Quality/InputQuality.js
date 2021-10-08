@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import catchAxiosError from "../../Util/catchAxiosError";
 import buttonStyles from "../../Modules/Button.module.css";
 import InputWarp from "./InputWarp.js";
+import InputFeeder from "../Desgin/InputFeeder.js";
 
 function InputQuality() {
     let history = useHistory();
@@ -37,6 +38,7 @@ function InputQuality() {
     const [topwarp, setTopwarp] = useState(templateWarpObject);
     const [pickonloom, setPickonloom] = useState(0);
     const [buttacharge, setButtacharge] = useState(0);
+    const [rs, setRS] = useState(0);
     const [lasercharge, setLasercharge] = useState(0);
     const [designcharge, setDesigncharge] = useState(0);
     const [finishingcharge, setFinishingcharge] = useState(0);
@@ -47,19 +49,70 @@ function InputQuality() {
     const [discount, setDiscount] = useState(0);
     const [length, setLength] = useState(0);
     const [weftwastage, setWeftWastage] = useState(0);
+    const [feeder1, setFeeder1] = useState({ pick: 0 });
+    const [feeder2, setFeeder2] = useState({ pick: 0 });
+    const [feeder3, setFeeder3] = useState({ pick: 0 });
+    const [feeder4, setFeeder4] = useState({ pick: 0 });
+    const [feeder5, setFeeder5] = useState({ pick: 0 });
+    const [feeder6, setFeeder6] = useState({ pick: 0 });
+    const [feeder7, setFeeder7] = useState({ pick: 0 });
+    const [feeder8, setFeeder8] = useState({ pick: 0 });
 
+    const [feeders] = useState([
+        ["feeder1", "setFeeder1"],
+        ["feeder2", "setFeeder2"],
+        ["feeder3", "setFeeder3"],
+        ["feeder4", "setFeeder4"],
+        ["feeder5", "setFeeder5"],
+        ["feeder6", "setFeeder6"],
+        ["feeder7", "setFeeder7"],
+        ["feeder8", "setFeeder8"],
+    ]);
     const [yarnQualities, setYarnqualities] = useState([]);
 
     useEffect(() => {
+        feeders.map((feedername, index) => {
+            let feeder = eval(feedername[0]);
+            let setFeeder = eval(feedername[1]);
+            let tempAvgPick = feeder.pick / (length * 39.37);
+            let tempWeight = (tempAvgPick * rs * feeder.denier) / 90000;
+            let tempAmount = tempWeight * feeder.rate;
+            setFeeder((prevState) => ({
+                ...prevState,
+                averagepick: isNaN(tempAvgPick)
+                    ? 0
+                    : parseFloat(tempAvgPick).toFixed(2),
+                weight: isNaN(tempWeight)
+                    ? 0
+                    : parseFloat(tempWeight).toFixed(3),
+                amount: isNaN(tempAmount)
+                    ? 0
+                    : parseFloat(tempAmount).toFixed(2),
+            }));
+        });
+    }, [length, weftwastage]);
+
+    useEffect(() => {
+        let tempRS =
+            parseFloat(bodywarp.rs) +
+            (bodywarp.rs ? parseFloat(bodywarp.rs) : 0) +
+            2;
+        setRS(isNaN(tempRS) ? 0 : tempRS);
+    }, []);
+
+    useEffect(async () => {
         try {
             setLoad(true);
-            axios
+            await axios
                 .get(`/quality/add`)
                 .then(({ data }) => {
                     setYarnqualities(data.quality);
                     setLoad(false);
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
             document.title = "Input Quality";
             document.addEventListener("wheel", () =>
                 document.activeElement.type === "number"
@@ -76,13 +129,21 @@ function InputQuality() {
     const onSubmitEvent = async () => {
         try {
             setLoad(true);
-            axios
+            await axios
                 .post(`/quality/`, {
                     qualityname,
                     jobcharge,
                     bodywarp,
                     borderwarp,
                     topbeam: topwarp,
+                    feeder1,
+                    feeder2,
+                    feeder3,
+                    feeder4,
+                    feeder5,
+                    feeder6,
+                    feeder7,
+                    feeder8,
                     pickonloom,
                     buttacharge,
                     lasercharge,
@@ -100,8 +161,12 @@ function InputQuality() {
                     setLoad(false);
                     history.push("/quality");
                 })
-                .catch(catchAxiosError);
+                .catch((err) => {
+                    setLoad(false);
+                    catchAxiosError(err);
+                });
         } catch (err) {
+            setLoad(false);
             console.log(err);
             alert(err.message);
         }
@@ -226,230 +291,293 @@ function InputQuality() {
                                 captureEnter={captureEnter}
                                 handleFocus={handleFocus}
                             />
-                            <tr>
-                                <td
-                                    style={{ borderBottom: "1px solid black" }}
-                                    colSpan="2"
-                                >
-                                    Pick on loom
-                                </td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Pick on Loom ..."
-                                        value={pickonloom}
-                                        onChange={(e) => {
-                                            setPickonloom(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style={{ borderBottom: "1px solid black" }}
-                                    colSpan="2"
-                                >
-                                    Butta Charge
-                                </td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Butta Charge..."
-                                        value={buttacharge}
-                                        onChange={(e) => {
-                                            setButtacharge(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style={{ borderBottom: "1px solid black" }}
-                                    colSpan="2"
-                                >
-                                    Laser Charge
-                                </td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Laser Charge..."
-                                        value={lasercharge}
-                                        onChange={(e) => {
-                                            setLasercharge(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style={{ borderBottom: "1px solid black" }}
-                                    colSpan="2"
-                                >
-                                    Design Charge
-                                </td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Design Charge..."
-                                        value={designcharge}
-                                        onChange={(e) => {
-                                            setDesigncharge(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style={{ borderBottom: "1px solid black" }}
-                                    colSpan="2"
-                                >
-                                    Finishing Charge
-                                </td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Finishing Charge..."
-                                        value={finishingcharge}
-                                        onChange={(e) => {
-                                            setFinishingcharge(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style={{ borderBottom: "1px solid black" }}
-                                    colSpan="2"
-                                >
-                                    Packing Charge
-                                </td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Paching Charge..."
-                                        value={packingcharge}
-                                        onChange={(e) => {
-                                            setPackingcharge(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style={{ borderBottom: "1px solid black" }}
-                                    colSpan="2"
-                                >
-                                    Agent Charge
-                                </td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter ..."
-                                        value={agentcharge}
-                                        onChange={(e) => {
-                                            setAgentcharge(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style={{ borderBottom: "1px solid black" }}
-                                    colSpan="2"
-                                >
-                                    Dyeing Charge
-                                </td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Dyeing Charge..."
-                                        value={dyeingcharge}
-                                        onChange={(e) => {
-                                            setDyeingCharge(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style={{ borderBottom: "1px solid black" }}
-                                    colSpan="2"
-                                >
-                                    Market Margin
-                                </td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Market Margin..."
-                                        value={marketmargin}
-                                        onChange={(e) => {
-                                            setMarketMargin(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style={{ borderBottom: "1px solid black" }}
-                                    colSpan="2"
-                                >
-                                    Discount
-                                </td>
-                                <td>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Discount..."
-                                        value={discount}
-                                        onChange={(e) => {
-                                            setDiscount(e.target.value);
-                                        }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
-                                    />
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td colSpan="2">
-                                    <button
-                                        type="button"
-                                        className={buttonStyles.inputbutton}
-                                        onClick={onSubmitEvent}
-                                    >
-                                        Add new Yarn Quality
-                                    </button>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th width="5%">Sr. No</th>
+                                <th width="15%">Quality</th>
+                                <th width="10%">Denier</th>
+                                <th width="15%">Pick</th>
+                                <th width="15%">Avg. Pick</th>
+                                <th width="10%">Weight</th>
+                                <th width="15%">Rate</th>
+                                <th width="15%">Amount</th>
+                            </tr>
+                            {feeders.map((feeder, index) => (
+                                <InputFeeder
+                                    role={index + 1}
+                                    feeder={eval(feeder[0])}
+                                    length={length}
+                                    rs={rs}
+                                    weftwastage={weftwastage}
+                                    setFeeder={eval(feeder[1])}
+                                    yarnQualities={yarnQualities}
+                                    captureEnter={captureEnter}
+                                    handleFocus={handleFocus}
+                                />
+                            ))}
+                        </tbody>
+                    </table>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <table style={{ marginTop: "50px" }}>
+                            <tbody>
+                                <tr>
+                                    <td
+                                        style={{
+                                            borderBottom: "1px solid black",
+                                        }}
+                                        colSpan="2"
+                                    >
+                                        Pick on loom
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Pick on Loom ..."
+                                            value={pickonloom}
+                                            onChange={(e) => {
+                                                setPickonloom(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        style={{
+                                            borderBottom: "1px solid black",
+                                        }}
+                                        colSpan="2"
+                                    >
+                                        Butta Charge / MTR
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Butta Charge..."
+                                            value={buttacharge}
+                                            onChange={(e) => {
+                                                setButtacharge(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        style={{
+                                            borderBottom: "1px solid black",
+                                        }}
+                                        colSpan="2"
+                                    >
+                                        Laser Charge / MTR
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Laser Charge..."
+                                            value={lasercharge}
+                                            onChange={(e) => {
+                                                setLasercharge(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        style={{
+                                            borderBottom: "1px solid black",
+                                        }}
+                                        colSpan="2"
+                                    >
+                                        Design Charge / MTR
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Design Charge..."
+                                            value={designcharge}
+                                            onChange={(e) => {
+                                                setDesigncharge(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        style={{
+                                            borderBottom: "1px solid black",
+                                        }}
+                                        colSpan="2"
+                                    >
+                                        Dyeing Charge / MTR
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Dyeing Charge..."
+                                            value={dyeingcharge}
+                                            onChange={(e) => {
+                                                setDyeingCharge(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        style={{
+                                            borderBottom: "1px solid black",
+                                        }}
+                                        colSpan="2"
+                                    >
+                                        Finishing Charge / Piece
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Finishing Charge..."
+                                            value={finishingcharge}
+                                            onChange={(e) => {
+                                                setFinishingcharge(
+                                                    e.target.value
+                                                );
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        style={{
+                                            borderBottom: "1px solid black",
+                                        }}
+                                        colSpan="2"
+                                    >
+                                        Packing Charge / Piece
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Paching Charge..."
+                                            value={packingcharge}
+                                            onChange={(e) => {
+                                                setPackingcharge(
+                                                    e.target.value
+                                                );
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td
+                                        style={{
+                                            borderBottom: "1px solid black",
+                                        }}
+                                        colSpan="2"
+                                    >
+                                        Market Margin %
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Market Margin..."
+                                            value={marketmargin}
+                                            onChange={(e) => {
+                                                setMarketMargin(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        style={{
+                                            borderBottom: "1px solid black",
+                                        }}
+                                        colSpan="2"
+                                    >
+                                        Discount %
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Discount..."
+                                            value={discount}
+                                            onChange={(e) => {
+                                                setDiscount(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        style={{
+                                            borderBottom: "1px solid black",
+                                        }}
+                                        colSpan="2"
+                                    >
+                                        Agent Charge %
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter ..."
+                                            value={agentcharge}
+                                            onChange={(e) => {
+                                                setAgentcharge(e.target.value);
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colSpan="2">
+                                        <button
+                                            type="button"
+                                            className={buttonStyles.inputbutton}
+                                            onClick={onSubmitEvent}
+                                        >
+                                            Save Quality
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </form>
             )}
         </div>

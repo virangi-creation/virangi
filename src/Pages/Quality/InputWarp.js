@@ -4,7 +4,7 @@ const InputWarp = ({
     warp,
     setWarp,
     role,
-    yarnQualities,
+    yarnqualities,
     captureEnter,
     handleFocus,
     firstRender,
@@ -15,7 +15,7 @@ const InputWarp = ({
             ...prevState,
             warpqualityname: q,
         }));
-        yarnQualities.map((quality) => {
+        yarnqualities.map((quality) => {
             if (quality.qualityname === q) {
                 setWarp((prevState) => ({
                     ...prevState,
@@ -159,7 +159,10 @@ const InputWarp = ({
     return (
         <>
             <tr>
-                <td rowSpan="17" style={{ paddingRight: "50px" }}>
+                <td
+                    rowSpan="17"
+                    style={{ paddingRight: "50px", alignItems: "start" }}
+                >
                     {role} Warp Details
                 </td>
             </tr>
@@ -178,8 +181,8 @@ const InputWarp = ({
                     />
 
                     <datalist id={`${role}qualitylist`}>
-                        {yarnQualities.length > 0 &&
-                            yarnQualities.map((quality) => (
+                        {yarnqualities.length > 0 &&
+                            yarnqualities.map((quality) => (
                                 <option value={quality.qualityname} />
                             ))}
                     </datalist>

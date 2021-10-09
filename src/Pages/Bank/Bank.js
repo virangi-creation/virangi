@@ -23,6 +23,7 @@ function Bank() {
                         window.location.reload();
                     })
                     .catch((err) => {
+                        console.log(err);
                         setLoad(false);
                         catchAxiosError(err);
                     });

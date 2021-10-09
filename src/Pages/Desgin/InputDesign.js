@@ -9,12 +9,19 @@ function InputDesign() {
     let history = useHistory();
 
     const [load, setLoad] = useState(false);
-    const [yarnQualities, setYarnQualities] = useState([]);
+    const [yarnqualities, setYarnQualities] = useState([]);
     const [qualities, setQualities] = useState([]);
+    const [harnesses, setHarnesses] = useState([]);
+    const [feeders, setFeeders] = useState([]);
+    const [warps, setWarps] = useState([]);
 
     // Final Variables
     const [quality, setQuality] = useState("");
     const [designno, setDesignNo] = useState("");
+    const [designfilename, setDesignFileName] = useState("");
+    const [harnessid, setHarnessid] = useState("");
+    const [loomnos, setLoomnos] = useState("");
+    const [fullDetail, setFullDetail] = useState("");
     const [qualityid, setQualityid] = useState("");
     const [pickonloom, setPickOnLoom] = useState(0);
     const [pickonfabric, setPickOnFabric] = useState(0);
@@ -22,16 +29,36 @@ function InputDesign() {
     const [rs, setRS] = useState(0);
     const [weftwastage, setWeftWastage] = useState(0);
 
-    const [feeder1, setFeeder1] = useState({});
-    const [feeder2, setFeeder2] = useState({});
-    const [feeder3, setFeeder3] = useState({});
-    const [feeder4, setFeeder4] = useState({});
-    const [feeder5, setFeeder5] = useState({});
-    const [feeder6, setFeeder6] = useState({});
-    const [feeder7, setFeeder7] = useState({});
-    const [feeder8, setFeeder8] = useState({});
+    const [bodywarp, setBodyWarp] = useState({});
+    const [borderwarp, setBorderWarp] = useState({});
+    const [topbeam, setTopBeam] = useState({});
 
-    const [feeders] = useState([
+    let feederTemplate = {
+        feederid: 1,
+        yarnqualityid: 1,
+        yarnqualityname: "",
+        designpick: 0,
+        pick: 0,
+        averagepick: 0,
+        weftwastage: 0,
+        weight: 0,
+        amount: 0,
+    };
+    const [feeder1, setFeeder1] = useState(feederTemplate);
+    const [feeder2, setFeeder2] = useState(feederTemplate);
+    const [feeder3, setFeeder3] = useState(feederTemplate);
+    const [feeder4, setFeeder4] = useState(feederTemplate);
+    const [feeder5, setFeeder5] = useState(feederTemplate);
+    const [feeder6, setFeeder6] = useState(feederTemplate);
+    const [feeder7, setFeeder7] = useState(feederTemplate);
+    const [feeder8, setFeeder8] = useState(feederTemplate);
+
+    const [warpDetails] = useState([
+        ["bodywarp", "setBodyWarp"],
+        ["borderwarp", "setBorderWarp"],
+        ["topbeam", "setTopBeam"],
+    ]);
+    const [feederDetails] = useState([
         ["feeder1", "setFeeder1"],
         ["feeder2", "setFeeder2"],
         ["feeder3", "setFeeder3"],
@@ -83,8 +110,12 @@ function InputDesign() {
         await axios
             .get("/design/add")
             .then(({ data }) => {
-                setYarnQualities(data.yarnQualities);
+                console.log(data);
+                setYarnQualities(data.yarnqualities);
                 setQualities(data.qualities);
+                setHarnesses(data.harnesses);
+                setWarps(data.warps);
+                setFeeders(data.feeders);
                 setLoad(false);
             })
             .catch((err) => {
@@ -160,6 +191,17 @@ function InputDesign() {
             if (quality.qualityname === q) {
                 setQuality(quality);
                 setQualityid(quality.qualityid);
+                setBodyWarp({ warpid: quality.bodywarpid });
+                setBorderWarp({ warpid: quality.borderwarpid });
+                setTopBeam({ warpid: quality.topbeamid });
+                setFeeder1({ feederid: parseInt(quality.feeder1) });
+                setFeeder2({ feederid: parseInt(quality.feeder2) });
+                setFeeder3({ feederid: parseInt(quality.feeder3) });
+                setFeeder4({ feederid: parseInt(quality.feeder4) });
+                setFeeder5({ feederid: parseInt(quality.feeder5) });
+                setFeeder6({ feederid: parseInt(quality.feeder6) });
+                setFeeder7({ feederid: parseInt(quality.feeder7) });
+                setFeeder8({ feederid: parseInt(quality.feeder8) });
                 setAgentCharge(
                     parseFloat(quality.agentcharge ? quality.agentcharge : 0)
                 );
@@ -201,63 +243,107 @@ function InputDesign() {
                     parseFloat(quality.weftwastage ? quality.weftwastage : 0)
                 );
                 setLength(parseFloat(quality.length ? quality.length : 6.1));
-                setPickOnFabric(
-                    (
-                        quality.pickonloom *
-                        (quality.bodytotalwarplength / 100)
-                    ).toFixed(2)
-                );
-                setRS(
-                    parseFloat(quality.bodyrs) +
-                        (quality.borderrs ? parseFloat(quality.borderrs) : 0) +
-                        2
-                );
-                setTotalEnds(
-                    (quality.bodyends ? parseInt(quality.bodyends) : 0) +
-                        (quality.borderends
-                            ? parseInt(quality.borderends)
-                            : 0) +
-                        (quality.topbeamends
-                            ? parseInt(quality.topbeamends)
-                            : 0)
-                );
-                setTotalWarpLength(
-                    quality.bodytotalwarplength
-                        ? parseFloat(quality.bodytotalwarplength)
-                        : 0
-                );
-                setTotalWarpWeight(
-                    (quality.bodytotalweight
-                        ? parseFloat(quality.bodytotalweight)
-                        : 0) +
-                        (quality.bordertotalweight
-                            ? parseFloat(quality.bordertotalweight)
-                            : 0) +
-                        (quality.topbeamtotalweight
-                            ? parseFloat(quality.topbeamtotalweight)
-                            : 0)
-                );
-                setTotalWarpYarnCost(
-                    (quality.bodyyarncost
-                        ? parseFloat(quality.bodyyarncost)
-                        : 0) +
-                        (quality.borderyarncost
-                            ? parseFloat(quality.borderyarncost)
-                            : 0) +
-                        (quality.topbeamyarncost
-                            ? parseFloat(quality.topbeamyarncost)
-                            : 0)
-                );
             }
         });
     };
 
     useEffect(() => {
-        if (isNaN(rs)) setRS(0);
-    }, [rs]);
+        for (let i = 0; i < 3; i++) {
+            let warpname = eval(warpDetails[i][0]);
+            let setWarpName = eval(warpDetails[i][1]);
+            warps.map((warp) => {
+                if (warp.warpid === warpname.warpid) {
+                    let { warpid, ...y } = warp;
+                    yarnqualities.map((yq) => {
+                        if (yq.qualityid === warp.warpqualityid) {
+                            setWarpName((prevState) => ({
+                                ...prevState,
+                                ...y,
+                                denier: yq.denier,
+                                yarnprice: yq.totalprice,
+                                warpqualityname: yq.qualityname,
+                            }));
+                        }
+                    });
+                }
+            });
+        }
+    }, [bodywarp.warpid, borderwarp.warpid, topbeam.warpid]);
+
+    useEffect(async () => {
+        for (let i = 0; i < 8; i++) {
+            let feedername = eval(feederDetails[i][0]);
+            let setFeederName = eval(feederDetails[i][1]);
+            await feeders.map((feeder) => {
+                if (feeder.feederid === feedername.feederid) {
+                    let { feederid, ...y } = feeder;
+                    console.log(feeder);
+                    yarnqualities.map((yq) => {
+                        if (yq.qualityid === feeder.yarnqualityid) {
+                            console.log(yq);
+                            setFeederName((prevState) => ({
+                                ...prevState,
+                                ...y,
+                                denier: yq.denier,
+                                yarnprice: yq.totalprice,
+                                yarnqualityname: yq.qualityname,
+                            }));
+                        }
+                    });
+                }
+            });
+        }
+    }, [feeder1.feederid]);
 
     useEffect(() => {
-        feeders.map((feedername, index) => {
+        setPickOnFabric(
+            (pickonloom * (bodywarp.totalwarplength / 100)).toFixed(2)
+        );
+        setRS(
+            (bodywarp.rs ? parseFloat(bodywarp.rs) : 0) +
+                (borderwarp.rs ? parseFloat(borderwarp.rs) : 0) +
+                2
+        );
+        setTotalEnds(
+            parseInt(bodywarp.ends) +
+                (borderwarp.ends ? parseInt(borderwarp.ends) : 0) +
+                (topbeam.ends ? parseInt(topbeam.ends) : 0)
+        );
+        setTotalWarpLength(
+            borderwarp.totalwarplength
+                ? parseFloat(borderwarp.totalwarplength)
+                : 0
+        );
+        setTotalWarpWeight(
+            (bodywarp.totalweight ? parseFloat(bodywarp.totalweight) : 0) +
+                (borderwarp.totalweight
+                    ? parseFloat(borderwarp.totalweight)
+                    : 0) +
+                (topbeam.totalweight ? parseFloat(topbeam.totalweight) : 0)
+        );
+        setTotalWarpYarnCost(
+            (bodywarp.yarncost ? parseFloat(bodywarp.yarncost) : 0) +
+                (borderwarp.yarncost ? parseFloat(borderwarp.yarncost) : 0) +
+                (topbeam.yarncost ? parseFloat(topbeam.yarncost) : 0)
+        );
+    }, [bodywarp.totalwarplength, borderwarp.rs, pickonloom]);
+
+    const onUpdateHarness = (e) => {
+        let q = e.target.value;
+        setHarnessid(null);
+        setLoomnos(null);
+        setFullDetail(null);
+        harnesses.map((harness) => {
+            if (harness.harnessname === q) {
+                setHarnessid(harness.harnessid);
+                setLoomnos(harness.loomno);
+                setFullDetail(harness.fulldetail);
+            }
+        });
+    };
+
+    useEffect(() => {
+        feederDetails.map((feedername, index) => {
             let feeder = eval(feedername[0]);
             let setFeeder = eval(feedername[1]);
             let tempAvgPick = feeder.pick / (length * 39.37);
@@ -283,7 +369,7 @@ function InputDesign() {
             tempTotalAveragePick = 0,
             tempTotalWeftWeight = 0,
             tempTotalWeftAmount = 0;
-        feeders.map((feedername) => {
+        feederDetails.map((feedername) => {
             let feeder = eval(feedername[0]);
             tempTotalPick += isNaN(feeder.pick) ? 0 : parseInt(feeder.pick);
             tempTotalAveragePick += isNaN(feeder.averagepick)
@@ -296,7 +382,6 @@ function InputDesign() {
                 ? 0
                 : parseFloat(feeder.amount);
         });
-
         setTotalPick(tempTotalPick);
         setTotalAvgPick(tempTotalAveragePick.toFixed(2));
         let tempCalculatedAvgPick = tempTotalPick / (length * 39.37).toFixed(2);
@@ -393,6 +478,24 @@ function InputDesign() {
                     <table className={tableStyles.quality_table}>
                         <tbody>
                             <tr>
+                                <td>Design File Name</td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        placeholder="Design File Name"
+                                        value={designfilename}
+                                        onChange={(e) => {
+                                            setDesignFileName(
+                                                e.target.value.toUpperCase()
+                                            );
+                                        }}
+                                        onKeyDown={captureEnter}
+                                        autoFocus
+                                        onFocus={handleFocus}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>Design No</td>
                                 <td>
                                     <input
@@ -405,10 +508,42 @@ function InputDesign() {
                                             );
                                         }}
                                         onKeyDown={captureEnter}
-                                        autoFocus
                                         onFocus={handleFocus}
                                     />
                                 </td>
+                            </tr>
+                            <tr>
+                                <td>Harness</td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        list="harnesslist"
+                                        onChange={onUpdateHarness}
+                                        autoCapitalize
+                                        placeholder="Harness Type"
+                                        onKeyDown={captureEnter}
+                                    />
+
+                                    <datalist id="harnesslist">
+                                        {harnesses.length > 0 &&
+                                            harnesses.map((harness) => (
+                                                <option
+                                                    value={harness.harnessname}
+                                                />
+                                            ))}
+                                    </datalist>
+                                </td>
+                                {fullDetail && (
+                                    <td style={{ paddingLeft: "10px" }}>
+                                        {" "}
+                                        &#91; {fullDetail} &#93; ,{" "}
+                                    </td>
+                                )}
+                                {loomnos && (
+                                    <td style={{ paddingLeft: "10px" }}>
+                                        &#40; {loomnos} &#41;
+                                    </td>
+                                )}
                             </tr>
                             <tr>
                                 <td>Quality</td>
@@ -445,7 +580,7 @@ function InputDesign() {
                                 <td>
                                     <input
                                         type="number"
-                                        placeholder="Pick on Loom"
+                                        placeholder="Length per Piece"
                                         count="0.01"
                                         value={length}
                                         onChange={(e) => {
@@ -504,49 +639,25 @@ function InputDesign() {
                                 <th>Rate</th>
                                 <th>Amount</th>
                             </tr>
-                            {quality.bodyends && quality.bodyends > 0 && (
-                                <tr>
-                                    <td>1</td>
-                                    <td>{quality.bodyqualityname}</td>
-                                    <td>{quality.bodyreed}</td>
-                                    <td>{quality.bodyrs}</td>
-                                    <td>{quality.bodyends}</td>
-                                    <td>{quality.bodytotalwarplength}</td>
-                                    <td>{quality.bodydenier}</td>
-                                    <td>{quality.bodytotalweight}</td>
-                                    <td>{quality.bodyyarnprice}</td>
-                                    <td>{quality.bodyyarncost}</td>
-                                </tr>
-                            )}
-                            {quality.borderends && quality.borderends > 0 && (
-                                <tr>
-                                    <td>2</td>
-                                    <td>{quality.borderqualityname}</td>
-                                    <td>{quality.borderreed}</td>
-                                    <td>{quality.borderrs}</td>
-                                    <td>{quality.borderends}</td>
-                                    <td>{quality.bordertotalwarplength}</td>
-                                    <td>{quality.borderdenier}</td>
-                                    <td>{quality.bordertotalweight}</td>
-                                    <td>{quality.borderyarnprice}</td>
-                                    <td>{quality.borderyarncost}</td>
-                                </tr>
-                            )}
-                            {quality.topbeamends && quality.topbeamends > 0 && (
-                                <tr>
-                                    <td>3</td>
-                                    <td>{quality.topbeamqualityname}</td>
-                                    <td>{quality.topbeamreed}</td>
-                                    <td>{quality.topbeamrs}</td>
-                                    <td>{quality.topbeamends}</td>
-                                    <td>{quality.topbeamtotalwarplength}</td>
-                                    <td>{quality.topbeamdenier}</td>
-                                    <td>{quality.topbeamtotalweight}</td>
-                                    <td>{quality.topbeamyarnprice}</td>
-                                    <td>{quality.topbeamyarncost}</td>
-                                </tr>
-                            )}
-
+                            {warpDetails.map((w, index) => {
+                                let wName = eval(w[0]);
+                                if (wName.ends && wName.ends > 0) {
+                                    return (
+                                        <tr>
+                                            <td>{index + 1}</td>
+                                            <td>{wName.warpqualityname}</td>
+                                            <td>{wName.reed}</td>
+                                            <td>{wName.rs}</td>
+                                            <td>{wName.ends}</td>
+                                            <td>{wName.totalwarplength}</td>
+                                            <td>{wName.denier}</td>
+                                            <td>{wName.totalweight}</td>
+                                            <td>{wName.yarnprice}</td>
+                                            <td>{wName.yarncost}</td>
+                                        </tr>
+                                    );
+                                }
+                            })}
                             <tr>
                                 <td>Totals</td>
                                 <td colSpan="2"></td>
@@ -571,7 +682,7 @@ function InputDesign() {
                             <th width="15%">Rate</th>
                             <th width="15%">Amount</th>
                         </tr>
-                        {feeders.map((feeder, index) => (
+                        {feederDetails.map((feeder, index) => (
                             <InputFeeder
                                 role={index + 1}
                                 feeder={eval(feeder[0])}
@@ -579,7 +690,7 @@ function InputDesign() {
                                 rs={rs}
                                 weftwastage={weftwastage}
                                 setFeeder={eval(feeder[1])}
-                                yarnQualities={yarnQualities}
+                                yarnqualities={yarnqualities}
                                 captureEnter={captureEnter}
                                 handleFocus={handleFocus}
                             />
@@ -598,20 +709,16 @@ function InputDesign() {
                             <td>{calculatedavgpick.toFixed(2)}</td>
                         </tr>
 
-                        <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Yarn Cost Per MTR :</td>
-                            <td>{totalAmountOneMtr.toFixed(2)}</td>
-                        </tr>
-
-                        <tr>
+                        <tr style={{ height: "40px" }}>
                             <td colSpan="5"></td>
                             <td colSpan="2">Length :</td>
                             <td>{length.toFixed(2)}</td>
                         </tr>
+
                         <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Yarn Cost Saree :</td>
+                            <td colSpan="2">Yarn Cost Per MTR :</td>
+                            <td>{totalAmountOneMtr.toFixed(2)}</td>
+                            <td colSpan="4">Yarn Cost Saree :</td>
                             <td>{baseAmountDesign.toFixed(2)}</td>
                         </tr>
                         <tr>
@@ -719,6 +826,24 @@ function InputDesign() {
                         </tr>
                         <tr>
                             <td colSpan="5"></td>
+                            <td colSpan="2">Dyeing Charge / MTR</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    size="7"
+                                    placeholder="Dyeing Charge"
+                                    count="0.01"
+                                    value={dyeingcharge}
+                                    onChange={(e) => {
+                                        setDyeingCharge(e.target.value);
+                                    }}
+                                    onKeyDown={captureEnter}
+                                    onFocus={handleFocus}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan="5"></td>
                             <td colSpan="2">Finishing Charge / SAREE</td>
                             <td>
                                 <input
@@ -755,42 +880,6 @@ function InputDesign() {
                         </tr>
                         <tr>
                             <td colSpan="5"></td>
-                            <td colSpan="2">Agent Charge % </td>
-                            <td>
-                                <input
-                                    type="text"
-                                    size="7"
-                                    placeholder="Agent Charge"
-                                    count="0.01"
-                                    value={agentcharge}
-                                    onChange={(e) => {
-                                        setAgentCharge(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Dyeing Charge / MTR</td>
-                            <td>
-                                <input
-                                    type="text"
-                                    size="7"
-                                    placeholder="Dyeing Charge"
-                                    count="0.01"
-                                    value={dyeingcharge}
-                                    onChange={(e) => {
-                                        setDyeingCharge(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colSpan="5"></td>
                             <td colSpan="2">Market Margin %</td>
                             <td>
                                 <input
@@ -819,6 +908,24 @@ function InputDesign() {
                                     value={discount}
                                     onChange={(e) => {
                                         setDiscount(e.target.value);
+                                    }}
+                                    onKeyDown={captureEnter}
+                                    onFocus={handleFocus}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan="5"></td>
+                            <td colSpan="2">Agent Charge % </td>
+                            <td>
+                                <input
+                                    type="text"
+                                    size="7"
+                                    placeholder="Agent Charge"
+                                    count="0.01"
+                                    value={agentcharge}
+                                    onChange={(e) => {
+                                        setAgentCharge(e.target.value);
                                     }}
                                     onKeyDown={captureEnter}
                                     onFocus={handleFocus}

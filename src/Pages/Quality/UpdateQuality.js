@@ -70,7 +70,7 @@ function UpdateQuality() {
     const [length, setLength] = useState(0);
     const [weftwastage, setWeftWastage] = useState(0);
 
-    const [feeders] = useState([
+    const [feederDetails] = useState([
         ["feeder1", "setFeeder1"],
         ["feeder2", "setFeeder2"],
         ["feeder3", "setFeeder3"],
@@ -81,10 +81,10 @@ function UpdateQuality() {
         ["feeder8", "setFeeder8"],
     ]);
 
-    const [yarnQualities, setYarnqualities] = useState([]);
+    const [yarnqualities, setYarnqualities] = useState([]);
 
     useEffect(() => {
-        feeders.map((feedername) => {
+        feederDetails.map((feedername) => {
             let feeder = eval(feedername[0]);
             let setFeeder = eval(feedername[1]);
             let tempAvgPick = feeder.designpick / (length * 39.37);
@@ -123,7 +123,7 @@ function UpdateQuality() {
                     .get(`/quality/${location.state.qualityid}/update`)
                     .then(async ({ data }) => {
                         console.log(data);
-                        setYarnqualities(data.yarnQualities);
+                        setYarnqualities(data.yarnqualities);
                         let quality = data.quality;
                         setQualityname(quality.qualityname);
                         setJobcharge(quality.jobcharge);
@@ -181,7 +181,7 @@ function UpdateQuality() {
     }, []);
 
     useEffect(() => {
-        yarnQualities.map((yq) => {
+        yarnqualities.map((yq) => {
             if (yq.qualityid === bodywarp.warpqualityid) {
                 setBodywarp((prevState) => ({
                     ...prevState,
@@ -208,8 +208,8 @@ function UpdateQuality() {
     ]);
 
     useEffect(() => {
-        yarnQualities.map((yq) => {
-            feeders.map((feedername, index) => {
+        yarnqualities.map((yq) => {
+            feederDetails.map((feedername, index) => {
                 let feeder = eval(feedername[0]);
                 if (yq.qualityid === feeder.yarnqualityid) {
                     let tempSet = eval(feedername[1]);
@@ -378,7 +378,7 @@ function UpdateQuality() {
                                 setWarp={setBodywarp}
                                 firstRender={firstRender}
                                 role="Body"
-                                yarnQualities={yarnQualities}
+                                yarnqualities={yarnqualities}
                                 captureEnter={captureEnter}
                                 handleFocus={handleFocus}
                             />
@@ -387,7 +387,7 @@ function UpdateQuality() {
                                 setWarp={setBorderwarp}
                                 firstRender={firstRender}
                                 role="Border"
-                                yarnQualities={yarnQualities}
+                                yarnqualities={yarnqualities}
                                 captureEnter={captureEnter}
                                 handleFocus={handleFocus}
                             />
@@ -396,7 +396,7 @@ function UpdateQuality() {
                                 setWarp={setTopwarp}
                                 firstRender={firstRender}
                                 role="Top Beam"
-                                yarnQualities={yarnQualities}
+                                yarnqualities={yarnqualities}
                                 captureEnter={captureEnter}
                                 handleFocus={handleFocus}
                             />
@@ -414,7 +414,7 @@ function UpdateQuality() {
                                 <th width="15%">Rate</th>
                                 <th width="15%">Amount</th>
                             </tr>
-                            {feeders.map((feeder, index) => (
+                            {feederDetails.map((feeder, index) => (
                                 <InputFeeder
                                     role={index + 1}
                                     feeder={eval(feeder[0])}
@@ -422,7 +422,7 @@ function UpdateQuality() {
                                     rs={rs}
                                     weftwastage={weftwastage}
                                     setFeeder={eval(feeder[1])}
-                                    yarnQualities={yarnQualities}
+                                    yarnqualities={yarnqualities}
                                     captureEnter={captureEnter}
                                     handleFocus={handleFocus}
                                 />

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import logo from "./Pictures/logo.png";
 import styles from "../Modules/Nav.module.css";
 
-const Nav = ({ loggedIn, setLoggedIn, url }) => {
+const Nav = ({ loggedIn, logout }) => {
     return (
         <nav id="navbar">
             <div className={styles.nav_align}>
@@ -44,6 +44,11 @@ const Nav = ({ loggedIn, setLoggedIn, url }) => {
                                     <Link to="/design">
                                         <button className={styles.nav_button}>
                                             Design
+                                        </button>
+                                    </Link>
+                                    <Link to="/harness">
+                                        <button className={styles.nav_button}>
+                                            Harness
                                         </button>
                                     </Link>
                                 </div>
@@ -99,9 +104,7 @@ const Nav = ({ loggedIn, setLoggedIn, url }) => {
                                     <Link to="/">
                                         <button
                                             className={styles.nav_button}
-                                            onClick={() => {
-                                                setLoggedIn(false);
-                                            }}
+                                            onClick={logout}
                                         >
                                             Log Out
                                         </button>

@@ -49,16 +49,26 @@ function InputQuality() {
     const [discount, setDiscount] = useState(0);
     const [length, setLength] = useState(0);
     const [weftwastage, setWeftWastage] = useState(0);
-    const [feeder1, setFeeder1] = useState({ pick: 0 });
-    const [feeder2, setFeeder2] = useState({ pick: 0 });
-    const [feeder3, setFeeder3] = useState({ pick: 0 });
-    const [feeder4, setFeeder4] = useState({ pick: 0 });
-    const [feeder5, setFeeder5] = useState({ pick: 0 });
-    const [feeder6, setFeeder6] = useState({ pick: 0 });
-    const [feeder7, setFeeder7] = useState({ pick: 0 });
-    const [feeder8, setFeeder8] = useState({ pick: 0 });
+    let feederTemplate = {
+        feederid: 1,
+        yarnqualityid: 1,
+        yarnqualityname: "",
+        designpick: 0,
+        averagepick: 0,
+        weftwastage: 0,
+        weight: 0,
+        amount: 0,
+    };
+    const [feeder1, setFeeder1] = useState(feederTemplate);
+    const [feeder2, setFeeder2] = useState(feederTemplate);
+    const [feeder3, setFeeder3] = useState(feederTemplate);
+    const [feeder4, setFeeder4] = useState(feederTemplate);
+    const [feeder5, setFeeder5] = useState(feederTemplate);
+    const [feeder6, setFeeder6] = useState(feederTemplate);
+    const [feeder7, setFeeder7] = useState(feederTemplate);
+    const [feeder8, setFeeder8] = useState(feederTemplate);
 
-    const [feeders] = useState([
+    const [feederDetails] = useState([
         ["feeder1", "setFeeder1"],
         ["feeder2", "setFeeder2"],
         ["feeder3", "setFeeder3"],
@@ -68,10 +78,10 @@ function InputQuality() {
         ["feeder7", "setFeeder7"],
         ["feeder8", "setFeeder8"],
     ]);
-    const [yarnQualities, setYarnqualities] = useState([]);
+    const [yarnqualities, setYarnqualities] = useState([]);
 
     useEffect(() => {
-        feeders.map((feedername, index) => {
+        feederDetails.map((feedername, index) => {
             let feeder = eval(feedername[0]);
             let setFeeder = eval(feedername[1]);
             let tempAvgPick = feeder.pick / (length * 39.37);
@@ -106,7 +116,7 @@ function InputQuality() {
             await axios
                 .get(`/quality/add`)
                 .then(({ data }) => {
-                    setYarnqualities(data.quality);
+                    setYarnqualities(data.yarnqualities);
                     setLoad(false);
                 })
                 .catch((err) => {
@@ -269,7 +279,7 @@ function InputQuality() {
                                 setWarp={setBodywarp}
                                 firstRender={firstRender}
                                 role="Body"
-                                yarnQualities={yarnQualities}
+                                yarnqualities={yarnqualities}
                                 captureEnter={captureEnter}
                                 handleFocus={handleFocus}
                             />
@@ -278,7 +288,7 @@ function InputQuality() {
                                 setWarp={setBorderwarp}
                                 firstRender={firstRender}
                                 role="Border"
-                                yarnQualities={yarnQualities}
+                                yarnqualities={yarnqualities}
                                 captureEnter={captureEnter}
                                 handleFocus={handleFocus}
                             />
@@ -287,7 +297,7 @@ function InputQuality() {
                                 setWarp={setTopwarp}
                                 firstRender={firstRender}
                                 role="Top Beam"
-                                yarnQualities={yarnQualities}
+                                yarnqualities={yarnqualities}
                                 captureEnter={captureEnter}
                                 handleFocus={handleFocus}
                             />
@@ -305,7 +315,7 @@ function InputQuality() {
                                 <th width="15%">Rate</th>
                                 <th width="15%">Amount</th>
                             </tr>
-                            {feeders.map((feeder, index) => (
+                            {feederDetails.map((feeder, index) => (
                                 <InputFeeder
                                     role={index + 1}
                                     feeder={eval(feeder[0])}
@@ -313,7 +323,7 @@ function InputQuality() {
                                     rs={rs}
                                     weftwastage={weftwastage}
                                     setFeeder={eval(feeder[1])}
-                                    yarnQualities={yarnQualities}
+                                    yarnqualities={yarnqualities}
                                     captureEnter={captureEnter}
                                     handleFocus={handleFocus}
                                 />

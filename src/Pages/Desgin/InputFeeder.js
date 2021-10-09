@@ -5,7 +5,7 @@ const InputFeeder = ({
     length,
     // weftwastage,
     rs,
-    yarnQualities,
+    yarnqualities,
     captureEnter,
     handleFocus,
 }) => {
@@ -15,9 +15,9 @@ const InputFeeder = ({
             ...prevState,
             yarnqualityname: q,
         }));
-        yarnQualities.map((quality) => {
+        yarnqualities.map((quality) => {
             if (quality.qualityname === q) {
-                let tempAvgPick = feeder.designpick / (length * 39.37);
+                let tempAvgPick = feeder.pick / (length * 39.37);
                 let tempWeight = (tempAvgPick * rs * quality.denier) / 90000;
                 let tempAmount = tempWeight * quality.totalprice;
                 setFeeder((prevState) => ({
@@ -52,7 +52,7 @@ const InputFeeder = ({
         let tempAmount = tempWeight * feeder.yarnprice;
         setFeeder((prevState) => ({
             ...prevState,
-            designpick: e.target.value,
+            pick: e.target.value,
             averagepick: isNaN(tempAvgPick)
                 ? 0
                 : parseFloat(tempAvgPick.toFixed(3)),
@@ -77,8 +77,8 @@ const InputFeeder = ({
                     onKeyDown={captureEnter}
                 />
                 <datalist id={`${role}yarnqualitylist`}>
-                    {yarnQualities.length > 0 &&
-                        yarnQualities.map((quality) => {
+                    {yarnqualities.length > 0 &&
+                        yarnqualities.map((quality) => {
                             return <option value={quality.qualityname} />;
                         })}
                 </datalist>
@@ -89,7 +89,7 @@ const InputFeeder = ({
                     type="number"
                     placeholder="Pick"
                     count="0.01"
-                    value={feeder.designpick}
+                    value={feeder.pick}
                     onChange={updatePick}
                     onKeyDown={captureEnter}
                     onFocus={handleFocus}

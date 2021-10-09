@@ -18,6 +18,7 @@ function Login({ login, logout }) {
                     password,
                 })
                 .then(({ data }) => {
+                    console.log(data);
                     setLoad(false);
                     login(data);
                 })

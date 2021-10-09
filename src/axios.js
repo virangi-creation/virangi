@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let url = process.env.BACKEND_URL;
+let url = process.env.REACT_APP_BACKEND_URL;
 // url = "http://localhost:9000/api";
 
 let token = window.localStorage.getItem("vcpltokenrepier");

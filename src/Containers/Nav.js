@@ -2,8 +2,19 @@ import React from "react";
 import { Link } from "react-router-dom";
 import logo from "./Pictures/logo.png";
 import styles from "../Modules/Nav.module.css";
+import { useHistory } from "react-router";
 
-const Nav = ({ loggedIn, logout }) => {
+const Nav = ({ loggedIn, setLoggedIn }) => {
+    const history = useHistory();
+
+    const logout = () => {
+        setLoggedIn(false);
+        window.localStorage.setItem("loggedIn", false);
+        window.localStorage.setItem("vcpltokenrepier", "NA");
+        history.push("/login");
+        window.location.reload();
+    };
+
     return (
         <nav id="navbar">
             <div className={styles.nav_align}>

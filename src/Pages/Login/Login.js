@@ -3,11 +3,29 @@ import buttonStyles from "../../Modules/Button.module.css";
 import "./login.css";
 import catchAxiosError from "../../Util/catchAxiosError";
 import axios from "../../axios";
+import { useHistory } from "react-router";
 
-function Login({ login, logout }) {
+function Login({ setLoggedIn }) {
+    const history = useHistory();
     let [load, setLoad] = useState(false);
     let [username, setEmailAddress] = useState("");
     let [password, setPassword] = useState("");
+
+    const logout = () => {
+        setLoggedIn(false);
+        window.localStorage.setItem("loggedIn", false);
+        window.localStorage.setItem("vcpltokenrepier", "NA");
+        history.push("/login");
+        window.location.reload();
+    };
+
+    const login = (data) => {
+        setLoggedIn(true);
+        window.localStorage.setItem("loggedIn", true);
+        window.localStorage.setItem("vcpltokenrepier", data.token);
+        history.push("/");
+        window.location.reload();
+    };
 
     const onSubmitEvent = () => {
         try {
@@ -18,11 +36,11 @@ function Login({ login, logout }) {
                     password,
                 })
                 .then(({ data }) => {
-                    console.log(data);
                     setLoad(false);
                     login(data);
                 })
                 .catch((err) => {
+                    console.log(err);
                     setLoad(false);
                     logout();
                     catchAxiosError(err);

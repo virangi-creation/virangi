@@ -47,6 +47,7 @@ function Bank() {
                 .get(`/bank/`)
                 .then((res) => {
                     setLoad(false);
+                    console.log(res);
                     setBanks(res.data);
                     setSearchedBanks(res.data);
                 })

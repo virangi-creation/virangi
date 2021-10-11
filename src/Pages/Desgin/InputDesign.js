@@ -16,13 +16,12 @@ function InputDesign() {
     const [warps, setWarps] = useState([]);
 
     // Final Variables
-    const [quality, setQuality] = useState("");
+    const [qualityid, setQualityid] = useState("");
     const [designno, setDesignNo] = useState("");
     const [designfilename, setDesignFileName] = useState("");
     const [harnessid, setHarnessid] = useState("");
     const [loomnos, setLoomnos] = useState("");
     const [fullDetail, setFullDetail] = useState("");
-    const [qualityid, setQualityid] = useState("");
     const [pickonloom, setPickOnLoom] = useState(0);
     const [pickonfabric, setPickOnFabric] = useState(0);
     const [length, setLength] = useState(0);
@@ -84,7 +83,7 @@ function InputDesign() {
     const [baseAmountDesign, setBaseAmountDesign] = useState(0);
 
     const [jobcharge, setJobCharge] = useState(0);
-    const [jobAmount, setJobAmount] = useState(0);
+    const [jobamount, setJobAmount] = useState(0);
     const [buttacharge, setButtaCharge] = useState(0);
     const [lasercharge, setLaserCharge] = useState(0);
     const [designcharge, setDesignCharge] = useState(0);
@@ -94,11 +93,13 @@ function InputDesign() {
     const [dyeingcharge, setDyeingCharge] = useState(0);
     const [marketmargin, setMarketMargin] = useState(0);
     const [discount, setDiscount] = useState(0);
+    const [marketmarginamount, setMarketMarginAmount] = useState(0);
+    const [discountamount, setDiscountAmount] = useState(0);
+    const [agentamount, setAgentAmount] = useState(0);
 
-    const [totalAmountDesign, setTotalAmountDesign] = useState(0);
-    const [sellPrice, setSellPrice] = useState(0);
-
-    // Final Variables
+    const [totalCharges, setTotalCharges] = useState(0);
+    const [totalamountdesign, setTotalAmountDesign] = useState(0);
+    const [sellprice, setSellPrice] = useState(0);
 
     useEffect(async () => {
         document.title = "Input Design";
@@ -135,6 +136,8 @@ function InputDesign() {
                 .post(`/design/`, {
                     qualityid,
                     designno,
+                    designfilename,
+                    harnessid,
                     pickonloom,
                     length,
                     feeder1,
@@ -147,7 +150,7 @@ function InputDesign() {
                     feeder8,
                     totalpick,
                     jobcharge,
-                    jobAmount,
+                    jobamount,
                     buttacharge,
                     weftwastage,
                     lasercharge,
@@ -158,9 +161,9 @@ function InputDesign() {
                     dyeingcharge,
                     marketmargin,
                     discount,
-                    totalAmountDesign,
+                    totalamountdesign,
                     totalaveragepick: totalavgpick,
-                    sellPrice,
+                    sellprice,
                 })
                 .then(() => {
                     setLoad(false);
@@ -189,7 +192,6 @@ function InputDesign() {
         setQualityid(null);
         qualities.map((quality) => {
             if (quality.qualityname === q) {
-                setQuality(quality);
                 setQualityid(quality.qualityid);
                 setBodyWarp({ warpid: quality.bodywarpid });
                 setBorderWarp({ warpid: quality.borderwarpid });
@@ -362,7 +364,7 @@ function InputDesign() {
                     : parseFloat(tempAmount).toFixed(2),
             }));
         });
-    }, [length, weftwastage]);
+    }, [length]);
 
     useEffect(() => {
         let tempTotalPick = 0,
@@ -411,59 +413,65 @@ function InputDesign() {
     }, [totalWarpYarnCost, totalweftamount]);
 
     useEffect(() => {
-        setJobAmount((calculatedavgpick * jobcharge * length) / 100);
+        setJobAmount((calculatedavgpick * jobcharge) / 100);
     }, [totalpick, jobcharge]);
 
     useEffect(() => {
-        let tempTotalAmount = baseAmountDesign;
+        let tempTotalAmount = totalAmountOneMtr;
 
-        tempTotalAmount += parseFloat(isNaN(jobAmount) ? 0 : jobAmount);
         tempTotalAmount += parseFloat(
-            isNaN(buttacharge) ? 0 : buttacharge * length
+            isNaN(weftwastage)
+                ? 0
+                : (totalweftamount * parseFloat(weftwastage)) / 100
+        );
+        tempTotalAmount += parseFloat(isNaN(jobamount) ? 0 : jobamount);
+        tempTotalAmount += parseFloat(isNaN(buttacharge) ? 0 : buttacharge);
+        tempTotalAmount += parseFloat(isNaN(lasercharge) ? 0 : lasercharge);
+        tempTotalAmount += parseFloat(isNaN(designcharge) ? 0 : designcharge);
+        tempTotalAmount += parseFloat(isNaN(dyeingcharge) ? 0 : dyeingcharge);
+        tempTotalAmount += parseFloat(
+            isNaN(finishingcharge) ? 0 : finishingcharge / length
         );
         tempTotalAmount += parseFloat(
-            isNaN(lasercharge) ? 0 : lasercharge * length
+            isNaN(packingcharge) ? 0 : packingcharge / length
         );
-        tempTotalAmount += parseFloat(
-            isNaN(designcharge) ? 0 : designcharge * length
-        );
-        tempTotalAmount += parseFloat(
-            isNaN(dyeingcharge) ? 0 : dyeingcharge * length
-        );
-        tempTotalAmount += parseFloat(
-            isNaN(finishingcharge) ? 0 : finishingcharge
-        );
-        tempTotalAmount += parseFloat(isNaN(packingcharge) ? 0 : packingcharge);
-        if (!isNaN(marketmargin)) {
-            tempTotalAmount += parseFloat(
-                (tempTotalAmount * parseFloat(marketmargin)) / 100
-            );
-        }
-        if (!isNaN(discount)) {
-            tempTotalAmount -= parseFloat(
-                (tempTotalAmount * parseFloat(discount)) / 100
-            );
-        }
-        if (!isNaN(agentcharge)) {
-            tempTotalAmount += parseFloat(
-                (tempTotalAmount * parseFloat(agentcharge)) / 100
-            );
-        }
-        setTotalAmountDesign(tempTotalAmount);
-        setSellPrice(tempTotalAmount.toFixed(2));
+        setTotalCharges(tempTotalAmount);
     }, [
-        baseAmountDesign,
-        jobAmount,
+        totalAmountOneMtr,
+        jobamount,
         buttacharge,
         lasercharge,
         designcharge,
         finishingcharge,
         packingcharge,
-        agentcharge,
         dyeingcharge,
-        marketmargin,
-        discount,
+        weftwastage,
     ]);
+
+    useEffect(() => {
+        let tempTotalAmount = totalCharges,
+            tempMarginAmount = 0,
+            tempDiscountAmount = 0,
+            tempAgentAmount = 0;
+        if (!isNaN(marketmargin)) {
+            tempMarginAmount =
+                (tempTotalAmount * parseFloat(marketmargin)) / 100;
+            setMarketMarginAmount(tempMarginAmount);
+            tempTotalAmount += parseFloat(tempMarginAmount);
+        }
+        if (!isNaN(discount)) {
+            tempDiscountAmount = (tempTotalAmount * parseFloat(discount)) / 100;
+            setDiscountAmount(tempDiscountAmount);
+            tempTotalAmount -= parseFloat(tempDiscountAmount);
+        }
+        if (!isNaN(agentcharge)) {
+            tempAgentAmount = (tempTotalAmount * parseFloat(agentcharge)) / 100;
+            tempTotalAmount += parseFloat(tempAgentAmount);
+            setAgentAmount(tempAgentAmount);
+        }
+        setTotalAmountDesign((tempTotalAmount * length).toFixed(2));
+        setSellPrice((tempTotalAmount * length).toFixed(2));
+    }, [marketmargin, agentcharge, discount, totalCharges]);
 
     return (
         <div
@@ -580,7 +588,7 @@ function InputDesign() {
                                 <td>
                                     <input
                                         type="number"
-                                        placeholder="Length per Piece"
+                                        placeholder="Length / Piece"
                                         count="0.01"
                                         value={length}
                                         onChange={(e) => {
@@ -711,23 +719,23 @@ function InputDesign() {
 
                         <tr style={{ height: "40px" }}>
                             <td colSpan="5"></td>
-                            <td colSpan="2">Length :</td>
+                            <td colSpan="3" style={{ paddingRight: "70px" }}>
+                                Length :
+                            </td>
                             <td>{length.toFixed(2)}</td>
                         </tr>
 
                         <tr>
-                            <td colSpan="2">Yarn Cost Per MTR :</td>
+                            <td colSpan="6">Yarn Cost / MTR :</td>
+                            <td></td>
                             <td>{totalAmountOneMtr.toFixed(2)}</td>
-                            <td colSpan="4">Yarn Cost Saree :</td>
                             <td>{baseAmountDesign.toFixed(2)}</td>
                         </tr>
                         <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Weft Wastage :</td>
+                            <td colSpan="6">Weft Wastage :</td>
                             <td>
                                 <input
                                     type="text"
-                                    size="7"
                                     placeholder="Weft Wastage"
                                     count="0.01"
                                     value={weftwastage}
@@ -740,7 +748,13 @@ function InputDesign() {
                             </td>
                             <td>
                                 {(
-                                    (baseAmountDesign * weftwastage) /
+                                    (totalweftamount * weftwastage) /
+                                    100
+                                ).toFixed(2)}
+                            </td>
+                            <td>
+                                {(
+                                    (totalweftamount * weftwastage * length) /
                                     100
                                 ).toFixed(2)}
                             </td>
@@ -752,12 +766,11 @@ function InputDesign() {
                             <td></td>
                         </tr>
                         <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Job Charge</td>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">Job Charge</td>
                             <td>
                                 <input
                                     type="text"
-                                    size="7"
                                     placeholder="Job Charge"
                                     count="0.01"
                                     value={jobcharge}
@@ -768,15 +781,17 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
-                            <td>{jobAmount.toFixed(2)}</td>
+                            <td>
+                                {((jobcharge * totalavgpick) / 100).toFixed(2)}
+                            </td>
+                            <td>{jobamount.toFixed(2)}</td>
                         </tr>
                         <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Butta Charge / MTR</td>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">Butta Charge / MTR</td>
                             <td>
                                 <input
                                     type="text"
-                                    size="7"
                                     placeholder="Butta Charge"
                                     count="0.01"
                                     value={buttacharge}
@@ -787,14 +802,15 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
+                            <td>{buttacharge.toFixed(2)}</td>
+                            <td>{(buttacharge * length).toFixed(2)}</td>
                         </tr>
                         <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Laser Charge / MTR</td>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">Laser Charge / MTR</td>
                             <td>
                                 <input
                                     type="text"
-                                    size="7"
                                     placeholder="Laser Charge"
                                     count="0.01"
                                     value={lasercharge}
@@ -805,14 +821,15 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
+                            <td>{lasercharge.toFixed(2)}</td>
+                            <td>{(lasercharge * length).toFixed(2)}</td>
                         </tr>
                         <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Design Charge / MTR</td>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">Design Charge / MTR</td>
                             <td>
                                 <input
                                     type="text"
-                                    size="7"
                                     placeholder="Design Charge"
                                     count="0.01"
                                     value={designcharge}
@@ -823,14 +840,15 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
+                            <td>{designcharge.toFixed(2)}</td>
+                            <td>{(designcharge * length).toFixed(2)}</td>
                         </tr>
                         <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Dyeing Charge / MTR</td>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">Dyeing Charge / MTR</td>
                             <td>
                                 <input
                                     type="text"
-                                    size="7"
                                     placeholder="Dyeing Charge"
                                     count="0.01"
                                     value={dyeingcharge}
@@ -841,14 +859,15 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
+                            <td>{dyeingcharge.toFixed(2)}</td>
+                            <td>{(dyeingcharge * length).toFixed(2)}</td>
                         </tr>
                         <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Finishing Charge / SAREE</td>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">Finishing Charge / UNIT</td>
                             <td>
                                 <input
                                     type="text"
-                                    size="7"
                                     placeholder="Finishing Charge"
                                     count="0.01"
                                     value={finishingcharge}
@@ -859,14 +878,20 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
+                            <td>
+                                {(isNaN(finishingcharge)
+                                    ? 0
+                                    : finishingcharge / length
+                                ).toFixed(2)}
+                            </td>
+                            <td>{finishingcharge.toFixed(2)}</td>
                         </tr>
                         <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Packing Charge / SAREE</td>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">Packing Charge / UNIT</td>
                             <td>
                                 <input
                                     type="text"
-                                    size="7"
                                     placeholder="Packing Charge"
                                     count="0.01"
                                     value={packingcharge}
@@ -877,14 +902,38 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
+                            <td>
+                                {(isNaN(packingcharge)
+                                    ? 0
+                                    : packingcharge / length
+                                ).toFixed(2)}
+                            </td>
+                            <td>{packingcharge.toFixed(2)}</td>
                         </tr>
                         <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Market Margin %</td>
+                            <td>.</td>
+                        </tr>
+                        <tr>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">Total Charges </td>
+                            <td></td>
+                            <td>
+                                {(isNaN(totalCharges)
+                                    ? 0
+                                    : totalCharges
+                                ).toFixed(2)}
+                            </td>
+                            <td>{(totalCharges * length).toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                            <td>.</td>
+                        </tr>
+                        <tr>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">Market Margin %</td>
                             <td>
                                 <input
                                     type="text"
-                                    size="7"
                                     placeholder="Market Margin"
                                     count="0.01"
                                     value={marketmargin}
@@ -895,14 +944,15 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
+                            <td>{marketmarginamount.toFixed(2)}</td>
+                            <td>{(marketmarginamount * length).toFixed(2)}</td>
                         </tr>
                         <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Discount %</td>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">Discount %</td>
                             <td>
                                 <input
                                     type="text"
-                                    size="7"
                                     placeholder="Discount"
                                     count="0.01"
                                     value={discount}
@@ -913,14 +963,15 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
+                            <td>{discountamount.toFixed(2)}</td>
+                            <td>{(discountamount * length).toFixed(2)}</td>
                         </tr>
                         <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Agent Charge % </td>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">Agent Charge % </td>
                             <td>
                                 <input
                                     type="text"
-                                    size="7"
                                     placeholder="Agent Charge"
                                     count="0.01"
                                     value={agentcharge}
@@ -931,14 +982,17 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
+                            <td>{agentamount.toFixed(2)}</td>
+                            <td>{(agentamount * length).toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td>.</td>
                         </tr>
                         <tr>
-                            <td colSpan="5"></td>
-                            <td colSpan="2">Total Amount Per Saree :</td>
-                            <td>{totalAmountDesign.toFixed(2)}</td>
+                            <td colSpan="4"></td>
+                            <td colSpan="3">Total Amount :</td>
+                            <td>{(totalamountdesign / length).toFixed(2)}</td>
+                            <td>{totalamountdesign}</td>
                         </tr>
                         <tr>
                             <td colSpan="6"></td>
@@ -946,10 +1000,10 @@ function InputDesign() {
                             <td>
                                 <input
                                     type="text"
-                                    size="7"
+                                    size="14"
                                     placeholder="Selling Price"
                                     count="0.01"
-                                    value={sellPrice}
+                                    value={sellprice}
                                     onChange={(e) => {
                                         setSellPrice(e.target.value);
                                     }}

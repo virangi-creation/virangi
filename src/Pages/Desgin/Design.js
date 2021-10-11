@@ -146,8 +146,8 @@ function Design() {
                                                 to={{
                                                     pathname: "/design/update",
                                                     state: {
-                                                        designno:
-                                                            design.designno,
+                                                        designfilename:
+                                                            design.designfilename,
                                                     },
                                                 }}
                                             >

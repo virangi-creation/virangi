@@ -32,6 +32,7 @@ import InputDesign from "./Pages/Desgin/InputDesign";
 import Harness from "./Pages/Harness/Harness";
 import InputHarness from "./Pages/Harness/InputHarness";
 import UpdateHarness from "./Pages/Harness/UpdateHarness";
+import UpdateDesign from "./Pages/Desgin/UpdateDesign";
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
@@ -128,7 +129,7 @@ function App() {
                 </Route>
                 <Route path="/design/update" exact>
                     <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-                    <UpdateAgent />
+                    <UpdateDesign />
                 </Route>
                 <Route path="/harness" exact>
                     <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} />

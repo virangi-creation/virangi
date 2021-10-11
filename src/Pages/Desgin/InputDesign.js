@@ -192,6 +192,7 @@ function InputDesign() {
         setQualityid(null);
         qualities.map((quality) => {
             if (quality.qualityname === q) {
+                console.log(quality);
                 setQualityid(quality.qualityid);
                 setBodyWarp({ warpid: quality.bodywarpid });
                 setBorderWarp({ warpid: quality.borderwarpid });
@@ -279,10 +280,8 @@ function InputDesign() {
             await feeders.map((feeder) => {
                 if (feeder.feederid === feedername.feederid) {
                     let { feederid, ...y } = feeder;
-                    console.log(feeder);
                     yarnqualities.map((yq) => {
                         if (yq.qualityid === feeder.yarnqualityid) {
-                            console.log(yq);
                             setFeederName((prevState) => ({
                                 ...prevState,
                                 ...y,
@@ -295,7 +294,16 @@ function InputDesign() {
                 }
             });
         }
-    }, [feeder1.feederid]);
+    }, [
+        feeder1.feederid,
+        feeder2.feederid,
+        feeder3.feederid,
+        feeder4.feederid,
+        feeder5.feederid,
+        feeder6.feederid,
+        feeder7.feederid,
+        feeder8.feederid,
+    ]);
 
     useEffect(() => {
         setPickOnFabric(
@@ -350,7 +358,7 @@ function InputDesign() {
             let setFeeder = eval(feedername[1]);
             let tempAvgPick = feeder.pick / (length * 39.37);
             let tempWeight = (tempAvgPick * rs * feeder.denier) / 90000;
-            let tempAmount = tempWeight * feeder.rate;
+            let tempAmount = tempWeight * feeder.yarnprice;
             setFeeder((prevState) => ({
                 ...prevState,
                 averagepick: isNaN(tempAvgPick)
@@ -364,7 +372,17 @@ function InputDesign() {
                     : parseFloat(tempAmount).toFixed(2),
             }));
         });
-    }, [length]);
+    }, [
+        length,
+        feeder1.yarnqualityid,
+        feeder2.yarnqualityid,
+        feeder3.yarnqualityid,
+        feeder4.yarnqualityid,
+        feeder5.yarnqualityid,
+        feeder6.yarnqualityid,
+        feeder7.yarnqualityid,
+        feeder8.yarnqualityid,
+    ]);
 
     useEffect(() => {
         let tempTotalPick = 0,
@@ -749,13 +767,13 @@ function InputDesign() {
                             <td>
                                 {(
                                     (totalweftamount * weftwastage) /
-                                    100
+                                    10000
                                 ).toFixed(2)}
                             </td>
                             <td>
                                 {(
                                     (totalweftamount * weftwastage * length) /
-                                    100
+                                    10000
                                 ).toFixed(2)}
                             </td>
                         </tr>

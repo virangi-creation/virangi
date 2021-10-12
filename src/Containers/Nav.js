@@ -90,6 +90,31 @@ const Nav = ({ loggedIn, setLoggedIn }) => {
                                 </div>
                             </div>
                         )}
+                        {loggedIn && (
+                            <div className={styles.dropdown}>
+                                <button className={styles.dropbtn}>
+                                    Purchase
+                                    <i className="fa fa-caret-down"></i>
+                                </button>
+                                <div className={styles.dropdown_content}>
+                                    <Link to="/purchaseorder">
+                                        <button className={styles.nav_button}>
+                                            Purchase Orders
+                                        </button>
+                                    </Link>
+                                    <Link to="/party">
+                                        <button className={styles.nav_button}>
+                                            Purchase Bill
+                                        </button>
+                                    </Link>
+                                    <Link to="/agent">
+                                        <button className={styles.nav_button}>
+                                            Purchase Challan
+                                        </button>
+                                    </Link>
+                                </div>
+                            </div>
+                        )}
                         {!loggedIn && (
                             <div className={styles.dropdown}>
                                 <button className={styles.dropbtn}>

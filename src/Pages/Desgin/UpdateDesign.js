@@ -34,12 +34,11 @@ function UpdateDesign() {
     const [bodywarp, setBodyWarp] = useState({});
     const [borderwarp, setBorderWarp] = useState({});
     const [topbeam, setTopBeam] = useState({});
-
     let feederTemplate = {
         feederid: 1,
         yarnqualityid: 1,
         yarnqualityname: "",
-        designpick: 0,
+        feedertype: 3,
         pick: 0,
         averagepick: 0,
         weftwastage: 0,

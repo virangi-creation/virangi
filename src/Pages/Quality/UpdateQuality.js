@@ -36,7 +36,8 @@ function UpdateQuality() {
         feederid: 1,
         yarnqualityid: 1,
         yarnqualityname: "",
-        designpick: 0,
+        feedertype: 3,
+        pick: 0,
         averagepick: 0,
         weftwastage: 0,
         weight: 0,
@@ -87,7 +88,7 @@ function UpdateQuality() {
         feederDetails.map((feedername) => {
             let feeder = eval(feedername[0]);
             let setFeeder = eval(feedername[1]);
-            let tempAvgPick = feeder.designpick / (length * 39.37);
+            let tempAvgPick = feeder.pick / (length * 39.37);
             let tempWeight = (tempAvgPick * rs * feeder.denier) / 90000;
             let tempAmount = tempWeight * feeder.yarnprice;
             setFeeder((prevState) => ({
@@ -150,14 +151,6 @@ function UpdateQuality() {
                         setFeeder6(data.feeder6);
                         setFeeder7(data.feeder7);
                         setFeeder8(data.feeder8);
-                        // console.log(feeder1);
-                        // console.log(feeder2);
-                        // console.log(feeder3);
-                        // console.log(feeder4);
-                        // console.log(feeder5);
-                        // console.log(feeder6);
-                        // console.log(feeder7);
-                        // console.log(feeder8);
 
                         setLoad(false);
 

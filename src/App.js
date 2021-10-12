@@ -33,6 +33,9 @@ import Harness from "./Pages/Harness/Harness";
 import InputHarness from "./Pages/Harness/InputHarness";
 import UpdateHarness from "./Pages/Harness/UpdateHarness";
 import UpdateDesign from "./Pages/Desgin/UpdateDesign";
+import PurchaseOrder from "./Pages/PurchaseOrder/PurchaseOrder";
+import InputPurchaseOrder from "./Pages/PurchaseOrder/InputPurchaseOrder";
+import UpdatePurchaseOrder from "./Pages/PurchaseOrder/UpdatePurchaseOrder";
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
@@ -141,8 +144,19 @@ function App() {
                 </Route>
                 <Route path="/harness/update" exact>
                     <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-                    {loggedIn && <Redirect to="/login" />}
                     <UpdateHarness />
+                </Route>
+                <Route path="/purchaseorder" exact>
+                    <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+                    <PurchaseOrder />
+                </Route>
+                <Route path="/purchaseorder/add" exact>
+                    <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+                    <InputPurchaseOrder />
+                </Route>
+                <Route path="/purchaseorder/update" exact>
+                    <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+                    <UpdatePurchaseOrder />
                 </Route>
                 <Route path="/login" exact>
                     <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} />

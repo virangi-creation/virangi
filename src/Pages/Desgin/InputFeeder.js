@@ -3,7 +3,6 @@ const InputFeeder = ({
     setFeeder,
     role,
     length,
-    // weftwastage,
     rs,
     yarnqualities,
     captureEnter,
@@ -84,6 +83,22 @@ const InputFeeder = ({
                 </datalist>
             </td>
             <td>{feeder.denier}</td>
+            <td>
+                <select
+                    value={feeder.feedertype}
+                    onKeyDown={captureEnter}
+                    onChange={(e) => {
+                        setFeeder((prevState) => ({
+                            ...prevState,
+                            feedertype: parseInt(e.target.value),
+                        }));
+                    }}
+                >
+                    <option value="1">Body</option>
+                    <option value="2">Border</option>
+                    <option value="3">Meena</option>
+                </select>
+            </td>
             <td>
                 <input
                     type="number"

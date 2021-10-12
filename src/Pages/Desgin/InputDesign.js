@@ -36,13 +36,14 @@ function InputDesign() {
         feederid: 1,
         yarnqualityid: 1,
         yarnqualityname: "",
-        designpick: 0,
+        feedertype: 3,
         pick: 0,
         averagepick: 0,
         weftwastage: 0,
         weight: 0,
         amount: 0,
     };
+
     const [feeder1, setFeeder1] = useState(feederTemplate);
     const [feeder2, setFeeder2] = useState(feederTemplate);
     const [feeder3, setFeeder3] = useState(feederTemplate);
@@ -750,7 +751,7 @@ function InputDesign() {
                             <td colSpan="3" style={{ paddingRight: "70px" }}>
                                 Length :
                             </td>
-                            <td>{length.toFixed(2)}</td>
+                            <td>{length}</td>
                         </tr>
 
                         <tr>
@@ -830,7 +831,7 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
-                            <td>{buttacharge.toFixed(2)}</td>
+                            <td>{buttacharge}</td>
                             <td>{(buttacharge * length).toFixed(2)}</td>
                         </tr>
                         <tr>
@@ -849,7 +850,7 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
-                            <td>{lasercharge.toFixed(2)}</td>
+                            <td>{lasercharge}</td>
                             <td>{(lasercharge * length).toFixed(2)}</td>
                         </tr>
                         <tr>
@@ -868,7 +869,7 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
-                            <td>{designcharge.toFixed(2)}</td>
+                            <td>{designcharge}</td>
                             <td>{(designcharge * length).toFixed(2)}</td>
                         </tr>
                         <tr>
@@ -887,7 +888,7 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
-                            <td>{dyeingcharge.toFixed(2)}</td>
+                            <td>{dyeingcharge}</td>
                             <td>{(dyeingcharge * length).toFixed(2)}</td>
                         </tr>
                         <tr>
@@ -912,7 +913,7 @@ function InputDesign() {
                                     : finishingcharge / length
                                 ).toFixed(2)}
                             </td>
-                            <td>{finishingcharge.toFixed(2)}</td>
+                            <td>{finishingcharge}</td>
                         </tr>
                         <tr>
                             <td colSpan="3"></td>
@@ -936,7 +937,7 @@ function InputDesign() {
                                     : packingcharge / length
                                 ).toFixed(2)}
                             </td>
-                            <td>{packingcharge.toFixed(2)}</td>
+                            <td>{packingcharge}</td>
                         </tr>
                         <tr>
                             <td>.</td>

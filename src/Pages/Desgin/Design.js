@@ -116,11 +116,13 @@ function Design() {
                         )}
                         {searchedDesigns.length !== 0 &&
                             searchedDesigns.map((design) => {
+                                console.log(design);
                                 return (
                                     <tr key={design.designno}>
                                         <td>{design.designno}</td>
                                         <td>{design.designfilename}</td>
                                         <td>{design.qualityname}</td>
+                                        <td>{design.sellprice}</td>
                                         <td className={tableStyles.tableButton}>
                                             <Link
                                                 style={{ color: "white" }}

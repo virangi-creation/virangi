@@ -230,7 +230,7 @@ function UpdateDesign() {
         try {
             setLoad(true);
             await axios
-                .post(`/design/`, {
+                .put(`/design/${location.state.designfilename}`, {
                     qualityid,
                     designno,
                     designfilename,

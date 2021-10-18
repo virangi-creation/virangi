@@ -122,6 +122,7 @@ function Design() {
                                         <td>{design.designno}</td>
                                         <td>{design.designfilename}</td>
                                         <td>{design.qualityname}</td>
+                                        <td>{design.totalamountdesign}</td>
                                         <td>{design.sellprice}</td>
                                         <td className={tableStyles.tableButton}>
                                             <Link

@@ -13,13 +13,13 @@ function Design() {
 
     const deleteRequest = async (e) => {
         try {
-            let designno = e;
+            let designfilename = e;
             if (
                 window.confirm("Are you sure you want to delete this design?")
             ) {
                 setLoad(true);
                 await axios
-                    .delete(`/design/${designno}`)
+                    .delete(`/design/${designfilename}`)
                     .then(() => {
                         setLoad(false);
                         window.location.reload();
@@ -65,6 +65,7 @@ function Design() {
         designs.map((design) => {
             if (
                 design.designno.includes(str) ||
+                design.designfilename.includes(str) ||
                 design.qualityname.includes(str)
             )
                 tempDesigns.push(design);
@@ -102,6 +103,7 @@ function Design() {
                     <tbody>
                         <tr>
                             <th>Design No</th>
+                            <th>Design File Name</th>
                             <th>Quality</th>
                             <th></th>
                             <th></th>
@@ -117,6 +119,7 @@ function Design() {
                                 return (
                                     <tr key={design.designno}>
                                         <td>{design.designno}</td>
+                                        <td>{design.designfilename}</td>
                                         <td>{design.qualityname}</td>
                                         <td className={tableStyles.tableButton}>
                                             <Link
@@ -135,7 +138,9 @@ function Design() {
                                         <td
                                             className={tableStyles.tableButton}
                                             onClick={() => {
-                                                deleteRequest(design.designno);
+                                                deleteRequest(
+                                                    design.designfilename
+                                                );
                                             }}
                                         >
                                             Delete

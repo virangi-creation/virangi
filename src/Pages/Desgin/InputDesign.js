@@ -392,7 +392,8 @@ function InputDesign() {
             tempTotalWeftAmount = 0;
         feederDetails.map((feedername) => {
             let feeder = eval(feedername[0]);
-            tempTotalPick += isNaN(feeder.pick) ? 0 : parseInt(feeder.pick);
+            if (feeder.pick)
+                tempTotalPick += isNaN(feeder.pick) ? 0 : parseInt(feeder.pick);
             tempTotalAveragePick += isNaN(feeder.averagepick)
                 ? 0
                 : parseFloat(feeder.averagepick);
@@ -412,6 +413,7 @@ function InputDesign() {
         setTotalWeftAmount(tempTotalWeftAmount);
         setTotalWeftWeight(tempTotalWeftWeight);
     }, [
+        length,
         feeder1,
         feeder2,
         feeder3,
@@ -438,32 +440,22 @@ function InputDesign() {
     useEffect(() => {
         let tempTotalAmount = totalAmountOneMtr;
 
-        console.log("1", tempTotalAmount);
-
         tempTotalAmount += parseFloat(
             isNaN(weftwastage)
                 ? 0
                 : (totalweftamount * parseFloat(weftwastage)) / 10000
         );
-        console.log("2", tempTotalAmount);
         tempTotalAmount += parseFloat(isNaN(jobamount) ? 0 : jobamount);
-        console.log("3", tempTotalAmount);
         tempTotalAmount += parseFloat(isNaN(buttacharge) ? 0 : buttacharge);
-        console.log("4", tempTotalAmount);
         tempTotalAmount += parseFloat(isNaN(lasercharge) ? 0 : lasercharge);
-        console.log("5", tempTotalAmount);
         tempTotalAmount += parseFloat(isNaN(designcharge) ? 0 : designcharge);
-        console.log("6", tempTotalAmount);
         tempTotalAmount += parseFloat(isNaN(dyeingcharge) ? 0 : dyeingcharge);
-        console.log("7", tempTotalAmount);
         tempTotalAmount += parseFloat(
             isNaN(finishingcharge) ? 0 : finishingcharge / length
         );
-        console.log("8", tempTotalAmount);
         tempTotalAmount += parseFloat(
             isNaN(packingcharge) ? 0 : packingcharge / length
         );
-        console.log("9", tempTotalAmount);
         setTotalCharges(tempTotalAmount);
     }, [
         totalAmountOneMtr,
@@ -751,7 +743,7 @@ function InputDesign() {
                             <td colSpan="3" style={{ paddingRight: "70px" }}>
                                 Length :
                             </td>
-                            <td>{length}</td>
+                            <td>{length.toFixed(2)}</td>
                         </tr>
 
                         <tr>
@@ -810,10 +802,8 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
-                            <td>
-                                {((jobcharge * totalavgpick) / 100).toFixed(2)}
-                            </td>
                             <td>{jobamount.toFixed(2)}</td>
+                            <td>{(jobamount * length).toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td colSpan="3"></td>
@@ -831,7 +821,7 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
-                            <td>{buttacharge}</td>
+                            <td>{buttacharge.toFixed(2)}</td>
                             <td>{(buttacharge * length).toFixed(2)}</td>
                         </tr>
                         <tr>
@@ -850,7 +840,7 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
-                            <td>{lasercharge}</td>
+                            <td>{lasercharge.toFixed(2)}</td>
                             <td>{(lasercharge * length).toFixed(2)}</td>
                         </tr>
                         <tr>
@@ -869,7 +859,7 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
-                            <td>{designcharge}</td>
+                            <td>{designcharge.toFixed(2)}</td>
                             <td>{(designcharge * length).toFixed(2)}</td>
                         </tr>
                         <tr>
@@ -888,7 +878,7 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
-                            <td>{dyeingcharge}</td>
+                            <td>{dyeingcharge.toFixed(2)}</td>
                             <td>{(dyeingcharge * length).toFixed(2)}</td>
                         </tr>
                         <tr>
@@ -913,7 +903,7 @@ function InputDesign() {
                                     : finishingcharge / length
                                 ).toFixed(2)}
                             </td>
-                            <td>{finishingcharge}</td>
+                            <td>{finishingcharge.toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td colSpan="3"></td>
@@ -937,7 +927,7 @@ function InputDesign() {
                                     : packingcharge / length
                                 ).toFixed(2)}
                             </td>
-                            <td>{packingcharge}</td>
+                            <td>{packingcharge.toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td>.</td>

@@ -19,7 +19,7 @@ const Nav = ({ loggedIn, setLoggedIn }) => {
         <nav id="navbar">
             <div className={styles.nav_align}>
                 <div className="img">
-                    <Link to="/virangi/">
+                    <Link to="/">
                         <img
                             src={logo}
                             alt="Forum Logo"

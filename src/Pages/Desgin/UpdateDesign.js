@@ -548,37 +548,26 @@ function UpdateDesign() {
 
     useEffect(() => {
         setJobAmount((calculatedavgpick * jobcharge) / 100);
-    }, [totalpick, jobcharge, length]);
+    }, [totalpick, jobcharge]);
 
     useEffect(() => {
         let tempTotalAmount = totalAmountOneMtr;
-
-        console.log("1", tempTotalAmount);
-
         tempTotalAmount += parseFloat(
             isNaN(weftwastage)
                 ? 0
                 : (totalweftamount * parseFloat(weftwastage)) / 10000
         );
-        console.log("2", tempTotalAmount);
         tempTotalAmount += parseFloat(isNaN(jobamount) ? 0 : jobamount);
-        console.log("3", tempTotalAmount);
         tempTotalAmount += parseFloat(isNaN(buttacharge) ? 0 : buttacharge);
-        console.log("4", tempTotalAmount);
         tempTotalAmount += parseFloat(isNaN(lasercharge) ? 0 : lasercharge);
-        console.log("5", tempTotalAmount);
         tempTotalAmount += parseFloat(isNaN(designcharge) ? 0 : designcharge);
-        console.log("6", tempTotalAmount);
         tempTotalAmount += parseFloat(isNaN(dyeingcharge) ? 0 : dyeingcharge);
-        console.log("7", tempTotalAmount);
         tempTotalAmount += parseFloat(
             isNaN(finishingcharge) ? 0 : finishingcharge / length
         );
-        console.log("8", tempTotalAmount);
         tempTotalAmount += parseFloat(
             isNaN(packingcharge) ? 0 : packingcharge / length
         );
-        console.log("9", tempTotalAmount);
         setTotalCharges(tempTotalAmount);
     }, [
         totalAmountOneMtr,

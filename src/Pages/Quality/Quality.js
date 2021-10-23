@@ -106,7 +106,8 @@ function Quality() {
                             <th rowSpan="2"></th>
                             <th rowSpan="2">Quality</th>
                             <th rowSpan="2">Job Charge</th>
-                            <th rowSpan="2">Length</th>
+                            <th rowSpan="2">Design Length</th>
+                            <th rowSpan="2">Unit Length</th>
                             <th colSpan="15">Body Warp Details</th>
                             <th colSpan="5">Border Warp Details</th>
                             <th colSpan="5">Top Beam Warp Details</th>
@@ -115,6 +116,7 @@ function Quality() {
                             <th rowSpan="2">Laser Charge / MTR</th>
                             <th rowSpan="2">Design Charge / MTR</th>
                             <th rowSpan="2">Dyeing Charge / MTR</th>
+                            <th rowSpan="2">Seconds Ratio / Piece</th>
                             <th rowSpan="2">Finishing Charge / Piece</th>
                             <th rowSpan="2">Packing Charge / Piece</th>
                             <th rowSpan="2">Market Margin %</th>
@@ -124,7 +126,7 @@ function Quality() {
                         <tr>
                             <th>Warp Yarn Quality</th>
                             <th>Denier</th>
-                            <th>Length</th>
+                            <th>Warp Length</th>
                             <th>Shortage</th>
                             <th>Total Length</th>
                             <th>Ends</th>
@@ -183,7 +185,8 @@ function Quality() {
                                         </td>
                                         <td>{quality.qualityname}</td>
                                         <th>{quality.jobcharge}</th>
-                                        <th>{quality.length}</th>
+                                        <th>{quality.designlength}</th>
+                                        <th>{quality.unitlength}</th>
                                         <td>{quality.bodyqualityname}</td>
                                         <td>{quality.bodydenier}</td>
                                         <td>{quality.bodywarplength}</td>
@@ -216,6 +219,7 @@ function Quality() {
                                         <td>{quality.lasercharge}</td>
                                         <td>{quality.designcharge}</td>
                                         <td>{quality.dyeingcharge}</td>
+                                        <td>{quality.secondsratio}</td>
                                         <td>{quality.finishingcharge}</td>
                                         <td>{quality.packingcharge}</td>
                                         <td>{quality.marketmargin}</td>

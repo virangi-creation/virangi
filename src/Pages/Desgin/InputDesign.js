@@ -24,7 +24,8 @@ function InputDesign() {
     const [fullDetail, setFullDetail] = useState("");
     const [pickonloom, setPickOnLoom] = useState(0);
     const [pickonfabric, setPickOnFabric] = useState(0);
-    const [length, setLength] = useState(0);
+    const [designlength, setDesignLength] = useState(0);
+    const [unitlength, setUnitLength] = useState(0);
     const [rs, setRS] = useState(0);
     const [weftwastage, setWeftWastage] = useState(0);
 
@@ -90,10 +91,12 @@ function InputDesign() {
     const [designcharge, setDesignCharge] = useState(0);
     const [finishingcharge, setFinishingCharge] = useState(0);
     const [packingcharge, setPackingCharge] = useState(0);
+    const [secondsratio, setSecondsRatio] = useState(0);
     const [agentcharge, setAgentCharge] = useState(0);
     const [dyeingcharge, setDyeingCharge] = useState(0);
     const [marketmargin, setMarketMargin] = useState(0);
     const [discount, setDiscount] = useState(0);
+    const [secondsratioamount, setSecondsRatioAmount] = useState(0);
     const [marketmarginamount, setMarketMarginAmount] = useState(0);
     const [discountamount, setDiscountAmount] = useState(0);
     const [agentamount, setAgentAmount] = useState(0);
@@ -140,7 +143,8 @@ function InputDesign() {
                     designfilename,
                     harnessid,
                     pickonloom,
-                    length,
+                    designlength,
+                    unitlength,
                     feeder1,
                     feeder2,
                     feeder3,
@@ -157,6 +161,7 @@ function InputDesign() {
                     lasercharge,
                     designcharge,
                     finishingcharge,
+                    secondsratio,
                     packingcharge,
                     agentcharge,
                     dyeingcharge,
@@ -229,6 +234,9 @@ function InputDesign() {
                         quality.finishingcharge ? quality.finishingcharge : 0
                     )
                 );
+                setSecondsRatio(
+                    parseFloat(quality.secondsratio ? quality.secondsratio : 0)
+                );
                 setPackingCharge(
                     parseFloat(
                         quality.packingcharge ? quality.packingcharge : 0
@@ -246,7 +254,14 @@ function InputDesign() {
                 setWeftWastage(
                     parseFloat(quality.weftwastage ? quality.weftwastage : 0)
                 );
-                setLength(parseFloat(quality.length ? quality.length : 6.1));
+                setDesignLength(
+                    parseFloat(
+                        quality.designlength ? quality.designlength : 6.1
+                    )
+                );
+                setUnitLength(
+                    parseFloat(quality.unitlength ? quality.unitlength : 6.1)
+                );
             }
         });
     };
@@ -357,7 +372,7 @@ function InputDesign() {
         feederDetails.map((feedername, index) => {
             let feeder = eval(feedername[0]);
             let setFeeder = eval(feedername[1]);
-            let tempAvgPick = feeder.pick / (length * 39.37);
+            let tempAvgPick = feeder.pick / (designlength * 39.37);
             let tempWeight = (tempAvgPick * rs * feeder.denier) / 90000;
             let tempAmount = tempWeight * feeder.yarnprice;
             setFeeder((prevState) => ({
@@ -374,7 +389,7 @@ function InputDesign() {
             }));
         });
     }, [
-        length,
+        designlength,
         feeder1.yarnqualityid,
         feeder2.yarnqualityid,
         feeder3.yarnqualityid,
@@ -406,14 +421,15 @@ function InputDesign() {
         });
         setTotalPick(tempTotalPick);
         setTotalAvgPick(tempTotalAveragePick.toFixed(2));
-        let tempCalculatedAvgPick = tempTotalPick / (length * 39.37).toFixed(2);
+        let tempCalculatedAvgPick =
+            tempTotalPick / (designlength * 39.37).toFixed(2);
         setCalculatedAvgPick(
             isNaN(tempCalculatedAvgPick) ? 0 : tempCalculatedAvgPick
         );
         setTotalWeftAmount(tempTotalWeftAmount);
         setTotalWeftWeight(tempTotalWeftWeight);
     }, [
-        length,
+        designlength,
         feeder1,
         feeder2,
         feeder3,
@@ -428,14 +444,14 @@ function InputDesign() {
         let tempTotalAmountHundredMtr =
             parseFloat(totalweftamount) + parseFloat(totalWarpYarnCost);
         let tempTotalAmountOneMtr = tempTotalAmountHundredMtr / 100;
-        let tempBaseAmount = tempTotalAmountOneMtr * length;
+        let tempBaseAmount = tempTotalAmountOneMtr * unitlength;
         setTotalAmountOneMtr(tempTotalAmountOneMtr);
         setBaseAmountDesign(tempBaseAmount);
-    }, [totalWarpYarnCost, totalweftamount]);
+    }, [unitlength, totalWarpYarnCost, totalweftamount]);
 
     useEffect(() => {
         setJobAmount((calculatedavgpick * jobcharge) / 100);
-    }, [totalpick, jobcharge]);
+    }, [unitlength, totalpick, jobcharge]);
 
     useEffect(() => {
         let tempTotalAmount = totalAmountOneMtr;
@@ -451,11 +467,19 @@ function InputDesign() {
         tempTotalAmount += parseFloat(isNaN(designcharge) ? 0 : designcharge);
         tempTotalAmount += parseFloat(isNaN(dyeingcharge) ? 0 : dyeingcharge);
         tempTotalAmount += parseFloat(
-            isNaN(finishingcharge) ? 0 : finishingcharge / length
+            isNaN(finishingcharge) ? 0 : finishingcharge / unitlength
         );
+        if (!isNaN(secondsratio)) {
+            let tempSecondsRationAmount =
+                (tempTotalAmount * parseFloat(secondsratio) * unitlength) / 100;
+            tempTotalAmount += parseFloat(tempSecondsRationAmount);
+            setSecondsRatioAmount(tempSecondsRationAmount);
+        }
+
         tempTotalAmount += parseFloat(
-            isNaN(packingcharge) ? 0 : packingcharge / length
+            isNaN(packingcharge) ? 0 : packingcharge / unitlength
         );
+
         setTotalCharges(tempTotalAmount);
     }, [
         totalAmountOneMtr,
@@ -464,6 +488,7 @@ function InputDesign() {
         lasercharge,
         designcharge,
         finishingcharge,
+        secondsratio,
         packingcharge,
         dyeingcharge,
         weftwastage,
@@ -474,6 +499,7 @@ function InputDesign() {
             tempMarginAmount = 0,
             tempDiscountAmount = 0,
             tempAgentAmount = 0;
+
         if (!isNaN(marketmargin)) {
             tempMarginAmount =
                 (tempTotalAmount * parseFloat(marketmargin)) / 100;
@@ -490,8 +516,8 @@ function InputDesign() {
             tempTotalAmount += parseFloat(tempAgentAmount);
             setAgentAmount(tempAgentAmount);
         }
-        setTotalAmountDesign((tempTotalAmount * length).toFixed(2));
-        setSellPrice((tempTotalAmount * length).toFixed(2));
+        setTotalAmountDesign((tempTotalAmount * unitlength).toFixed(2));
+        setSellPrice((tempTotalAmount * unitlength).toFixed(2));
     }, [marketmargin, agentcharge, discount, totalCharges]);
 
     return (
@@ -605,15 +631,31 @@ function InputDesign() {
                                 <td>{rs}</td>
                             </tr>
                             <tr>
-                                <td>Length</td>
+                                <td>Design Length</td>
                                 <td>
                                     <input
                                         type="number"
-                                        placeholder="Length / Piece"
+                                        placeholder="Design Length / Piece"
                                         count="0.01"
-                                        value={length}
+                                        value={designlength}
                                         onChange={(e) => {
-                                            setLength(e.target.value);
+                                            setDesignLength(e.target.value);
+                                        }}
+                                        onKeyDown={captureEnter}
+                                        onFocus={handleFocus}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Unit Length</td>
+                                <td>
+                                    <input
+                                        type="number"
+                                        placeholder="Unit Length "
+                                        count="0.01"
+                                        value={unitlength}
+                                        onChange={(e) => {
+                                            setUnitLength(e.target.value);
                                         }}
                                         onKeyDown={captureEnter}
                                         onFocus={handleFocus}
@@ -715,7 +757,7 @@ function InputDesign() {
                             <InputFeeder
                                 role={index + 1}
                                 feeder={eval(feeder[0])}
-                                length={length}
+                                designlength={designlength}
                                 rs={rs}
                                 weftwastage={weftwastage}
                                 setFeeder={eval(feeder[1])}
@@ -741,9 +783,9 @@ function InputDesign() {
                         <tr style={{ height: "40px" }}>
                             <td colSpan="5"></td>
                             <td colSpan="3" style={{ paddingRight: "70px" }}>
-                                Length :
+                                Unit Length :
                             </td>
-                            <td>{length.toFixed(2)}</td>
+                            <td>{unitlength}</td>
                         </tr>
 
                         <tr>
@@ -775,7 +817,9 @@ function InputDesign() {
                             </td>
                             <td>
                                 {(
-                                    (totalweftamount * weftwastage * length) /
+                                    (totalweftamount *
+                                        weftwastage *
+                                        unitlength) /
                                     10000
                                 ).toFixed(2)}
                             </td>
@@ -803,7 +847,7 @@ function InputDesign() {
                                 />
                             </td>
                             <td>{jobamount.toFixed(2)}</td>
-                            <td>{(jobamount * length).toFixed(2)}</td>
+                            <td>{(jobamount * unitlength).toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td colSpan="3"></td>
@@ -821,8 +865,8 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
-                            <td>{buttacharge.toFixed(2)}</td>
-                            <td>{(buttacharge * length).toFixed(2)}</td>
+                            <td>{buttacharge}</td>
+                            <td>{(buttacharge * unitlength).toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td colSpan="3"></td>
@@ -840,8 +884,8 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
-                            <td>{lasercharge.toFixed(2)}</td>
-                            <td>{(lasercharge * length).toFixed(2)}</td>
+                            <td>{lasercharge}</td>
+                            <td>{(lasercharge * unitlength).toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td colSpan="3"></td>
@@ -859,8 +903,8 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
-                            <td>{designcharge.toFixed(2)}</td>
-                            <td>{(designcharge * length).toFixed(2)}</td>
+                            <td>{designcharge}</td>
+                            <td>{(designcharge * unitlength).toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td colSpan="3"></td>
@@ -878,8 +922,8 @@ function InputDesign() {
                                     onFocus={handleFocus}
                                 />
                             </td>
-                            <td>{dyeingcharge.toFixed(2)}</td>
-                            <td>{(dyeingcharge * length).toFixed(2)}</td>
+                            <td>{dyeingcharge}</td>
+                            <td>{(dyeingcharge * unitlength).toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td colSpan="3"></td>
@@ -900,10 +944,34 @@ function InputDesign() {
                             <td>
                                 {(isNaN(finishingcharge)
                                     ? 0
-                                    : finishingcharge / length
+                                    : finishingcharge / unitlength
                                 ).toFixed(2)}
                             </td>
-                            <td>{finishingcharge.toFixed(2)}</td>
+                            <td>{finishingcharge}</td>
+                        </tr>
+                        <tr>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">Seconds Ratio / UNIT</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    placeholder="Seconds Ratio"
+                                    count="0.01"
+                                    value={secondsratio}
+                                    onChange={(e) => {
+                                        setSecondsRatio(e.target.value);
+                                    }}
+                                    onKeyDown={captureEnter}
+                                    onFocus={handleFocus}
+                                />
+                            </td>
+                            <td>
+                                {(isNaN(secondsratio)
+                                    ? 0
+                                    : secondsratioamount / unitlength
+                                ).toFixed(2)}
+                            </td>
+                            <td>{secondsratioamount.toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td colSpan="3"></td>
@@ -924,10 +992,10 @@ function InputDesign() {
                             <td>
                                 {(isNaN(packingcharge)
                                     ? 0
-                                    : packingcharge / length
+                                    : packingcharge / unitlength
                                 ).toFixed(2)}
                             </td>
-                            <td>{packingcharge.toFixed(2)}</td>
+                            <td>{packingcharge}</td>
                         </tr>
                         <tr>
                             <td>.</td>
@@ -942,7 +1010,7 @@ function InputDesign() {
                                     : totalCharges
                                 ).toFixed(2)}
                             </td>
-                            <td>{(totalCharges * length).toFixed(2)}</td>
+                            <td>{(totalCharges * unitlength).toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td>.</td>
@@ -964,7 +1032,9 @@ function InputDesign() {
                                 />
                             </td>
                             <td>{marketmarginamount.toFixed(2)}</td>
-                            <td>{(marketmarginamount * length).toFixed(2)}</td>
+                            <td>
+                                {(marketmarginamount * unitlength).toFixed(2)}
+                            </td>
                         </tr>
                         <tr>
                             <td colSpan="3"></td>
@@ -983,7 +1053,7 @@ function InputDesign() {
                                 />
                             </td>
                             <td>{discountamount.toFixed(2)}</td>
-                            <td>{(discountamount * length).toFixed(2)}</td>
+                            <td>{(discountamount * unitlength).toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td colSpan="3"></td>
@@ -1002,7 +1072,7 @@ function InputDesign() {
                                 />
                             </td>
                             <td>{agentamount.toFixed(2)}</td>
-                            <td>{(agentamount * length).toFixed(2)}</td>
+                            <td>{(agentamount * unitlength).toFixed(2)}</td>
                         </tr>
                         <tr>
                             <td>.</td>
@@ -1010,7 +1080,9 @@ function InputDesign() {
                         <tr>
                             <td colSpan="4"></td>
                             <td colSpan="3">Total Amount :</td>
-                            <td>{(totalamountdesign / length).toFixed(2)}</td>
+                            <td>
+                                {(totalamountdesign / unitlength).toFixed(2)}
+                            </td>
                             <td>{totalamountdesign}</td>
                         </tr>
                         <tr>

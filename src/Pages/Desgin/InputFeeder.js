@@ -2,7 +2,7 @@ const InputFeeder = ({
     feeder,
     setFeeder,
     role,
-    length,
+    designlength,
     rs,
     yarnqualities,
     captureEnter,
@@ -16,7 +16,7 @@ const InputFeeder = ({
         }));
         yarnqualities.map((quality) => {
             if (quality.qualityname === q) {
-                let tempAvgPick = feeder.pick / (length * 39.37);
+                let tempAvgPick = feeder.pick / (designlength * 39.37);
                 let tempWeight = (tempAvgPick * rs * quality.denier) / 90000;
                 let tempAmount = tempWeight * quality.totalprice;
                 setFeeder((prevState) => ({
@@ -46,7 +46,7 @@ const InputFeeder = ({
         }));
     };
     const updatePick = (e) => {
-        let tempAvgPick = e.target.value / (length * 39.37);
+        let tempAvgPick = e.target.value / (designlength * 39.37);
         let tempWeight = (tempAvgPick * rs * feeder.denier) / 90000;
         let tempAmount = tempWeight * feeder.yarnprice;
         setFeeder((prevState) => ({

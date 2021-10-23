@@ -64,6 +64,7 @@ function UpdateQuality() {
     const [designcharge, setDesigncharge] = useState(0);
     const [finishingcharge, setFinishingcharge] = useState(0);
     const [packingcharge, setPackingcharge] = useState(0);
+    const [secondsratio, setSecondsRatio] = useState(0);
     const [agentcharge, setAgentcharge] = useState(0);
     const [dyeingcharge, setDyeingCharge] = useState(0);
     const [marketmargin, setMarketMargin] = useState(0);
@@ -137,6 +138,7 @@ function UpdateQuality() {
                         setDesigncharge(quality.designcharge);
                         setFinishingcharge(quality.finishingcharge);
                         setPackingcharge(quality.packingcharge);
+                        setSecondsRatio(quality.secondsratio);
                         setAgentcharge(quality.agentcharge);
                         setDyeingCharge(quality.dyeingcharge);
                         setMarketMargin(quality.marketmargin);
@@ -253,6 +255,7 @@ function UpdateQuality() {
                     designcharge,
                     finishingcharge,
                     packingcharge,
+                    secondsratio,
                     agentcharge,
                     weftwastage,
                     dyeingcharge,
@@ -523,6 +526,22 @@ function UpdateQuality() {
                                                 setPackingcharge(
                                                     e.target.value
                                                 );
+                                            }}
+                                            onFocus={handleFocus}
+                                            onKeyDown={captureEnter}
+                                            required
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan="2">Seconds Ratio</td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            placeholder="Enter Seconds Ratio..."
+                                            value={secondsratio}
+                                            onChange={(e) => {
+                                                setSecondsRatio(e.target.value);
                                             }}
                                             onFocus={handleFocus}
                                             onKeyDown={captureEnter}

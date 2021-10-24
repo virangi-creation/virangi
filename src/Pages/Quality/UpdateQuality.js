@@ -255,6 +255,7 @@ function UpdateQuality() {
                     buttacharge,
                     lasercharge,
                     designcharge,
+                    unitlength,
                     finishingcharge,
                     packingcharge,
                     secondsratio,

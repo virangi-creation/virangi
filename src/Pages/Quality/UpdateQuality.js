@@ -69,7 +69,8 @@ function UpdateQuality() {
     const [dyeingcharge, setDyeingCharge] = useState(0);
     const [marketmargin, setMarketMargin] = useState(0);
     const [discount, setDiscount] = useState(0);
-    const [length, setLength] = useState(0);
+    const [designlength, setDesignLength] = useState(0);
+    const [unitlength, setUnitLength] = useState(0);
     const [weftwastage, setWeftWastage] = useState(0);
 
     const [feederDetails] = useState([
@@ -89,7 +90,7 @@ function UpdateQuality() {
         feederDetails.map((feedername) => {
             let feeder = eval(feedername[0]);
             let setFeeder = eval(feedername[1]);
-            let tempAvgPick = feeder.pick / (length * 39.37);
+            let tempAvgPick = feeder.pick / (designlength * 39.37);
             let tempWeight = (tempAvgPick * rs * feeder.denier) / 90000;
             let tempAmount = tempWeight * feeder.yarnprice;
             setFeeder((prevState) => ({
@@ -105,7 +106,7 @@ function UpdateQuality() {
                     : parseFloat(tempAmount).toFixed(2),
             }));
         });
-    }, [length, weftwastage]);
+    }, [designlength, weftwastage]);
 
     useEffect(() => {
         let tempRS =
@@ -143,7 +144,8 @@ function UpdateQuality() {
                         setDyeingCharge(quality.dyeingcharge);
                         setMarketMargin(quality.marketmargin);
                         setDiscount(quality.discount);
-                        setLength(quality.length);
+                        setDesignLength(quality.designlength);
+                        setUnitLength(quality.unitlength);
                         setWeftWastage(quality.weftwastage);
                         setFeeder1(data.feeder1);
                         setFeeder2(data.feeder2);
@@ -261,7 +263,7 @@ function UpdateQuality() {
                     dyeingcharge,
                     marketmargin,
                     discount,
-                    length,
+                    designlength,
                 })
                 .then(() => {
                     setLoad(false);
@@ -322,14 +324,30 @@ function UpdateQuality() {
                                 </td>
                             </tr>
                             <tr>
-                                <td colSpan="2">Length of Saree</td>
+                                <td colSpan="2">Design Length</td>
                                 <td>
                                     <input
                                         type="number"
-                                        placeholder="Enter Saree Length..."
-                                        value={length}
+                                        placeholder="Enter Design Length..."
+                                        value={designlength}
                                         onChange={(e) => {
-                                            setLength(e.target.value);
+                                            setDesignLength(e.target.value);
+                                        }}
+                                        onFocus={handleFocus}
+                                        onKeyDown={captureEnter}
+                                        required
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="2">Unit Length</td>
+                                <td>
+                                    <input
+                                        type="number"
+                                        placeholder="Enter Unit Length..."
+                                        value={unitlength}
+                                        onChange={(e) => {
+                                            setUnitLength(e.target.value);
                                         }}
                                         onFocus={handleFocus}
                                         onKeyDown={captureEnter}
@@ -414,7 +432,7 @@ function UpdateQuality() {
                                 <InputFeeder
                                     role={index + 1}
                                     feeder={eval(feeder[0])}
-                                    length={length}
+                                    designlength={designlength}
                                     rs={rs}
                                     weftwastage={weftwastage}
                                     setFeeder={eval(feeder[1])}

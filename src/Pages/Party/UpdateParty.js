@@ -157,14 +157,17 @@ function UpdateParty() {
         }
     };
 
-    function captureEnter(event) {
-        if (event.keyCode === 13) {
+    const captureEnter = (event) => {
+        let kC = event.keyCode;
+        if (kC == 27 && window.confirm("Are you sure you want to save?"))
+            onSubmitEvent();
+        else if (event.keyCode === 13) {
             const form = event.target.form;
             const index = Array.prototype.indexOf.call(form, event.target);
             form.elements[index + 1].focus();
             event.preventDefault();
         }
-    }
+    };
 
     const onUpdateAgent = (e) => {
         let q = e.target.value;

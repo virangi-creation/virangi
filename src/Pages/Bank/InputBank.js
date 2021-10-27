@@ -33,9 +33,11 @@ function InputBank() {
         }
     };
 
-    function captureEnter(event) {
-        if (event.keyCode === 13) onSubmitEvent();
-    }
+    const captureEnter = (event) => {
+        let kC = event.keyCode;
+        if (kC == 27 && window.confirm("Are you sure you want to save?"))
+            onSubmitEvent();
+    };
 
     const updateEvent = (e) => {
         setBankName(e.target.value.toUpperCase());

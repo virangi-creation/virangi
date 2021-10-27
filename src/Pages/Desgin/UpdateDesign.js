@@ -21,6 +21,7 @@ function UpdateDesign() {
     const [qualityname, setQualityname] = useState("");
     const [designno, setDesignNo] = useState("");
     const [designfilename, setDesignFileName] = useState("");
+    const [designdescription, setDesignDescription] = useState("");
     const [harnessid, setHarnessid] = useState("");
     const [harnessname, setHarnessName] = useState("");
     const [loomnos, setLoomnos] = useState("");
@@ -119,6 +120,7 @@ function UpdateDesign() {
                         let design = data.design;
                         setQualityid(parseInt(design.qualityid));
                         setDesignFileName(design.designfilename);
+                        setDesignDescription(design.designdescription);
                         setDesignNo(design.designno);
                         setHarnessid(design.harnessid);
 
@@ -249,6 +251,7 @@ function UpdateDesign() {
                     qualityid,
                     designno,
                     designfilename,
+                    designdescription,
                     harnessid,
                     pickonloom,
                     designlength,
@@ -680,6 +683,23 @@ function UpdateDesign() {
                                         value={designno}
                                         onChange={(e) => {
                                             setDesignNo(
+                                                e.target.value.toUpperCase()
+                                            );
+                                        }}
+                                        onKeyDown={captureEnter}
+                                        onFocus={handleFocus}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Design Description</td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        placeholder="Design Description"
+                                        value={designdescription}
+                                        onChange={(e) => {
+                                            setDesignDescription(
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
@@ -1232,7 +1252,7 @@ function UpdateDesign() {
                         className={buttonStyles.inputbutton}
                         onClick={onSubmitEvent}
                     >
-                        Add new Design
+                        Update Design
                     </button>
                 </form>
             )}{" "}

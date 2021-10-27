@@ -19,6 +19,7 @@ function InputDesign() {
     const [qualityid, setQualityid] = useState("");
     const [designno, setDesignNo] = useState("");
     const [designfilename, setDesignFileName] = useState("");
+    const [designdescription, setDesignDescription] = useState("");
     const [harnessid, setHarnessid] = useState("");
     const [loomnos, setLoomnos] = useState("");
     const [fullDetail, setFullDetail] = useState("");
@@ -141,6 +142,7 @@ function InputDesign() {
                     qualityid,
                     designno,
                     designfilename,
+                    designdescription,
                     harnessid,
                     pickonloom,
                     designlength,
@@ -550,6 +552,7 @@ function InputDesign() {
                                     />
                                 </td>
                             </tr>
+
                             <tr>
                                 <td>Design No</td>
                                 <td>
@@ -559,6 +562,23 @@ function InputDesign() {
                                         value={designno}
                                         onChange={(e) => {
                                             setDesignNo(
+                                                e.target.value.toUpperCase()
+                                            );
+                                        }}
+                                        onKeyDown={captureEnter}
+                                        onFocus={handleFocus}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Design Description</td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        placeholder="Design Description"
+                                        value={designdescription}
+                                        onChange={(e) => {
+                                            setDesignDescription(
                                                 e.target.value.toUpperCase()
                                             );
                                         }}

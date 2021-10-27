@@ -104,6 +104,7 @@ function Design() {
                         <tr>
                             <th>Design No</th>
                             <th>Design File Name</th>
+                            <th>Description</th>
                             <th>Quality</th>
                             <th></th>
                             <th></th>
@@ -121,6 +122,7 @@ function Design() {
                                     <tr key={design.designno}>
                                         <td>{design.designno}</td>
                                         <td>{design.designfilename}</td>
+                                        <td>{design.designdescription}</td>
                                         <td>{design.qualityname}</td>
                                         <td>{design.totalamountdesign}</td>
                                         <td>{design.sellprice}</td>

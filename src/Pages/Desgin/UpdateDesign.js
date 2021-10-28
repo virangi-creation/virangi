@@ -601,8 +601,8 @@ function UpdateDesign() {
         );
         if (!isNaN(secondsratio)) {
             let tempSecondsRationAmount =
-                (tempTotalAmount * parseFloat(secondsratio) * unitlength) / 100;
-            tempTotalAmount += parseFloat(tempSecondsRationAmount);
+                (tempTotalAmount * parseFloat(secondsratio)) / 100;
+            tempTotalAmount += parseFloat(tempSecondsRationAmount) / unitlength;
             setSecondsRatioAmount(tempSecondsRationAmount);
         }
         tempTotalAmount += parseFloat(

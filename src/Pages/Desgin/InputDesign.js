@@ -477,8 +477,8 @@ function InputDesign() {
         );
         if (!isNaN(secondsratio)) {
             let tempSecondsRationAmount =
-                (tempTotalAmount * parseFloat(secondsratio)) / 100;
-            tempTotalAmount += parseFloat(tempSecondsRationAmount) / unitlength;
+                (tempTotalAmount * parseFloat(secondsratio) * unitlength) / 100;
+            tempTotalAmount += parseFloat(tempSecondsRationAmount / unitlength);
             setSecondsRatioAmount(tempSecondsRationAmount);
         }
 

@@ -601,8 +601,8 @@ function UpdateDesign() {
         );
         if (!isNaN(secondsratio)) {
             let tempSecondsRationAmount =
-                (tempTotalAmount * parseFloat(secondsratio)) / 100;
-            tempTotalAmount += parseFloat(tempSecondsRationAmount) / unitlength;
+                (tempTotalAmount * parseFloat(secondsratio) * unitlength) / 100;
+            tempTotalAmount += parseFloat(tempSecondsRationAmount / unitlength);
             setSecondsRatioAmount(tempSecondsRationAmount);
         }
         tempTotalAmount += parseFloat(
@@ -893,6 +893,7 @@ function UpdateDesign() {
                             <th width="5%">Sr. No</th>
                             <th width="15%">Quality</th>
                             <th width="10%">Denier</th>
+                            <th width="10%">Feeder</th>
                             <th width="15%">Pick</th>
                             <th width="15%">Avg. Pick</th>
                             <th width="10%">Weight</th>
@@ -913,7 +914,7 @@ function UpdateDesign() {
                             />
                         ))}
                         <tr>
-                            <td colSpan="3"></td>
+                            <td colSpan="4"></td>
                             <td>{totalpick}</td>
                             <td>{totalavgpick}</td>
                             <td>{totalweftweight.toFixed(3)}</td>

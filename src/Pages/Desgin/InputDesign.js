@@ -771,6 +771,7 @@ function InputDesign() {
                             <th width="5%">Sr. No</th>
                             <th width="15%">Quality</th>
                             <th width="10%">Denier</th>
+                            <th width="10%">Feeder</th>
                             <th width="15%">Pick</th>
                             <th width="15%">Avg. Pick</th>
                             <th width="10%">Weight</th>
@@ -791,7 +792,7 @@ function InputDesign() {
                             />
                         ))}
                         <tr>
-                            <td colSpan="3"></td>
+                            <td colSpan="4"></td>
                             <td>{totalpick}</td>
                             <td>{totalavgpick}</td>
                             <td>{totalweftweight.toFixed(3)}</td>

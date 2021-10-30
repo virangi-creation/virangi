@@ -118,7 +118,7 @@ function Quality() {
                             <th rowSpan="2">Dyeing Charge / MTR</th>
                             <th rowSpan="2">Seconds Ratio / Piece</th>
                             <th rowSpan="2">Finishing Charge / Piece</th>
-                            <th rowSpan="2">Packing Charge / Piece</th>
+                            <th rowSpan="2">Value Addition Charge / Piece</th>
                             <th rowSpan="2">Market Margin %</th>
                             <th rowSpan="2">Discount %</th>
                             <th rowSpan="2">Agent Charge %</th>

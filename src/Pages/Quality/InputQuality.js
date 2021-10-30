@@ -531,7 +531,7 @@ function InputQuality() {
                                         }}
                                         colSpan="2"
                                     >
-                                        Packing Charge / Piece
+                                        Value Addition Charge / Piece
                                     </td>
                                     <td>
                                         <input

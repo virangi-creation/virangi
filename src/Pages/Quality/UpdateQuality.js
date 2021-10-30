@@ -63,7 +63,7 @@ function UpdateQuality() {
     const [lasercharge, setLasercharge] = useState(0);
     const [designcharge, setDesigncharge] = useState(0);
     const [finishingcharge, setFinishingcharge] = useState(0);
-    const [packingcharge, setPackingcharge] = useState(0);
+    const [valueadditioncharge, setValueAdditionCharge] = useState(0);
     const [secondsratio, setSecondsRatio] = useState(0);
     const [agentcharge, setAgentcharge] = useState(0);
     const [dyeingcharge, setDyeingCharge] = useState(0);
@@ -138,7 +138,7 @@ function UpdateQuality() {
                         setLasercharge(quality.lasercharge);
                         setDesigncharge(quality.designcharge);
                         setFinishingcharge(quality.finishingcharge);
-                        setPackingcharge(quality.packingcharge);
+                        setValueAdditionCharge(quality.valueadditioncharge);
                         setSecondsRatio(quality.secondsratio);
                         setAgentcharge(quality.agentcharge);
                         setDyeingCharge(quality.dyeingcharge);
@@ -257,7 +257,7 @@ function UpdateQuality() {
                     designcharge,
                     unitlength,
                     finishingcharge,
-                    packingcharge,
+                    valueadditioncharge,
                     secondsratio,
                     agentcharge,
                     weftwastage,
@@ -538,14 +538,14 @@ function UpdateQuality() {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan="2">Packing Charge</td>
+                                    <td colSpan="2">Value Addition Charge</td>
                                     <td>
                                         <input
                                             type="number"
-                                            placeholder="Enter Paching Charge..."
-                                            value={packingcharge}
+                                            placeholder="Enter Value Addition Charge..."
+                                            value={valueadditioncharge}
                                             onChange={(e) => {
-                                                setPackingcharge(
+                                                setValueAdditionCharge(
                                                     e.target.value
                                                 );
                                             }}

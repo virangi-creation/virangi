@@ -93,7 +93,8 @@ function UpdateDesign() {
     const [designcharge, setDesignCharge] = useState(0);
     const [finishingcharge, setFinishingCharge] = useState(0);
     const [secondsratio, setSecondsRatio] = useState(0);
-    const [packingcharge, setPackingCharge] = useState(0);
+    const [valueadditioncharge, setValueAdditionCharge] = useState(0);
+    const [manufacturersellprice, setManufacturerSellPrice] = useState(0);
     const [agentcharge, setAgentCharge] = useState(0);
     const [dyeingcharge, setDyeingCharge] = useState(0);
     const [marketmargin, setMarketMargin] = useState(0);
@@ -181,9 +182,11 @@ function UpdateDesign() {
                                 design.secondsratio ? design.secondsratio : 0
                             )
                         );
-                        setPackingCharge(
+                        setValueAdditionCharge(
                             parseFloat(
-                                design.packingcharge ? design.packingcharge : 0
+                                design.valueadditioncharge
+                                    ? design.valueadditioncharge
+                                    : 0
                             )
                         );
                         setDyeingCharge(
@@ -214,7 +217,8 @@ function UpdateDesign() {
                                 design.unitlength ? design.unitlength : 6.1
                             )
                         );
-
+                        setManufacturerSellPrice(design.manufacturersellprice);
+                        setSellPrice(design.sellprice);
                         setYarnQualities(data.yarnqualities);
                         setQualities(data.qualities);
                         setHarnesses(data.harnesses);
@@ -273,7 +277,7 @@ function UpdateDesign() {
                     designcharge,
                     finishingcharge,
                     secondsratio,
-                    packingcharge,
+                    valueadditioncharge,
                     agentcharge,
                     dyeingcharge,
                     marketmargin,
@@ -281,6 +285,7 @@ function UpdateDesign() {
                     totalamountdesign,
                     totalaveragepick: totalavgpick,
                     sellprice,
+                    manufacturersellprice,
                 })
                 .then(() => {
                     setLoad(false);
@@ -364,9 +369,11 @@ function UpdateDesign() {
                 setSecondsRatio(
                     parseFloat(quality.secondsratio ? quality.secondsratio : 0)
                 );
-                setPackingCharge(
+                setValueAdditionCharge(
                     parseFloat(
-                        quality.packingcharge ? quality.packingcharge : 0
+                        quality.valueadditioncharge
+                            ? quality.valueadditioncharge
+                            : 0
                     )
                 );
                 setDyeingCharge(
@@ -596,18 +603,13 @@ function UpdateDesign() {
         tempTotalAmount += parseFloat(isNaN(lasercharge) ? 0 : lasercharge);
         tempTotalAmount += parseFloat(isNaN(designcharge) ? 0 : designcharge);
         tempTotalAmount += parseFloat(isNaN(dyeingcharge) ? 0 : dyeingcharge);
-        tempTotalAmount += parseFloat(
-            isNaN(finishingcharge) ? 0 : finishingcharge / unitlength
-        );
         if (!isNaN(secondsratio)) {
             let tempSecondsRationAmount =
                 (tempTotalAmount * parseFloat(secondsratio) * unitlength) / 100;
             tempTotalAmount += parseFloat(tempSecondsRationAmount / unitlength);
             setSecondsRatioAmount(tempSecondsRationAmount);
         }
-        tempTotalAmount += parseFloat(
-            isNaN(packingcharge) ? 0 : packingcharge / unitlength
-        );
+
         setTotalCharges(tempTotalAmount);
     }, [
         totalAmountOneMtr,
@@ -615,21 +617,30 @@ function UpdateDesign() {
         buttacharge,
         lasercharge,
         designcharge,
-        finishingcharge,
         secondsratio,
-        packingcharge,
         dyeingcharge,
         weftwastage,
+        unitlength,
     ]);
 
     useEffect(() => {
-        let tempTotalAmount = totalCharges,
+        let tempTotalAmount = parseFloat(manufacturersellprice) / unitlength,
             tempMarginAmount = 0,
             tempDiscountAmount = 0,
             tempAgentAmount = 0;
+
+        tempTotalAmount += parseFloat(
+            isNaN(finishingcharge) ? 0 : finishingcharge / unitlength
+        );
+
+        tempTotalAmount += parseFloat(
+            isNaN(valueadditioncharge) ? 0 : valueadditioncharge / unitlength
+        );
+
         if (!isNaN(marketmargin)) {
             tempMarginAmount =
-                (tempTotalAmount * parseFloat(marketmargin)) / 100;
+                (tempTotalAmount * 100) / (100 - parseFloat(marketmargin)) -
+                tempTotalAmount;
             setMarketMarginAmount(tempMarginAmount);
             tempTotalAmount += parseFloat(tempMarginAmount);
         }
@@ -644,8 +655,14 @@ function UpdateDesign() {
             setAgentAmount(tempAgentAmount);
         }
         setTotalAmountDesign((tempTotalAmount * unitlength).toFixed(2));
-        setSellPrice((tempTotalAmount * unitlength).toFixed(2));
-    }, [marketmargin, agentcharge, discount, totalCharges]);
+    }, [
+        marketmargin,
+        agentcharge,
+        discount,
+        manufacturersellprice,
+        finishingcharge,
+        valueadditioncharge,
+    ]);
 
     return (
         <div
@@ -1074,6 +1091,69 @@ function UpdateDesign() {
                         </tr>
                         <tr>
                             <td colSpan="3"></td>
+                            <td colSpan="3">Seconds Ratio / UNIT</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    placeholder="Seconds Ratio"
+                                    count="0.01"
+                                    value={secondsratio}
+                                    onChange={(e) => {
+                                        setSecondsRatio(e.target.value);
+                                    }}
+                                    onKeyDown={captureEnter}
+                                    onFocus={handleFocus}
+                                />
+                            </td>
+                            <td>
+                                {(isNaN(secondsratioamount)
+                                    ? 0
+                                    : secondsratioamount / unitlength
+                                ).toFixed(2)}
+                            </td>
+                            <td>{secondsratioamount.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                            <td>.</td>
+                        </tr>
+                        <tr>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">Total Cost </td>
+                            <td></td>
+                            <td>
+                                {(isNaN(totalCharges)
+                                    ? 0
+                                    : totalCharges
+                                ).toFixed(2)}
+                            </td>
+                            <td>{(totalCharges * unitlength).toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">Manufacturer Sell Price / UNIT</td>
+                            <td></td>
+                            <td colSpan="2">
+                                <input
+                                    type="text"
+                                    placeholder="Manufacturer Sell Price"
+                                    count="0.01"
+                                    value={manufacturersellprice}
+                                    onChange={(e) => {
+                                        setManufacturerSellPrice(
+                                            e.target.value
+                                        );
+                                    }}
+                                    onKeyDown={captureEnter}
+                                    onFocus={handleFocus}
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>.</td>
+                        </tr>
+
+                        <tr>
+                            <td colSpan="3"></td>
                             <td colSpan="3">Finishing Charge / UNIT</td>
                             <td>
                                 <input
@@ -1098,66 +1178,27 @@ function UpdateDesign() {
                         </tr>
                         <tr>
                             <td colSpan="3"></td>
-                            <td colSpan="3">Seconds Ratio / UNIT</td>
+                            <td colSpan="3">Value Addition Charge / UNIT</td>
                             <td>
                                 <input
                                     type="text"
-                                    placeholder="Seconds Ratio"
+                                    placeholder="Value Addition Charge"
                                     count="0.01"
-                                    value={secondsratio}
+                                    value={valueadditioncharge}
                                     onChange={(e) => {
-                                        setSecondsRatio(e.target.value);
+                                        setValueAdditionCharge(e.target.value);
                                     }}
                                     onKeyDown={captureEnter}
                                     onFocus={handleFocus}
                                 />
                             </td>
                             <td>
-                                {(isNaN(secondsratioamount)
+                                {(isNaN(valueadditioncharge)
                                     ? 0
-                                    : secondsratioamount / unitlength
+                                    : valueadditioncharge / unitlength
                                 ).toFixed(2)}
                             </td>
-                            <td>{secondsratioamount.toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Packing Charge / UNIT</td>
-                            <td>
-                                <input
-                                    type="text"
-                                    placeholder="Packing Charge"
-                                    count="0.01"
-                                    value={packingcharge}
-                                    onChange={(e) => {
-                                        setPackingCharge(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                            <td>
-                                {(isNaN(packingcharge)
-                                    ? 0
-                                    : packingcharge / unitlength
-                                ).toFixed(2)}
-                            </td>
-                            <td>{packingcharge}</td>
-                        </tr>
-                        <tr>
-                            <td>.</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Total Charges </td>
-                            <td></td>
-                            <td>
-                                {(isNaN(totalCharges)
-                                    ? 0
-                                    : totalCharges
-                                ).toFixed(2)}
-                            </td>
-                            <td>{(totalCharges * unitlength).toFixed(2)}</td>
+                            <td>{valueadditioncharge}</td>
                         </tr>
                         <tr>
                             <td>.</td>

@@ -43,7 +43,7 @@ function InputQuality() {
     const [designcharge, setDesigncharge] = useState(0);
     const [finishingcharge, setFinishingcharge] = useState(0);
     const [secondsratio, setSecondsRatio] = useState(0);
-    const [packingcharge, setPackingcharge] = useState(0);
+    const [valueadditioncharge, setValueAdditionCharge] = useState(0);
     const [agentcharge, setAgentcharge] = useState(0);
     const [dyeingcharge, setDyeingCharge] = useState(0);
     const [marketmargin, setMarketMargin] = useState(0);
@@ -162,7 +162,7 @@ function InputQuality() {
                     lasercharge,
                     designcharge,
                     finishingcharge,
-                    packingcharge,
+                    valueadditioncharge,
                     secondsratio,
                     agentcharge,
                     weftwastage,
@@ -536,10 +536,10 @@ function InputQuality() {
                                     <td>
                                         <input
                                             type="number"
-                                            placeholder="Enter Paching Charge..."
-                                            value={packingcharge}
+                                            placeholder="Enter Value Addition Charge..."
+                                            value={valueadditioncharge}
                                             onChange={(e) => {
-                                                setPackingcharge(
+                                                setValueAdditionCharge(
                                                     e.target.value
                                                 );
                                             }}

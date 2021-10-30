@@ -221,7 +221,7 @@ function Quality() {
                                         <td>{quality.dyeingcharge}</td>
                                         <td>{quality.secondsratio}</td>
                                         <td>{quality.finishingcharge}</td>
-                                        <td>{quality.packingcharge}</td>
+                                        <td>{quality.valueadditioncharge}</td>
                                         <td>{quality.marketmargin}</td>
                                         <td>{quality.discount}</td>
                                         <td>{quality.agentcharge}</td>

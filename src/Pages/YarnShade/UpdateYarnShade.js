@@ -3,6 +3,7 @@ import axios from "../../axios.js";
 import { useHistory, useLocation } from "react-router";
 import buttonStyles from "../../Modules/Button.module.css";
 import catchAxiosError from "../../Util/catchAxiosError.js";
+import handleFocus from "../../Util/handleFocus";
 
 function UpdateYarnShade() {
     let history = useHistory();
@@ -24,6 +25,8 @@ function UpdateYarnShade() {
 
     useEffect(async () => {
         try {
+            document.addEventListener("keydown", captureEnter, false);
+            document.addEventListener("focus", handleFocus, true);
             if (location.state) {
                 setQuality(location.state.quality);
                 setQualityid(location.state.qualityid);
@@ -54,10 +57,6 @@ function UpdateYarnShade() {
             alert(err.message);
         }
     }, []);
-
-    const handleFocus = (event) => {
-        event.target.select();
-    };
 
     const onSubmitEvent = async () => {
         try {
@@ -137,20 +136,18 @@ function UpdateYarnShade() {
             {load && <div>Loading...</div>}
             {!load && (
                 <form>
-                    <table>
+                    <table className="table table-bordered table-hover table-responsive">
                         <tbody>
                             <tr>
                                 <td>Quality Name</td>
                                 <td>
                                     <input
-                                        type="text"
                                         list="qualitylist"
                                         onChange={onUpdateQuality}
                                         value={quality}
                                         autoFocus
                                         autoCapitalize="true"
                                         placeholder="Quality Name"
-                                        onKeyDown={captureEnter}
                                     />
 
                                     <datalist id="qualitylist">
@@ -167,13 +164,9 @@ function UpdateYarnShade() {
                                 <td>Yarn Shade</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Yarn Shade"
                                         value={shadeno}
                                         onChange={onUpdateShadeno}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -181,13 +174,9 @@ function UpdateYarnShade() {
                                 <td>Colour</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Colour"
                                         value={colour}
                                         onChange={onUpdateColour}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -195,12 +184,10 @@ function UpdateYarnShade() {
                                 <td>Company Name</td>
                                 <td>
                                     <input
-                                        type="text"
                                         list="partylist"
                                         onChange={onUpdateParty}
                                         placeholder="Company Name"
                                         value={party}
-                                        required
                                     />
 
                                     <datalist id="partylist">

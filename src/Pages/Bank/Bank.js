@@ -96,7 +96,10 @@ function Bank() {
             </div>
             {load && <div>Loading...</div>}
             {!load && (
-                <table border="1" className={tableStyles.table}>
+                <table
+                    border="1"
+                    className="table table-bordered table-hover table-responsive"
+                >
                     <tbody>
                         <tr>
                             <th>Bank ID</th>
@@ -115,26 +118,35 @@ function Bank() {
                                     <tr key={bank.bankid}>
                                         <td>{bank.bankid}</td>
                                         <td>{bank.bankname}</td>
-                                        <td
-                                            className={tableStyles.tableButton}
-                                            onClick={() => {
-                                                deleteRequest(bank.bankid);
-                                            }}
-                                        >
-                                            Delete
-                                        </td>
-                                        <td className={tableStyles.tableButton}>
-                                            <Link
-                                                style={{ color: "white" }}
-                                                to={{
-                                                    pathname: "/bank/update",
-                                                    state: {
-                                                        bankid: bank.bankid,
-                                                    },
+                                        <td>
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-primary"
+                                                onClick={() => {
+                                                    deleteRequest(bank.bankid);
                                                 }}
                                             >
-                                                Update
-                                            </Link>
+                                                Delete
+                                            </button>
+                                        </td>
+                                        <td className={tableStyles.tableButton}>
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-primary"
+                                            >
+                                                {" "}
+                                                <Link
+                                                    to={{
+                                                        pathname:
+                                                            "/bank/update",
+                                                        state: {
+                                                            bankid: bank.bankid,
+                                                        },
+                                                    }}
+                                                >
+                                                    Update
+                                                </Link>
+                                            </button>
                                         </td>
                                     </tr>
                                 );

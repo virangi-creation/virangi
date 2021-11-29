@@ -106,7 +106,10 @@ function YarnShade() {
             </div>
             {load && <div>Loading...</div>}
             {!load && (
-                <table border="1" className={tableStyles.table}>
+                <table
+                    className="table table-bordered table-hover table-responsive"
+                    style={{ margin: "auto", maxWidth: "70%" }}
+                >
                     <tbody>
                         <tr>
                             <th>Quality</th>
@@ -135,39 +138,44 @@ function YarnShade() {
                                         <td>{shade.partyname}</td>
                                         <td>{shade.virtualstock}</td>
                                         <td>{shade.actualstock}</td>
-                                        <td
-                                            className={tableStyles.tableButton}
-                                            onClick={() => {
-                                                deleteRequest(
-                                                    shade.shadeno,
-                                                    shade.colour,
-                                                    shade.partyid,
-                                                    shade.qualityid
-                                                );
-                                            }}
-                                        >
-                                            Delete
-                                        </td>
-                                        <td className={tableStyles.tableButton}>
-                                            <Link
-                                                style={{ color: "white" }}
-                                                to={{
-                                                    pathname:
-                                                        "/yarnshade/update",
-                                                    state: {
-                                                        quality:
-                                                            shade.qualityname,
-                                                        shadeno: shade.shadeno,
-                                                        qualityid:
-                                                            shade.qualityid,
-                                                        colour: shade.colour,
-                                                        partyid: shade.partyid,
-                                                        party: shade.partyname,
-                                                    },
+                                        <td>
+                                            <button
+                                                className="btn btn-outline-primary"
+                                                onClick={() => {
+                                                    deleteRequest(
+                                                        shade.shadeno,
+                                                        shade.colour,
+                                                        shade.partyid,
+                                                        shade.qualityid
+                                                    );
                                                 }}
                                             >
-                                                Update
-                                            </Link>
+                                                Delete
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button className="btn btn-outline-primary">
+                                                <Link
+                                                    to={{
+                                                        pathname:
+                                                            "/yarnshade/update",
+                                                        state: {
+                                                            quality:
+                                                                shade.qualityname,
+                                                            shadeno:
+                                                                shade.shadeno,
+                                                            qualityid:
+                                                                shade.qualityid,
+                                                            colour: shade.colour,
+                                                            partyid:
+                                                                shade.partyid,
+                                                            party: shade.partyname,
+                                                        },
+                                                    }}
+                                                >
+                                                    Update
+                                                </Link>
+                                            </button>
                                         </td>
                                     </tr>
                                 );

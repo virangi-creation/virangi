@@ -99,15 +99,21 @@ function Party() {
             </div>
             {load && <div>Loading...</div>}
             {!load && (
-                <table border="1" className={tableStyles.table}>
+                <table
+                    className="table table-bordered table-hover table-responsive"
+                    style={{ verticalAlign: "middle" }}
+                >
                     <tbody>
                         <tr>
                             <th>Party ID</th>
+                            <th></th>
+                            <th></th>
                             <th>Agent Name</th>
                             <th>Party Type</th>
                             <th>Party Name</th>
                             <th>Leading Name</th>
                             <th>Leading Phone No</th>
+                            <th>Discount</th>
                             <th>Accountant Name</th>
                             <th>Accountant Phone</th>
                             <th>GST</th>
@@ -119,8 +125,6 @@ function Party() {
                             <th>Account No</th>
                             <th>IFSC Code</th>
                             <th>Bank Name</th>
-                            <th></th>
-                            <th></th>
                         </tr>
                         {searchedParties.length === 0 && (
                             <tr className={tableStyles.notfound}>
@@ -148,11 +152,49 @@ function Party() {
                                 return (
                                     <tr key={party.partyid}>
                                         <td>{party.partyid}</td>
+                                        <td>
+                                            <button
+                                                onClick={() => {
+                                                    deleteRequest(
+                                                        party.partyid
+                                                    );
+                                                }}
+                                                type="button"
+                                                className="btn btn-outline-primary"
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-primary"
+                                            >
+                                                <Link
+                                                    to={{
+                                                        pathname:
+                                                            "/party/update",
+                                                        state: {
+                                                            partyid:
+                                                                party.partyid,
+                                                            agentname:
+                                                                party.agentname,
+                                                            bankname:
+                                                                party.bankname,
+                                                        },
+                                                    }}
+                                                >
+                                                    Update
+                                                </Link>
+                                            </button>
+                                        </td>
+
                                         <td>{party.agentname}</td>
                                         <td>{party.partytype}</td>
                                         <td>{party.partyname}</td>
                                         <td>{party.leadingname}</td>
                                         <td>{party.leadingphone}</td>
+                                        <td>{party.discount}</td>
                                         <td>{party.accountantname}</td>
                                         <td>{party.accountantphone}</td>
                                         <td>{party.gst}</td>
@@ -164,31 +206,6 @@ function Party() {
                                         <td>{party.accountno}</td>
                                         <td>{party.ifsccode}</td>
                                         <td>{party.bankname}</td>
-                                        <td
-                                            className={tableStyles.tableButton}
-                                            onClick={() => {
-                                                deleteRequest(party.partyid);
-                                            }}
-                                        >
-                                            Delete
-                                        </td>
-                                        <td className={tableStyles.tableButton}>
-                                            <Link
-                                                style={{ color: "white" }}
-                                                to={{
-                                                    pathname: "/party/update",
-                                                    state: {
-                                                        partyid: party.partyid,
-                                                        agentname:
-                                                            party.agentname,
-                                                        bankname:
-                                                            party.bankname,
-                                                    },
-                                                }}
-                                            >
-                                                Update
-                                            </Link>
-                                        </td>
                                     </tr>
                                 );
                             })}

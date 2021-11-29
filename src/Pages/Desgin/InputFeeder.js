@@ -5,8 +5,6 @@ const InputFeeder = ({
     designlength,
     rs,
     yarnqualities,
-    captureEnter,
-    handleFocus,
 }) => {
     const onUpdateYarnQuality = (e) => {
         let q = e.target.value;
@@ -65,15 +63,12 @@ const InputFeeder = ({
             <td>{role}</td>
             <td>
                 <input
-                    type="text"
                     id={`${role}yarnquality`}
                     list={`${role}yarnqualitylist`}
                     value={feeder.yarnqualityname}
                     onChange={onUpdateYarnQuality}
                     autoCapitalize
-                    onFocus={handleFocus}
                     placeholder="Yarn Quality"
-                    onKeyDown={captureEnter}
                 />
                 <datalist id={`${role}yarnqualitylist`}>
                     {yarnqualities.length > 0 &&
@@ -86,7 +81,6 @@ const InputFeeder = ({
             <td>
                 <select
                     value={feeder.feedertype}
-                    onKeyDown={captureEnter}
                     onChange={(e) => {
                         setFeeder((prevState) => ({
                             ...prevState,
@@ -106,8 +100,6 @@ const InputFeeder = ({
                     count="0.01"
                     value={feeder.pick}
                     onChange={updatePick}
-                    onKeyDown={captureEnter}
-                    onFocus={handleFocus}
                 />
             </td>
             <td>{feeder.averagepick}</td>
@@ -119,8 +111,6 @@ const InputFeeder = ({
                     count="0.01"
                     value={feeder.yarnprice}
                     onChange={updateRate}
-                    onKeyDown={captureEnter}
-                    onFocus={handleFocus}
                 />
             </td>
             <td>{feeder.amount}</td>

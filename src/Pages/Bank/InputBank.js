@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import buttonStyles from "../../Modules/Button.module.css";
 import { useHistory } from "react-router-dom";
 import catchAxiosError from "../../Util/catchAxiosError.js";
+import handleFocus from "../../Util/handleFocus.js";
 
 function InputBank() {
     const [bankName, setBankName] = useState("");
@@ -11,6 +12,8 @@ function InputBank() {
 
     useEffect(() => {
         document.title = "Add Bank";
+        document.addEventListener("keydown", captureEnter, false);
+        document.addEventListener("focus", handleFocus, true);
     }, []);
 
     const onSubmitEvent = async () => {
@@ -39,10 +42,6 @@ function InputBank() {
             onSubmitEvent();
     };
 
-    const updateEvent = (e) => {
-        setBankName(e.target.value.toUpperCase());
-    };
-
     return (
         <div
             style={{
@@ -52,19 +51,19 @@ function InputBank() {
         >
             {load && <div>Loading...</div>}
             {!load && (
-                <table>
+                <table className="table table-bordered table-hover table-responsive">
                     <tbody>
                         <tr>
                             <td>Bank Name</td>
                             <td>
                                 <input
-                                    type="text"
-                                    id="bankname"
                                     placeholder="Bank Name"
                                     value={bankName}
-                                    onChange={updateEvent}
-                                    onKeyDown={captureEnter}
-                                    required
+                                    onChange={(e) => {
+                                        setBankName(
+                                            e.target.value.toUpperCase()
+                                        );
+                                    }}
                                     autoFocus
                                 />
                             </td>

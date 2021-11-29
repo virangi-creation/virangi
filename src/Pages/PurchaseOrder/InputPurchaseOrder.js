@@ -6,6 +6,7 @@ import catchAxiosError from "../../Util/catchAxiosError.js";
 import generateInputDateString from "../../Util/generateInputDateString.js";
 import generateDateString from "../../Util/generateDateString.js";
 import amountFormatter from "../../Util/amountFormatter.js";
+import handleFocus from "../../Util/handleFocus";
 
 function InputPurchaseOrder() {
     const [orderid, setOrderid] = useState(0);
@@ -46,6 +47,8 @@ function InputPurchaseOrder() {
 
     useEffect(async () => {
         document.title = "Add Purchase Order";
+        document.addEventListener("keydown", captureEnter, false);
+        document.addEventListener("focus", handleFocus, true);
         await axios.get("/purchaseorder/add").then(({ data }) => {
             setOrderid(data.orderid);
             setParties(data.parties);
@@ -175,7 +178,10 @@ function InputPurchaseOrder() {
             {load && <div>Loading...</div>}
             {!load && (
                 <form>
-                    <table>
+                    <table
+                        className="table table-bordered table-hover table-responsive"
+                        style={{ verticalAlign: "middle" }}
+                    >
                         <tbody>
                             <tr>
                                 <td>Order Id</td>
@@ -187,8 +193,6 @@ function InputPurchaseOrder() {
                                         onChange={(e) => {
                                             setOrderid(e.target.value);
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                         autoFocus
                                     />
                                 </td>
@@ -202,8 +206,6 @@ function InputPurchaseOrder() {
                                         onChange={(e) => {
                                             setOrderDate(e.target.value);
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -215,7 +217,6 @@ function InputPurchaseOrder() {
                                         onChange={(e) => {
                                             setFirmid(parseInt(e.target.value));
                                         }}
-                                        onKeyDown={captureEnter}
                                     >
                                         {firms.map((firm) => (
                                             <option value={firm.firmid}>
@@ -230,7 +231,6 @@ function InputPurchaseOrder() {
                                 <td>
                                     <select
                                         value={partyid}
-                                        onKeyDown={captureEnter}
                                         onChange={(e) => {
                                             setPartyId(
                                                 parseInt(e.target.value)
@@ -250,7 +250,6 @@ function InputPurchaseOrder() {
                                 <td>
                                     <select
                                         value={agentid}
-                                        onKeyDown={captureEnter}
                                         onChange={(e) => {
                                             setAgentId(
                                                 parseInt(e.target.value)
@@ -272,7 +271,6 @@ function InputPurchaseOrder() {
                                 <td>
                                     <select
                                         value={manufacturerid}
-                                        onKeyDown={captureEnter}
                                         onChange={(e) => {
                                             setManufacturerId(
                                                 parseInt(e.target.value)
@@ -292,7 +290,6 @@ function InputPurchaseOrder() {
                                 <td>
                                     <select
                                         value={qualityid}
-                                        onKeyDown={captureEnter}
                                         onChange={(e) => {
                                             setQualityId(
                                                 parseInt(e.target.value)
@@ -312,7 +309,6 @@ function InputPurchaseOrder() {
                                 <td>
                                     <select
                                         value={shadeno}
-                                        onKeyDown={captureEnter}
                                         onChange={(e) => {
                                             setShadeno(
                                                 parseInt(e.target.value)

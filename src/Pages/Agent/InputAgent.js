@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import buttonStyles from "../../Modules/Button.module.css";
 import { useHistory } from "react-router-dom";
 import catchAxiosError from "../../Util/catchAxiosError.js";
+import handleFocus from "../../Util/handleFocus.js";
 
 const InputAgent = () => {
     const [agentname, setAgentname] = useState("");
@@ -22,6 +23,8 @@ const InputAgent = () => {
     useEffect(() => {
         try {
             document.title = "Add Agent";
+            document.addEventListener("keydown", captureEnter, false);
+            document.addEventListener("focus", handleFocus, true);
         } catch (err) {
             console.log(err);
             alert(err.message);
@@ -69,9 +72,6 @@ const InputAgent = () => {
         }
     };
 
-    const handleFocus = (event) => {
-        event.target.select();
-    };
     return (
         <div
             style={{
@@ -82,7 +82,7 @@ const InputAgent = () => {
             {load && <div>Loading...</div>}
             {!load && (
                 <form>
-                    <table>
+                    <table className="table table-bordered table-hover table-responsive">
                         <tbody>
                             <tr>
                                 <td>Agent Name</td>
@@ -96,7 +96,6 @@ const InputAgent = () => {
                                                 e.target.value.toUpperCase()
                                             )
                                         }
-                                        onKeyDown={captureEnter}
                                         required
                                         autoFocus
                                     />
@@ -112,7 +111,6 @@ const InputAgent = () => {
                                         onChange={(e) =>
                                             setGST(e.target.value.toUpperCase())
                                         }
-                                        onKeyDown={captureEnter}
                                         required
                                     />
                                 </td>
@@ -127,7 +125,6 @@ const InputAgent = () => {
                                         onChange={(e) =>
                                             setPAN(e.target.value.toUpperCase())
                                         }
-                                        onKeyDown={captureEnter}
                                         required
                                     />
                                 </td>
@@ -144,7 +141,6 @@ const InputAgent = () => {
                                                 e.target.value.toUpperCase()
                                             )
                                         }
-                                        onKeyDown={captureEnter}
                                         required
                                     />
                                 </td>
@@ -162,7 +158,6 @@ const InputAgent = () => {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
                                         required
                                     />
                                 </td>
@@ -179,7 +174,6 @@ const InputAgent = () => {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
                                         required
                                     />
                                 </td>
@@ -196,7 +190,6 @@ const InputAgent = () => {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
                                         required
                                     />
                                 </td>
@@ -213,7 +206,6 @@ const InputAgent = () => {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
                                         required
                                     />
                                 </td>
@@ -230,7 +222,6 @@ const InputAgent = () => {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
                                         required
                                     />
                                 </td>

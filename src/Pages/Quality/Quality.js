@@ -5,6 +5,7 @@ import tableStyles from "../../Modules/Table.module.css";
 import inputStyles from "../../Modules/Input.module.css";
 import axios from "../../axios.js";
 import catchAxiosError from "../../Util/catchAxiosError";
+import handleFocus from "../../Util/handleFocus";
 
 function Quality() {
     const [qualities, setQualities] = useState([]);
@@ -99,7 +100,12 @@ function Quality() {
             </div>
             {load && <div>Loading...</div>}
             {!load && (
-                <table border="1" className={tableStyles.table}>
+                <table
+                    className="table table-bordered table-hover table-responsive"
+                    style={{
+                        verticalAlign: "middle",
+                    }}
+                >
                     <tbody>
                         <tr>
                             <th rowSpan="2"></th>
@@ -159,34 +165,42 @@ function Quality() {
                             searchedQualities.map((quality) => {
                                 return (
                                     <tr key={quality.qualityid}>
-                                        <td
-                                            className={tableStyles.tableButton}
-                                            onClick={() => {
-                                                deleteRequest(
-                                                    quality.qualityid
-                                                );
-                                            }}
-                                        >
-                                            Delete
-                                        </td>
-                                        <td className={tableStyles.tableButton}>
-                                            <Link
-                                                style={{ color: "white" }}
-                                                to={{
-                                                    pathname: "/quality/update",
-                                                    state: {
-                                                        qualityid:
-                                                            quality.qualityid,
-                                                    },
+                                        <td>
+                                            <button
+                                                onClick={() => {
+                                                    deleteRequest(
+                                                        quality.qualityid
+                                                    );
                                                 }}
+                                                type="button"
+                                                className="btn btn-outline-primary"
                                             >
-                                                Update
-                                            </Link>
+                                                Delete
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-primary"
+                                            >
+                                                <Link
+                                                    to={{
+                                                        pathname:
+                                                            "/quality/update",
+                                                        state: {
+                                                            qualityid:
+                                                                quality.qualityid,
+                                                        },
+                                                    }}
+                                                >
+                                                    Update
+                                                </Link>
+                                            </button>
                                         </td>
                                         <td>{quality.qualityname}</td>
-                                        <th>{quality.jobcharge}</th>
-                                        <th>{quality.designlength}</th>
-                                        <th>{quality.unitlength}</th>
+                                        <td>{quality.jobcharge}</td>
+                                        <td>{quality.designlength}</td>
+                                        <td>{quality.unitlength}</td>
                                         <td>{quality.bodyqualityname}</td>
                                         <td>{quality.bodydenier}</td>
                                         <td>{quality.bodywarplength}</td>

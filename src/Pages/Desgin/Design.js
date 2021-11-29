@@ -10,7 +10,80 @@ function Design() {
     const [designs, setDesigns] = useState([]);
     const [searchedDesigns, setSearchedDesigns] = useState([]);
     const [load, setLoad] = useState(false);
+    const [content, setContent] = useState();
 
+    useEffect(async () => {
+        if (searchedDesigns.length > 0) {
+            let tempContent = "";
+            tempContent = await searchedDesigns.map((design) => {
+                return (
+                    <tr key={design.designfilename}>
+                        <td>{design.catalogueno}</td>
+                        <td>{design.designno}</td>
+                        <td>{design.designfilename}</td>
+                        <td>{design.designdescription}</td>
+                        <td>{design.qualityname}</td>
+                        <td>{design.totalamountdesign}</td>
+                        <td>{design.sellprice}</td>
+                        <td className={tableStyles.tableButton}>
+                            <button
+                                type="button"
+                                className="btn btn-outline-primary"
+                            >
+                                <Link
+                                    to={{
+                                        pathname: "/design/detail",
+                                        state: {
+                                            designfilename:
+                                                design.designfilename,
+                                        },
+                                    }}
+                                >
+                                    Details
+                                </Link>
+                            </button>
+                        </td>
+                        <td>
+                            <button
+                                type="button"
+                                className="btn btn-outline-primary"
+                                onClick={() => {
+                                    deleteRequest(design.designfilename);
+                                }}
+                            >
+                                Delete
+                            </button>
+                        </td>
+                        <td className={tableStyles.tableButton}>
+                            <button
+                                type="button"
+                                className="btn btn-outline-primary"
+                            >
+                                <Link
+                                    to={{
+                                        pathname: "/design/update",
+                                        state: {
+                                            designfilename:
+                                                design.designfilename,
+                                        },
+                                    }}
+                                >
+                                    Update
+                                </Link>
+                            </button>
+                        </td>
+                    </tr>
+                );
+            });
+            setContent(tempContent);
+        } else {
+            setContent(
+                <tr className={tableStyles.notfound}>
+                    <td colSpan="4">No Design Found yet</td>
+                </tr>
+            );
+        }
+    }, [searchedDesigns]);
     const deleteRequest = async (e) => {
         try {
             let designfilename = e;
@@ -47,6 +120,7 @@ function Design() {
                 .then(({ data }) => {
                     setLoad(false);
                     setDesigns(data);
+                    console.log(data);
                     setSearchedDesigns(data);
                 })
                 .catch((err) => {
@@ -58,17 +132,20 @@ function Design() {
         }
     }, []);
 
-    const onSearchChange = (e) => {
+    const onSearchChange = async (e) => {
         let str = e.target.value;
         str = str.toUpperCase();
         let tempDesigns = [];
-        designs.map((design) => {
+        await designs.map((design) => {
             if (
+                (design.catalogueno &&
+                    design.catalogueno.toString().includes(str)) ||
                 design.designno.includes(str) ||
                 design.designfilename.includes(str) ||
                 design.qualityname.includes(str)
-            )
+            ) {
                 tempDesigns.push(design);
+            }
         });
         setSearchedDesigns([...tempDesigns]);
     };
@@ -99,74 +176,28 @@ function Design() {
             </div>
             {load && <div>Loading...</div>}
             {!load && (
-                <table border="1" className={tableStyles.table}>
+                <table
+                    className="table table-bordered table-hover table-responsive"
+                    style={{
+                        width: "80%",
+                        margin: "50px auto",
+                        verticalAlign: "middle",
+                    }}
+                >
                     <tbody>
                         <tr>
+                            <th>Catalogue No</th>
                             <th>Design No</th>
                             <th>Design File Name</th>
                             <th>Description</th>
                             <th>Quality</th>
+                            <th>Total Amount</th>
+                            <th>Sell Price</th>
                             <th></th>
                             <th></th>
                             <th></th>
                         </tr>
-                        {searchedDesigns.length === 0 && (
-                            <tr className={tableStyles.notfound}>
-                                <td colSpan="4">No Design Found yet</td>
-                            </tr>
-                        )}
-                        {searchedDesigns.length !== 0 &&
-                            searchedDesigns.map((design) => {
-                                console.log(design);
-                                return (
-                                    <tr key={design.designno}>
-                                        <td>{design.designno}</td>
-                                        <td>{design.designfilename}</td>
-                                        <td>{design.designdescription}</td>
-                                        <td>{design.qualityname}</td>
-                                        <td>{design.totalamountdesign}</td>
-                                        <td>{design.sellprice}</td>
-                                        <td className={tableStyles.tableButton}>
-                                            <Link
-                                                style={{ color: "white" }}
-                                                to={{
-                                                    pathname: "/design/detail",
-                                                    state: {
-                                                        designno:
-                                                            design.designno,
-                                                    },
-                                                }}
-                                            >
-                                                Details
-                                            </Link>
-                                        </td>
-                                        <td
-                                            className={tableStyles.tableButton}
-                                            onClick={() => {
-                                                deleteRequest(
-                                                    design.designfilename
-                                                );
-                                            }}
-                                        >
-                                            Delete
-                                        </td>
-                                        <td className={tableStyles.tableButton}>
-                                            <Link
-                                                style={{ color: "white" }}
-                                                to={{
-                                                    pathname: "/design/update",
-                                                    state: {
-                                                        designfilename:
-                                                            design.designfilename,
-                                                    },
-                                                }}
-                                            >
-                                                Update
-                                            </Link>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                        {content}
                     </tbody>
                 </table>
             )}{" "}

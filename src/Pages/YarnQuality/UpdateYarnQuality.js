@@ -2,8 +2,8 @@ import axios from "../../axios.js";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router";
 import buttonStyles from "../../Modules/Button.module.css";
-import catchError from "../../Util/catchAxiosError.js";
 import catchAxiosError from "../../Util/catchAxiosError.js";
+import handleFocus from "../../Util/handleFocus";
 
 function UpdateYarnQuality() {
     let history = useHistory();
@@ -20,6 +20,8 @@ function UpdateYarnQuality() {
 
     useEffect(() => {
         try {
+            document.addEventListener("keydown", captureEnter, false);
+            document.addEventListener("focus", handleFocus, true);
             document.title = "Update Yarn Quality";
             if (location.state) {
                 setQualityid(location.state.qualityid);
@@ -34,10 +36,6 @@ function UpdateYarnQuality() {
             alert(err.message);
         }
     }, []);
-
-    const handleFocus = (event) => {
-        event.target.select();
-    };
 
     const onSubmitEvent = async () => {
         setLoad(true);
@@ -89,13 +87,12 @@ function UpdateYarnQuality() {
             {load && <div>Loading...</div>}
             {!load && (
                 <form>
-                    <table>
+                    <table className="table table-bordered table-hover table-responsive">
                         <tbody>
                             <tr>
                                 <td>Quality Name</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Quality Name"
                                         value={qualityname}
                                         onChange={(e) => {
@@ -103,9 +100,6 @@ function UpdateYarnQuality() {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
-                                        onFocus={handleFocus}
                                         autoFocus
                                     />
                                 </td>
@@ -120,10 +114,7 @@ function UpdateYarnQuality() {
                                         onChange={(e) => {
                                             setDenier(e.target.value);
                                         }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
                                         count="0.01"
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -133,14 +124,11 @@ function UpdateYarnQuality() {
                                     <input
                                         type="number"
                                         placeholder="Price"
-                                        onFocus={handleFocus}
                                         value={price}
                                         onChange={(e) => {
                                             setPrice(e.target.value);
                                         }}
                                         count="0.01"
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -150,14 +138,11 @@ function UpdateYarnQuality() {
                                     <input
                                         type="number"
                                         placeholder="Cartage"
-                                        onFocus={handleFocus}
                                         value={cartage}
                                         onChange={(e) => {
                                             setCartage(e.target.value);
                                         }}
                                         count="0.01"
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -172,9 +157,6 @@ function UpdateYarnQuality() {
                                         onChange={(e) => {
                                             setGst(e.target.value);
                                         }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -183,11 +165,8 @@ function UpdateYarnQuality() {
                                 <td>
                                     <input
                                         type="number"
-                                        onFocus={handleFocus}
                                         placeholder="Total Price"
                                         value={totalprice}
-                                        onKeyDown={captureEnter}
-                                        required
                                         count="0.01"
                                         readOnly="read-only"
                                     />

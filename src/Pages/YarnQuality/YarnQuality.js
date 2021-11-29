@@ -96,7 +96,10 @@ function YarnQuality() {
             </div>
             {load && <div>Loading...</div>}
             {!load && (
-                <table border="1" className={tableStyles.table}>
+                <table
+                    style={{ maxWidth: "80%", margin: "auto" }}
+                    className="table table-bordered table-hover table-responsive"
+                >
                     <tbody>
                         <tr>
                             <th>Yarn Quality ID</th>
@@ -125,39 +128,42 @@ function YarnQuality() {
                                         <td>{quality.cartage}</td>
                                         <td>{quality.gst}</td>
                                         <td>{quality.totalprice}</td>
-                                        <td
-                                            className={tableStyles.tableButton}
-                                            onClick={() => {
-                                                deleteRequest(
-                                                    quality.qualityid
-                                                );
-                                            }}
-                                        >
-                                            Delete
-                                        </td>
-                                        <td className={tableStyles.tableButton}>
-                                            <Link
-                                                style={{ color: "white" }}
-                                                to={{
-                                                    pathname:
-                                                        "/yarnquality/update",
-                                                    state: {
-                                                        qualityid:
-                                                            quality.qualityid,
-                                                        qualityname:
-                                                            quality.qualityname,
-                                                        price: quality.price,
-                                                        denier: quality.denier,
-                                                        cartage:
-                                                            quality.cartage,
-                                                        gst: quality.gst,
-                                                        totalprice:
-                                                            quality.totalprice,
-                                                    },
+                                        <td>
+                                            <button
+                                                className="btn btn-outline-primary"
+                                                onClick={() => {
+                                                    deleteRequest(
+                                                        quality.qualityid
+                                                    );
                                                 }}
                                             >
-                                                Update
-                                            </Link>
+                                                Delete
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button className="btn btn-outline-primary">
+                                                <Link
+                                                    to={{
+                                                        pathname:
+                                                            "/yarnquality/update",
+                                                        state: {
+                                                            qualityid:
+                                                                quality.qualityid,
+                                                            qualityname:
+                                                                quality.qualityname,
+                                                            price: quality.price,
+                                                            denier: quality.denier,
+                                                            cartage:
+                                                                quality.cartage,
+                                                            gst: quality.gst,
+                                                            totalprice:
+                                                                quality.totalprice,
+                                                        },
+                                                    }}
+                                                >
+                                                    Update
+                                                </Link>
+                                            </button>
                                         </td>
                                     </tr>
                                 );

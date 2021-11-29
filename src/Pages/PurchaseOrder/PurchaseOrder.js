@@ -103,10 +103,15 @@ function PurchaseOrder() {
             </div>
             {load && <div>Loading...</div>}
             {!load && (
-                <table border="1" className={tableStyles.table}>
+                <table
+                    className="table table-bordered table-hover table-responsive"
+                    style={{ verticalAlign: "middle" }}
+                >
                     <tbody>
                         <tr>
                             <th>Order ID</th>
+                            <th>Delete</th>
+                            <th>Update</th>
                             <th>Order Date</th>
                             <th>Firm</th>
                             <th>Party</th>
@@ -129,8 +134,6 @@ function PurchaseOrder() {
                             <th>Remaining KG</th>
                             <th>Remaining %</th>
                             <th>Is Over</th>
-                            <th></th>
-                            <th></th>
                         </tr>
                         {searchedOrders.length === 0 && (
                             <tr className={tableStyles.notfound}>
@@ -142,6 +145,38 @@ function PurchaseOrder() {
                                 return (
                                     <tr key={order.orderid}>
                                         <td>{order.orderid}</td>
+                                        <td>
+                                            <button
+                                                onClick={() => {
+                                                    deleteRequest(
+                                                        order.orderid
+                                                    );
+                                                }}
+                                                type="button"
+                                                className="btn btn-outline-primary"
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
+                                        <td className={tableStyles.tableButton}>
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-primary"
+                                            >
+                                                <Link
+                                                    to={{
+                                                        pathname:
+                                                            "/purchaseorder/update",
+                                                        state: {
+                                                            orderid:
+                                                                order.orderid,
+                                                        },
+                                                    }}
+                                                >
+                                                    Update
+                                                </Link>
+                                            </button>
+                                        </td>
                                         <td>{dateStringDB(order.orderdate)}</td>
                                         <td>{order.shortname}</td>
                                         <td>{order.partyname}</td>
@@ -175,28 +210,6 @@ function PurchaseOrder() {
                                             ).toFixed(2)}
                                         </td>
                                         <td>{order.isover}</td>
-                                        <td
-                                            className={tableStyles.tableButton}
-                                            onClick={() => {
-                                                deleteRequest(order.orderid);
-                                            }}
-                                        >
-                                            Delete
-                                        </td>
-                                        <td className={tableStyles.tableButton}>
-                                            <Link
-                                                style={{ color: "white" }}
-                                                to={{
-                                                    pathname:
-                                                        "/purchaseorder/update",
-                                                    state: {
-                                                        orderid: order.orderid,
-                                                    },
-                                                }}
-                                            >
-                                                Update
-                                            </Link>
-                                        </td>
                                     </tr>
                                 );
                             })}

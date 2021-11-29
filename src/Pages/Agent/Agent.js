@@ -93,7 +93,10 @@ function Agent() {
             </div>
             {load && <div>Loading...</div>}
             {!load && (
-                <table border="1" className={tableStyles.table}>
+                <table
+                    border="1"
+                    className="table table-bordered table-hover table-responsive"
+                >
                     <tbody>
                         <tr>
                             <th>Agent ID</th>
@@ -127,26 +130,37 @@ function Agent() {
                                         <td>{agent.pan}</td>
                                         <td>{agent.phoneno}</td>
                                         <td>{address}</td>
-                                        <td
-                                            className={tableStyles.tableButton}
-                                            onClick={() => {
-                                                deleteRequest(agent.agentid);
-                                            }}
-                                        >
-                                            Delete
-                                        </td>
-                                        <td className={tableStyles.tableButton}>
-                                            <Link
-                                                style={{ color: "white" }}
-                                                to={{
-                                                    pathname: "/agent/update",
-                                                    state: {
-                                                        agentid: agent.agentid,
-                                                    },
+                                        <td>
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-primary"
+                                                onClick={() => {
+                                                    deleteRequest(
+                                                        agent.agentid
+                                                    );
                                                 }}
                                             >
-                                                Update
-                                            </Link>
+                                                Delete
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-primary"
+                                            >
+                                                <Link
+                                                    to={{
+                                                        pathname:
+                                                            "/agent/update",
+                                                        state: {
+                                                            agentid:
+                                                                agent.agentid,
+                                                        },
+                                                    }}
+                                                >
+                                                    Update
+                                                </Link>
+                                            </button>
                                         </td>
                                     </tr>
                                 );

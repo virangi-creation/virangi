@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import buttonStyles from "../../Modules/Button.module.css";
 import { useHistory, useLocation } from "react-router";
 import catchAxiosError from "../../Util/catchAxiosError.js";
+import handleFocus from "../../Util/handleFocus";
 
 const UpdateHarness = () => {
     const [harnessid, setHarnessid] = useState("");
@@ -19,6 +20,8 @@ const UpdateHarness = () => {
     useEffect(async () => {
         try {
             document.title = "Add Harness";
+            document.addEventListener("keydown", captureEnter, false);
+            document.addEventListener("focus", handleFocus, true);
             if (location.state) {
                 setHarnessid(location.state.harnessid);
                 setLoad(true);
@@ -91,13 +94,15 @@ const UpdateHarness = () => {
             {load && <div>Loading...</div>}
             {!load && (
                 <form>
-                    <table>
+                    <table
+                        className="table table-bordered table-hover table-responsive"
+                        style={{ verticalAlign: "middle" }}
+                    >
                         <tbody>
                             <tr>
                                 <td>Harness Name</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Harness Name"
                                         value={harnessname}
                                         onChange={(e) =>
@@ -105,8 +110,6 @@ const UpdateHarness = () => {
                                                 e.target.value.toUpperCase()
                                             )
                                         }
-                                        onKeyDown={captureEnter}
-                                        required
                                         autoFocus
                                     />
                                 </td>
@@ -115,7 +118,6 @@ const UpdateHarness = () => {
                                 <td>Complete Harness Pattern</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Complete Harness Pattern"
                                         value={fulldetail}
                                         onChange={(e) =>
@@ -123,8 +125,6 @@ const UpdateHarness = () => {
                                                 e.target.value.toUpperCase()
                                             )
                                         }
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -138,8 +138,6 @@ const UpdateHarness = () => {
                                         onChange={(e) =>
                                             setReed(e.target.value)
                                         }
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -147,7 +145,6 @@ const UpdateHarness = () => {
                                 <td>Loom No</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Loom no"
                                         value={loomno}
                                         onChange={(e) =>
@@ -155,8 +152,6 @@ const UpdateHarness = () => {
                                                 e.target.value.toUpperCase()
                                             )
                                         }
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>

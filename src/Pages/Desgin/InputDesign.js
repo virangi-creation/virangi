@@ -5,6 +5,8 @@ import buttonStyles from "../../Modules/Button.module.css";
 import tableStyles from "../../Modules/Table.module.css";
 import catchAxiosError from "../../Util/catchAxiosError.js";
 import InputFeeder from "./InputFeeder.js";
+import handleFocus from "../../Util/handleFocus.js";
+
 function InputDesign() {
     let history = useHistory();
 
@@ -113,6 +115,8 @@ function InputDesign() {
             if (document.activeElement.type === "number")
                 document.activeElement.blur();
         });
+        document.addEventListener("keydown", captureEnter, false);
+        document.addEventListener("focus", handleFocus, true);
         setLoad(true);
         await axios
             .get("/design/add")
@@ -130,10 +134,6 @@ function InputDesign() {
                 catchAxiosError(err);
             });
     }, []);
-
-    const handleFocus = (event) => {
-        event.target.select();
-    };
 
     const onSubmitEvent = async () => {
         try {
@@ -549,13 +549,18 @@ function InputDesign() {
             {load && <div>Loading...</div>}
             {!load && (
                 <form>
-                    <table className={tableStyles.quality_table}>
+                    <table
+                        className="table table-bordered table-hover table-responsive"
+                        style={{
+                            width: "80%",
+                            verticalAlign: "middle",
+                        }}
+                    >
                         <tbody>
                             <tr>
                                 <td>Design File Name</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Design File Name"
                                         value={designfilename}
                                         onChange={(e) => {
@@ -563,9 +568,7 @@ function InputDesign() {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
                                         autoFocus
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
@@ -574,7 +577,6 @@ function InputDesign() {
                                 <td>Design No</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Design No"
                                         value={designno}
                                         onChange={(e) => {
@@ -582,8 +584,6 @@ function InputDesign() {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
@@ -591,7 +591,6 @@ function InputDesign() {
                                 <td>Design Description</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Design Description"
                                         value={designdescription}
                                         onChange={(e) => {
@@ -599,8 +598,6 @@ function InputDesign() {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
@@ -608,12 +605,10 @@ function InputDesign() {
                                 <td>Harness</td>
                                 <td>
                                     <input
-                                        type="text"
                                         list="harnesslist"
                                         onChange={onUpdateHarness}
                                         autoCapitalize
                                         placeholder="Harness Type"
-                                        onKeyDown={captureEnter}
                                     />
 
                                     <datalist id="harnesslist">
@@ -641,12 +636,10 @@ function InputDesign() {
                                 <td>Quality</td>
                                 <td>
                                     <input
-                                        type="text"
                                         list="qualitylist"
                                         onChange={onUpdateQuality}
                                         autoCapitalize
                                         placeholder="Quality Name"
-                                        onKeyDown={captureEnter}
                                     />
 
                                     <datalist id="qualitylist">
@@ -678,8 +671,6 @@ function InputDesign() {
                                         onChange={(e) => {
                                             setDesignLength(e.target.value);
                                         }}
-                                        onKeyDown={captureEnter}
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
@@ -694,8 +685,6 @@ function InputDesign() {
                                         onChange={(e) => {
                                             setUnitLength(e.target.value);
                                         }}
-                                        onKeyDown={captureEnter}
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
@@ -710,8 +699,6 @@ function InputDesign() {
                                         onChange={(e) => {
                                             setPickOnLoom(e.target.value);
                                         }}
-                                        onKeyDown={captureEnter}
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
@@ -726,14 +713,12 @@ function InputDesign() {
                                         onChange={(e) => {
                                             setPickOnFabric(e.target.value);
                                         }}
-                                        onKeyDown={captureEnter}
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <table className={tableStyles.design_table}>
+                    <table className="table table-bordered table-hover table-responsive">
                         <tbody>
                             <tr>
                                 <th>Sr. No.</th>
@@ -779,392 +764,371 @@ function InputDesign() {
                             </tr>
                         </tbody>
                     </table>
-                    <table className={tableStyles.design_table}>
-                        <tr>
-                            <th width="5%">Sr. No</th>
-                            <th width="15%">Quality</th>
-                            <th width="10%">Denier</th>
-                            <th width="10%">Feeder</th>
-                            <th width="15%">Pick</th>
-                            <th width="15%">Avg. Pick</th>
-                            <th width="10%">Weight</th>
-                            <th width="15%">Rate</th>
-                            <th width="15%">Amount</th>
-                        </tr>
-                        {feederDetails.map((feeder, index) => (
-                            <InputFeeder
-                                role={index + 1}
-                                feeder={eval(feeder[0])}
-                                designlength={designlength}
-                                rs={rs}
-                                weftwastage={weftwastage}
-                                setFeeder={eval(feeder[1])}
-                                yarnqualities={yarnqualities}
-                                captureEnter={captureEnter}
-                                handleFocus={handleFocus}
-                            />
-                        ))}
-                        <tr>
-                            <td colSpan="4"></td>
-                            <td>{totalpick}</td>
-                            <td>{totalavgpick}</td>
-                            <td>{totalweftweight.toFixed(3)}</td>
-                            <td></td>
-                            <td>{totalweftamount.toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="1"></td>
-                            <td colSpan="3">Calculated Average Pick =&gt;</td>
-                            <td>{calculatedavgpick.toFixed(2)}</td>
-                        </tr>
+                    <table className="table table-bordered table-hover table-responsive">
+                        <tbody>
+                            <tr>
+                                <th width="5%">Sr. No</th>
+                                <th width="15%">Quality</th>
+                                <th width="10%">Denier</th>
+                                <th width="10%">Feeder</th>
+                                <th width="15%">Pick</th>
+                                <th width="15%">Avg. Pick</th>
+                                <th width="10%">Weight</th>
+                                <th width="15%">Rate</th>
+                                <th width="15%">Amount</th>
+                            </tr>
+                            {feederDetails.map((feeder, index) => (
+                                <InputFeeder
+                                    role={index + 1}
+                                    feeder={eval(feeder[0])}
+                                    designlength={designlength}
+                                    rs={rs}
+                                    weftwastage={weftwastage}
+                                    setFeeder={eval(feeder[1])}
+                                    yarnqualities={yarnqualities}
+                                />
+                            ))}
+                            <tr>
+                                <td colSpan="4"></td>
+                                <td>{totalpick}</td>
+                                <td>{totalavgpick}</td>
+                                <td>{totalweftweight.toFixed(3)}</td>
+                                <td></td>
+                                <td>{totalweftamount.toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="1"></td>
+                                <td colSpan="3">
+                                    Calculated Average Pick =&gt;
+                                </td>
+                                <td>{calculatedavgpick.toFixed(2)}</td>
+                            </tr>
 
-                        <tr style={{ height: "40px" }}>
-                            <td colSpan="5"></td>
-                            <td colSpan="3" style={{ paddingRight: "70px" }}>
-                                Unit Length :
-                            </td>
-                            <td>{unitlength}</td>
-                        </tr>
+                            <tr style={{ height: "40px" }}>
+                                <td colSpan="5"></td>
+                                <td
+                                    colSpan="3"
+                                    style={{ paddingRight: "70px" }}
+                                >
+                                    Unit Length :
+                                </td>
+                                <td>{unitlength}</td>
+                            </tr>
 
-                        <tr>
-                            <td colSpan="6">Yarn Cost / MTR :</td>
-                            <td></td>
-                            <td>{totalAmountOneMtr.toFixed(2)}</td>
-                            <td>{baseAmountDesign.toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="6">Weft Wastage :</td>
-                            <td>
-                                <input
-                                    type="text"
-                                    placeholder="Weft Wastage"
-                                    count="0.01"
-                                    value={weftwastage}
-                                    onChange={(e) => {
-                                        setWeftWastage(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                            <td>
-                                {(
-                                    (totalweftamount * weftwastage) /
-                                    10000
-                                ).toFixed(2)}
-                            </td>
-                            <td>
-                                {(
-                                    (totalweftamount *
-                                        weftwastage *
-                                        unitlength) /
-                                    10000
-                                ).toFixed(2)}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>.</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Job Charge</td>
-                            <td>
-                                <input
-                                    type="text"
-                                    placeholder="Job Charge"
-                                    count="0.01"
-                                    value={jobcharge}
-                                    onChange={(e) => {
-                                        setJobCharge(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                            <td>{jobamount.toFixed(2)}</td>
-                            <td>{(jobamount * unitlength).toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Butta Charge / MTR</td>
-                            <td>
-                                <input
-                                    type="text"
-                                    placeholder="Butta Charge"
-                                    count="0.01"
-                                    value={buttacharge}
-                                    onChange={(e) => {
-                                        setButtaCharge(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                            <td>{buttacharge}</td>
-                            <td>{(buttacharge * unitlength).toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Laser Charge / MTR</td>
-                            <td>
-                                <input
-                                    type="text"
-                                    placeholder="Laser Charge"
-                                    count="0.01"
-                                    value={lasercharge}
-                                    onChange={(e) => {
-                                        setLaserCharge(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                            <td>{lasercharge}</td>
-                            <td>{(lasercharge * unitlength).toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Design Charge / MTR</td>
-                            <td>
-                                <input
-                                    type="text"
-                                    placeholder="Design Charge"
-                                    count="0.01"
-                                    value={designcharge}
-                                    onChange={(e) => {
-                                        setDesignCharge(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                            <td>{designcharge}</td>
-                            <td>{(designcharge * unitlength).toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Dyeing Charge / MTR</td>
-                            <td>
-                                <input
-                                    type="text"
-                                    placeholder="Dyeing Charge"
-                                    count="0.01"
-                                    value={dyeingcharge}
-                                    onChange={(e) => {
-                                        setDyeingCharge(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                            <td>{dyeingcharge}</td>
-                            <td>{(dyeingcharge * unitlength).toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Seconds Ratio / UNIT</td>
-                            <td>
-                                <input
-                                    type="text"
-                                    placeholder="Seconds Ratio"
-                                    count="0.01"
-                                    value={secondsratio}
-                                    onChange={(e) => {
-                                        setSecondsRatio(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                            <td>
-                                {(isNaN(secondsratio)
-                                    ? 0
-                                    : secondsratioamount / unitlength
-                                ).toFixed(2)}
-                            </td>
-                            <td>{secondsratioamount.toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td>.</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Total Cost </td>
-                            <td></td>
-                            <td>
-                                {(isNaN(totalCharges)
-                                    ? 0
-                                    : totalCharges
-                                ).toFixed(2)}
-                            </td>
-                            <td>{(totalCharges * unitlength).toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Manufacturer Sell Price / UNIT</td>
-                            <td></td>
-                            <td colSpan="2">
-                                <input
-                                    type="text"
-                                    placeholder="Manufacturer Sell Price"
-                                    count="0.01"
-                                    value={manufacturersellprice}
-                                    onChange={(e) => {
-                                        setManufacturerSellPrice(
-                                            e.target.value
-                                        );
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>.</td>
-                        </tr>
+                            <tr>
+                                <td colSpan="6">Yarn Cost / MTR :</td>
+                                <td></td>
+                                <td>{totalAmountOneMtr.toFixed(2)}</td>
+                                <td>{baseAmountDesign.toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="6">Weft Wastage :</td>
+                                <td>
+                                    <input
+                                        placeholder="Weft Wastage"
+                                        count="0.01"
+                                        value={weftwastage}
+                                        onChange={(e) => {
+                                            setWeftWastage(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                                <td>
+                                    {(
+                                        (totalweftamount * weftwastage) /
+                                        10000
+                                    ).toFixed(2)}
+                                </td>
+                                <td>
+                                    {(
+                                        (totalweftamount *
+                                            weftwastage *
+                                            unitlength) /
+                                        10000
+                                    ).toFixed(2)}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>.</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td colSpan="3">Job Charge</td>
+                                <td>
+                                    <input
+                                        placeholder="Job Charge"
+                                        count="0.01"
+                                        value={jobcharge}
+                                        onChange={(e) => {
+                                            setJobCharge(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                                <td>{jobamount.toFixed(2)}</td>
+                                <td>{(jobamount * unitlength).toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td colSpan="3">Butta Charge / MTR</td>
+                                <td>
+                                    <input
+                                        placeholder="Butta Charge"
+                                        count="0.01"
+                                        value={buttacharge}
+                                        onChange={(e) => {
+                                            setButtaCharge(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                                <td>{buttacharge}</td>
+                                <td>{(buttacharge * unitlength).toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td colSpan="3">Laser Charge / MTR</td>
+                                <td>
+                                    <input
+                                        placeholder="Laser Charge"
+                                        count="0.01"
+                                        value={lasercharge}
+                                        onChange={(e) => {
+                                            setLaserCharge(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                                <td>{lasercharge}</td>
+                                <td>{(lasercharge * unitlength).toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td colSpan="3">Design Charge / MTR</td>
+                                <td>
+                                    <input
+                                        placeholder="Design Charge"
+                                        count="0.01"
+                                        value={designcharge}
+                                        onChange={(e) => {
+                                            setDesignCharge(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                                <td>{designcharge}</td>
+                                <td>
+                                    {(designcharge * unitlength).toFixed(2)}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td colSpan="3">Dyeing Charge / MTR</td>
+                                <td>
+                                    <input
+                                        placeholder="Dyeing Charge"
+                                        count="0.01"
+                                        value={dyeingcharge}
+                                        onChange={(e) => {
+                                            setDyeingCharge(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                                <td>{dyeingcharge}</td>
+                                <td>
+                                    {(dyeingcharge * unitlength).toFixed(2)}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td colSpan="3">Seconds Ratio / UNIT</td>
+                                <td>
+                                    <input
+                                        placeholder="Seconds Ratio"
+                                        count="0.01"
+                                        value={secondsratio}
+                                        onChange={(e) => {
+                                            setSecondsRatio(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                                <td>
+                                    {(isNaN(secondsratio)
+                                        ? 0
+                                        : secondsratioamount / unitlength
+                                    ).toFixed(2)}
+                                </td>
+                                <td>{secondsratioamount.toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td>.</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td colSpan="3">Total Cost </td>
+                                <td></td>
+                                <td>
+                                    {(isNaN(totalCharges)
+                                        ? 0
+                                        : totalCharges
+                                    ).toFixed(2)}
+                                </td>
+                                <td>
+                                    {(totalCharges * unitlength).toFixed(2)}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td colSpan="3">
+                                    Manufacturer Sell Price / UNIT
+                                </td>
+                                <td></td>
+                                <td colSpan="2">
+                                    <input
+                                        placeholder="Manufacturer Sell Price"
+                                        count="0.01"
+                                        value={manufacturersellprice}
+                                        onChange={(e) => {
+                                            setManufacturerSellPrice(
+                                                e.target.value
+                                            );
+                                        }}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>.</td>
+                            </tr>
 
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Finishing Charge / UNIT</td>
-                            <td>
-                                <input
-                                    type="text"
-                                    placeholder="Finishing Charge"
-                                    count="0.01"
-                                    value={finishingcharge}
-                                    onChange={(e) => {
-                                        setFinishingCharge(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                            <td>
-                                {(isNaN(finishingcharge)
-                                    ? 0
-                                    : finishingcharge / unitlength
-                                ).toFixed(2)}
-                            </td>
-                            <td>{finishingcharge}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Value Addition / UNIT</td>
-                            <td>
-                                <input
-                                    type="text"
-                                    placeholder="Value Addition Charge"
-                                    count="0.01"
-                                    value={valueadditioncharge}
-                                    onChange={(e) => {
-                                        setValueAdditionCharge(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                            <td>
-                                {(isNaN(valueadditioncharge)
-                                    ? 0
-                                    : valueadditioncharge / unitlength
-                                ).toFixed(2)}
-                            </td>
-                            <td>{valueadditioncharge}</td>
-                        </tr>
-                        <tr>
-                            <td>.</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Market Margin %</td>
-                            <td>
-                                <input
-                                    type="text"
-                                    placeholder="Market Margin"
-                                    count="0.01"
-                                    value={marketmargin}
-                                    onChange={(e) => {
-                                        setMarketMargin(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                            <td>{marketmarginamount.toFixed(2)}</td>
-                            <td>
-                                {(marketmarginamount * unitlength).toFixed(2)}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Discount %</td>
-                            <td>
-                                <input
-                                    type="text"
-                                    placeholder="Discount"
-                                    count="0.01"
-                                    value={discount}
-                                    onChange={(e) => {
-                                        setDiscount(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                            <td>{discountamount.toFixed(2)}</td>
-                            <td>{(discountamount * unitlength).toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">Agent Charge % </td>
-                            <td>
-                                <input
-                                    type="text"
-                                    placeholder="Agent Charge"
-                                    count="0.01"
-                                    value={agentcharge}
-                                    onChange={(e) => {
-                                        setAgentCharge(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                            <td>{agentamount.toFixed(2)}</td>
-                            <td>{(agentamount * unitlength).toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td>.</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="4"></td>
-                            <td colSpan="3">Total Amount :</td>
-                            <td>
-                                {(totalamountdesign / unitlength).toFixed(2)}
-                            </td>
-                            <td>{totalamountdesign}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="6"></td>
-                            <td>Selling Price :</td>
-                            <td>
-                                <input
-                                    type="text"
-                                    size="14"
-                                    placeholder="Selling Price"
-                                    count="0.01"
-                                    value={sellprice}
-                                    onChange={(e) => {
-                                        setSellPrice(e.target.value);
-                                    }}
-                                    onKeyDown={captureEnter}
-                                    onFocus={handleFocus}
-                                />
-                            </td>
-                        </tr>
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td colSpan="3">Finishing Charge / UNIT</td>
+                                <td>
+                                    <input
+                                        placeholder="Finishing Charge"
+                                        count="0.01"
+                                        value={finishingcharge}
+                                        onChange={(e) => {
+                                            setFinishingCharge(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                                <td>
+                                    {(isNaN(finishingcharge)
+                                        ? 0
+                                        : finishingcharge / unitlength
+                                    ).toFixed(2)}
+                                </td>
+                                <td>{finishingcharge}</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td colSpan="3">Value Addition / UNIT</td>
+                                <td>
+                                    <input
+                                        placeholder="Value Addition Charge"
+                                        count="0.01"
+                                        value={valueadditioncharge}
+                                        onChange={(e) => {
+                                            setValueAdditionCharge(
+                                                e.target.value
+                                            );
+                                        }}
+                                    />
+                                </td>
+                                <td>
+                                    {(isNaN(valueadditioncharge)
+                                        ? 0
+                                        : valueadditioncharge / unitlength
+                                    ).toFixed(2)}
+                                </td>
+                                <td>{valueadditioncharge}</td>
+                            </tr>
+                            <tr>
+                                <td>.</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td colSpan="3">Market Margin %</td>
+                                <td>
+                                    <input
+                                        placeholder="Market Margin"
+                                        count="0.01"
+                                        value={marketmargin}
+                                        onChange={(e) => {
+                                            setMarketMargin(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                                <td>{marketmarginamount.toFixed(2)}</td>
+                                <td>
+                                    {(marketmarginamount * unitlength).toFixed(
+                                        2
+                                    )}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td colSpan="3">Discount %</td>
+                                <td>
+                                    <input
+                                        placeholder="Discount"
+                                        count="0.01"
+                                        value={discount}
+                                        onChange={(e) => {
+                                            setDiscount(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                                <td>{discountamount.toFixed(2)}</td>
+                                <td>
+                                    {(discountamount * unitlength).toFixed(2)}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td colSpan="3">Agent Charge % </td>
+                                <td>
+                                    <input
+                                        placeholder="Agent Charge"
+                                        count="0.01"
+                                        value={agentcharge}
+                                        onChange={(e) => {
+                                            setAgentCharge(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                                <td>{agentamount.toFixed(2)}</td>
+                                <td>{(agentamount * unitlength).toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td>.</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="4"></td>
+                                <td colSpan="3">Total Amount :</td>
+                                <td>
+                                    {(totalamountdesign / unitlength).toFixed(
+                                        2
+                                    )}
+                                </td>
+                                <td>{totalamountdesign}</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="6"></td>
+                                <td>Selling Price :</td>
+                                <td>
+                                    <input
+                                        size="14"
+                                        placeholder="Selling Price"
+                                        count="0.01"
+                                        value={sellprice}
+                                        onChange={(e) => {
+                                            setSellPrice(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                     <button
                         type="button"

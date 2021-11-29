@@ -3,6 +3,7 @@ import { useHistory, useLocation } from "react-router";
 import axios from "../../axios.js";
 import buttonStyles from "../../Modules/Button.module.css";
 import catchAxiosError from "../../Util/catchAxiosError.js";
+import handleFocus from "../../Util/handleFocus.js";
 
 function UpdateBank() {
     let history = useHistory();
@@ -16,6 +17,8 @@ function UpdateBank() {
         try {
             setLoad(true);
             document.title = "Update Bank";
+            document.addEventListener("keydown", captureEnter, false);
+            document.addEventListener("focus", handleFocus, true);
             await axios
                 .get(`/bank/${bankid}`)
                 .then((res) => {
@@ -58,10 +61,6 @@ function UpdateBank() {
             onSubmitEvent();
     };
 
-    const updateEvent = (e) => {
-        setBankName(e.target.value.toUpperCase());
-    };
-
     return (
         <div
             style={{
@@ -71,18 +70,16 @@ function UpdateBank() {
         >
             {load && <div>Loading...</div>}
             {!load && (
-                <table>
+                <table className="table table-bordered table-hover table-responsive">
                     <tr>
                         <td>Bank Name</td>
                         <td>
                             <input
-                                type="text"
-                                id="bankname"
                                 placeholder="Bank Name"
                                 value={bankName}
-                                onChange={updateEvent}
-                                onKeyDown={captureEnter}
-                                required
+                                onChange={(e) => {
+                                    setBankName(e.target.value.toUpperCase());
+                                }}
                                 autoFocus
                             />
                         </td>

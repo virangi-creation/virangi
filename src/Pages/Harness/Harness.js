@@ -94,7 +94,10 @@ function Harness() {
             </div>
             {load && <div>Loading...</div>}
             {!load && (
-                <table border="1" className={tableStyles.table}>
+                <table
+                    className="table table-bordered table-hover table-responsive"
+                    style={{ verticalAlign: "middle" }}
+                >
                     <tbody>
                         <tr>
                             <th>Harness</th>
@@ -117,29 +120,37 @@ function Harness() {
                                         <td>{harness.fulldetail}</td>
                                         <td>{harness.reed}</td>
                                         <td>{harness.loomno}</td>
-                                        <td
-                                            className={tableStyles.tableButton}
-                                            onClick={() => {
-                                                deleteRequest(
-                                                    harness.harnessid
-                                                );
-                                            }}
-                                        >
-                                            Delete
-                                        </td>
-                                        <td className={tableStyles.tableButton}>
-                                            <Link
-                                                style={{ color: "white" }}
-                                                to={{
-                                                    pathname: "/harness/update",
-                                                    state: {
-                                                        harnessid:
-                                                            harness.harnessid,
-                                                    },
+                                        <td>
+                                            <button
+                                                onClick={() => {
+                                                    deleteRequest(
+                                                        harness.harnessid
+                                                    );
                                                 }}
+                                                type="button"
+                                                className="btn btn-outline-primary"
                                             >
-                                                Update
-                                            </Link>
+                                                Delete
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-primary"
+                                            >
+                                                <Link
+                                                    to={{
+                                                        pathname:
+                                                            "/harness/update",
+                                                        state: {
+                                                            harnessid:
+                                                                harness.harnessid,
+                                                        },
+                                                    }}
+                                                >
+                                                    Update
+                                                </Link>
+                                            </button>
                                         </td>
                                     </tr>
                                 );

@@ -1,0 +1,187 @@
+.main-bill {
+    border: 1px solid black;
+    margin: 100px 100px;
+}
+
+.headers {
+    display: flex;
+    align-items: center;
+}
+
+.header-content {
+    flex: 1;
+    margin-left: -200px;
+}
+
+.header-content,
+.bank,
+.paiddetails {
+    border-bottom: 2px solid black;
+}
+
+.firmname {
+    display: flex;
+    justify-content: center;
+}
+
+.totalamountdetails,
+.right-receiver-details,
+.firm-details-salesbill,
+.receiveddetails {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid black;
+}
+.pa5 {
+    margin: 15px;
+}
+
+.receiver-details-salesbill {
+    display: flex;
+    justify-content: space-between;
+}
+
+.duedates {
+    display: flex;
+    flex-direction: row;
+}
+
+.left-inner-salesbill,
+.right-inner-salesbill,
+.left-firm-details,
+.right-firm-details,
+.left-receiver-column,
+.right-receiver-column {
+    display: flex;
+    flex-direction: column;
+    flex: 0.5;
+    justify-content: left;
+    padding: 20px 0px 20px 40px;
+    width: 100%;
+}
+
+.content-prototype {
+    display: flex;
+}
+
+.address-headings {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+.address-heading,
+.bank,
+.paiddetails {
+    flex: 0.5;
+    border-bottom: 2px solid black;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+}
+
+.bankdetails {
+    margin: 20px 0px 10px 40px;
+}
+
+.duedates {
+    margin-left: 40px;
+}
+.duedates > p {
+    flex: 0.5;
+}
+
+.content-prototype > .heading {
+    min-width: 200px;
+}
+
+.content-prototype > .content {
+    margin-left: 20px;
+}
+
+.lowerleft,
+.lowerright,
+.lowerright-amount,
+.paymentdetails,
+.companysign {
+    flex: 0.5;
+}
+
+.duedates1 {
+    flex: 0.55;
+}
+.duedates2 {
+    flex: 0.45;
+}
+
+.payment-terms {
+    display: flex;
+    margin-left: 40px;
+}
+
+.lowerleft,
+.paymentdetails {
+    border-right: 2px solid black;
+}
+
+.amountinwords {
+    border: 2px solid black;
+    padding: 5px;
+    padding-left: 40px;
+}
+
+.paymentdetails > .content-prototype {
+    margin-left: 40px;
+    margin-bottom: 10px;
+}
+
+.paymentdetails > .content-prototype > .content {
+    border-bottom: 3px solid black;
+    min-width: 300px;
+}
+
+.companysign {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.companysign > .firmname,
+.companysign > .signatory {
+    padding-right: 60px;
+}
+
+.lowerright-amount {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    /* padding-right: 60px; */
+}
+
+.lowerright-amount > .content-prototype > .heading {
+    min-width: 350px;
+}
+
+.lowerright-amount > .content-prototype > .content {
+    min-width: 200px;
+    text-align: end;
+    padding-right: 60px;
+}
+.lowerright-amount > .content-prototype {
+    padding: 0px;
+    margin: 0px;
+}
+.lowerright-amount {
+    padding-bottom: 20px;
+}
+
+.bankdetails > .content-prototype > .heading {
+    min-width: 120px;
+}
+
+.duedates1 > .temp-terms > .content-prototype > .heading {
+    min-width: 120px;
+}

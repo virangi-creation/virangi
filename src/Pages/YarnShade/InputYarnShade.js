@@ -3,6 +3,7 @@ import { useHistory, useLocation } from "react-router";
 import buttonStyles from "../../Modules/Button.module.css";
 import axios from "../../axios.js";
 import catchAxiosError from "../../Util/catchAxiosError.js";
+import handleFocus from "../../Util/handleFocus";
 
 function InputYarnShade() {
     let history = useHistory();
@@ -21,6 +22,8 @@ function InputYarnShade() {
         try {
             setLoad(true);
             document.title = "Input Yarn Shade";
+            document.addEventListener("keydown", captureEnter, false);
+            document.addEventListener("focus", handleFocus, true);
             document.addEventListener("wheel", function (event) {
                 if (document.activeElement.type === "number")
                     document.activeElement.blur();
@@ -40,10 +43,6 @@ function InputYarnShade() {
             alert(err.message);
         }
     }, []);
-
-    const handleFocus = (event) => {
-        event.target.select();
-    };
 
     const onSubmitEvent = async () => {
         try {
@@ -119,19 +118,17 @@ function InputYarnShade() {
             {load && <div>Loading...</div>}
             {!load && (
                 <form>
-                    <table>
+                    <table className="table table-bordered table-hover table-responsive">
                         <tbody>
                             <tr>
                                 <td>Quality Name</td>
                                 <td>
                                     <input
-                                        type="text"
                                         list="qualitylist"
                                         onChange={onUpdateQuality}
                                         autoFocus
                                         autoCapitalize
                                         placeholder="Quality Name"
-                                        onKeyDown={captureEnter}
                                     />
 
                                     <datalist id="qualitylist">
@@ -148,13 +145,9 @@ function InputYarnShade() {
                                 <td>Yarn Shade</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Yarn Shade"
                                         value={shadeno}
                                         onChange={onUpdateShadeno}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -162,13 +155,9 @@ function InputYarnShade() {
                                 <td>Colour</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Colour"
                                         value={colour}
                                         onChange={onUpdateColour}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -176,12 +165,9 @@ function InputYarnShade() {
                                 <td>Company Name</td>
                                 <td>
                                     <input
-                                        type="text"
                                         list="partylist"
                                         onChange={onUpdateParty}
                                         placeholder="Company Name"
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
 
                                     <datalist id="partylist">

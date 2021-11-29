@@ -1,7 +1,9 @@
 import axios from "../../axios.js";
 import { useHistory } from "react-router";
 import React, { useEffect, useState } from "react";
+import handleFocus from "../../Util/handleFocus";
 import buttonStyles from "../../Modules/Button.module.css";
+
 import catchAxiosError from "../../Util/catchAxiosError.js";
 
 function InputParty() {
@@ -24,6 +26,7 @@ function InputParty() {
     const [partytype, setPartytype] = useState(partytypes[0]);
     const [leadingname, setLeadingname] = useState("");
     const [leadingphone, setLeadingphone] = useState("");
+    const [discount, setDiscount] = useState(0);
     const [accountantname, setAccountantname] = useState("");
     const [accountantphone, setAccountantphone] = useState("");
     const [gst, setGST] = useState("");
@@ -53,6 +56,8 @@ function InputParty() {
                 document.activeElement.blur();
             }
         });
+        document.addEventListener("keydown", captureEnter, false);
+        document.addEventListener("focus", handleFocus, true);
         setLoad(true);
         await axios
             .get("/party/add")
@@ -67,10 +72,6 @@ function InputParty() {
             });
     }, []);
 
-    const handleFocus = (event) => {
-        event.target.select();
-    };
-
     const onSubmitEvent = async () => {
         try {
             setLoad(true);
@@ -80,6 +81,7 @@ function InputParty() {
                     partytype,
                     leadingname,
                     leadingphone,
+                    discount,
                     accountantname,
                     accountantphone,
                     gst,
@@ -165,19 +167,20 @@ function InputParty() {
             {load && <div>Loading...</div>}
             {!load && (
                 <form>
-                    <table>
+                    <table
+                        className="table table-bordered table-hover table-responsive"
+                        style={{ verticalAlign: "middle" }}
+                    >
                         <tbody>
                             <tr>
                                 <td>Agent Name</td>
                                 <td>
                                     <input
-                                        type="text"
                                         list="agentlist"
                                         onChange={onUpdateAgent}
                                         autoFocus
                                         autoCapitalize
                                         placeholder="Agent Name"
-                                        onKeyDown={captureEnter}
                                     />
 
                                     <datalist id="agentlist">
@@ -194,7 +197,6 @@ function InputParty() {
                                 <td>Party Name</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Party Name"
                                         value={partyname}
                                         onChange={(e) => {
@@ -202,9 +204,6 @@ function InputParty() {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
@@ -217,7 +216,6 @@ function InputParty() {
                                         onChange={(e) => {
                                             setPartytype(e.target.value.trim());
                                         }}
-                                        onKeyDown={captureEnter}
                                     >
                                         {partytypes.map((pt) => (
                                             <option value={pt}>{pt}</option>
@@ -229,7 +227,6 @@ function InputParty() {
                                 <td>Leading Name</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Leading Name"
                                         value={leadingname}
                                         onChange={(e) => {
@@ -237,8 +234,6 @@ function InputParty() {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
@@ -252,8 +247,19 @@ function InputParty() {
                                         onChange={(e) => {
                                             setLeadingphone(e.target.value);
                                         }}
-                                        onKeyDown={captureEnter}
-                                        onFocus={handleFocus}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Default Discount</td>
+                                <td>
+                                    <input
+                                        type="number"
+                                        value={discount}
+                                        placeholder="Discount on Delivery"
+                                        onChange={(e) => {
+                                            setDiscount(e.target.value);
+                                        }}
                                     />
                                 </td>
                             </tr>
@@ -261,7 +267,6 @@ function InputParty() {
                                 <td>Accountant Name</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Accountant Name"
                                         value={accountantname}
                                         onChange={(e) => {
@@ -269,8 +274,6 @@ function InputParty() {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
@@ -284,8 +287,6 @@ function InputParty() {
                                         onChange={(e) => {
                                             setAccountantphone(e.target.value);
                                         }}
-                                        onKeyDown={captureEnter}
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
@@ -293,7 +294,6 @@ function InputParty() {
                                 <td>GST</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="GST No."
                                         value={gst}
                                         onChange={(e) => {
@@ -301,8 +301,6 @@ function InputParty() {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
@@ -310,7 +308,6 @@ function InputParty() {
                                 <td>PAN</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="PAN No."
                                         value={pan}
                                         onChange={(e) => {
@@ -318,8 +315,6 @@ function InputParty() {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
@@ -327,7 +322,6 @@ function InputParty() {
                                 <td>Email</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Email"
                                         value={email}
                                         onChange={(e) => {
@@ -335,8 +329,6 @@ function InputParty() {
                                                 e.target.value.toLowerCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
@@ -344,7 +336,6 @@ function InputParty() {
                                 <td>CIN</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="CIN"
                                         value={cin}
                                         onChange={(e) => {
@@ -352,8 +343,6 @@ function InputParty() {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        onFocus={handleFocus}
                                     />
                                 </td>
                             </tr>
@@ -361,85 +350,65 @@ function InputParty() {
                                 <td rowSpan="5">Billing Address</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Address Line 1"
-                                        onFocus={handleFocus}
                                         value={balineone}
                                         onChange={(e) => {
                                             setBAlineone(
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Address Line 2"
-                                        onFocus={handleFocus}
                                         value={balinetwo}
                                         onChange={(e) => {
                                             setBAlinetwo(
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="City"
-                                        onFocus={handleFocus}
                                         value={bacity}
                                         onChange={(e) => {
                                             setBAcity(
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="State"
-                                        onFocus={handleFocus}
                                         value={bastate}
                                         onChange={(e) => {
                                             setBAstate(
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Pin Code"
-                                        onFocus={handleFocus}
                                         value={bapincode}
                                         onChange={(e) => {
                                             setBApincode(
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -458,92 +427,71 @@ function InputParty() {
                                             name="sameasbilling"
                                             id="sameasbilling"
                                             onClick={sameAsBilling}
-                                            onKeyDown={captureEnter}
                                         />
                                         Delivery address same as billing address
                                     </div>
                                 </td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Address Line 1"
-                                        onFocus={handleFocus}
                                         value={dalineone}
                                         onChange={(e) => {
                                             setDAlineone(
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Address Line 2"
-                                        onFocus={handleFocus}
                                         value={dalinetwo}
                                         onChange={(e) => {
                                             setDAlinetwo(
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="City"
-                                        onFocus={handleFocus}
                                         value={dacity}
                                         onChange={(e) => {
                                             setDAcity(
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="State"
-                                        onFocus={handleFocus}
                                         value={dastate}
                                         onChange={(e) => {
                                             setDAstate(
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Pin Code"
-                                        onFocus={handleFocus}
                                         value={dapincode}
                                         onChange={(e) => {
                                             setDApincode(
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -553,17 +501,13 @@ function InputParty() {
                                 <td>
                                     {" "}
                                     <input
-                                        type="text"
                                         placeholder="Account No"
-                                        onFocus={handleFocus}
                                         value={accountno}
                                         onChange={(e) => {
                                             setAccountno(
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -571,17 +515,13 @@ function InputParty() {
                                 <td>IFSC Code</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="IFSC Code"
-                                        onFocus={handleFocus}
                                         value={ifsccode}
                                         onChange={(e) => {
                                             setIFSCCode(
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -589,12 +529,10 @@ function InputParty() {
                                 <td>Bank Name</td>
                                 <td>
                                     <input
-                                        type="text"
                                         list="banklist"
                                         onChange={onUpdateBank}
                                         autoCapitalize
                                         placeholder="Bank Name"
-                                        onKeyDown={captureEnter}
                                     />
 
                                     <datalist id="banklist">
@@ -613,7 +551,7 @@ function InputParty() {
                                         className={buttonStyles.inputbutton}
                                         onClick={onSubmitEvent}
                                     >
-                                        Add new Yarn Quality
+                                        Save Party
                                     </button>
                                 </td>
                             </tr>

@@ -1,14 +1,6 @@
 import { useEffect } from "react";
 
-const InputWarp = ({
-    warp,
-    setWarp,
-    role,
-    yarnqualities,
-    captureEnter,
-    handleFocus,
-    firstRender,
-}) => {
+const InputWarp = ({ warp, setWarp, role, yarnqualities, firstRender }) => {
     const onUpdateYarnQuality = (e) => {
         let q = e.target.value;
         setWarp((prevState) => ({
@@ -159,23 +151,18 @@ const InputWarp = ({
     return (
         <>
             <tr>
-                <td
-                    rowSpan="17"
-                    style={{ paddingRight: "50px", alignItems: "start" }}
-                >
+                <td rowSpan="17" style={{ paddingRight: "50px" }}>
                     {role} Warp Details
                 </td>
             </tr>
             <tr>
-                <td style={{ padding: "25px 0px 0px 0px" }}>Warp Quality</td>
-                <td style={{ padding: "25px 0px 0px 0px" }}>
+                <td>Warp Quality</td>
+                <td>
                     <input
-                        type="text"
                         id={`${role}warpquality`}
                         list={`${role}qualitylist`}
                         value={warp.warpqualityname}
                         onChange={onUpdateYarnQuality}
-                        onKeyDown={captureEnter}
                         autoCapitalize
                         placeholder="Warp Quality Name"
                     />
@@ -195,9 +182,6 @@ const InputWarp = ({
                         type="number"
                         placeholder="Enter Warp Denier..."
                         value={warp.denier}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>
@@ -214,9 +198,6 @@ const InputWarp = ({
                                 warplength: e.target.value,
                             }));
                         }}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>
@@ -233,9 +214,6 @@ const InputWarp = ({
                                 warpshortage: e.target.value,
                             }));
                         }}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>
@@ -246,9 +224,6 @@ const InputWarp = ({
                         type="number"
                         placeholder="Enter Warp Length..."
                         value={warp.totalwarplength}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>
@@ -265,9 +240,6 @@ const InputWarp = ({
                                 ends: e.target.value,
                             }));
                         }}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>
@@ -284,9 +256,6 @@ const InputWarp = ({
                                 reed: e.target.value,
                             }));
                         }}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>
@@ -303,9 +272,6 @@ const InputWarp = ({
                                 endsperden: e.target.value,
                             }));
                         }}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>
@@ -322,9 +288,6 @@ const InputWarp = ({
                                 selvedgeden: e.target.value,
                             }));
                         }}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>
@@ -341,9 +304,6 @@ const InputWarp = ({
                                 selvedgeendsperden: e.target.value,
                             }));
                         }}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>
@@ -354,9 +314,6 @@ const InputWarp = ({
                         type="number"
                         placeholder="Enter RS..."
                         value={warp.rs}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>
@@ -367,9 +324,6 @@ const InputWarp = ({
                         type="number"
                         placeholder="Enter Warp Weight..."
                         value={warp.warpweight}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>
@@ -386,9 +340,6 @@ const InputWarp = ({
                                 warpwastage: e.target.value,
                             }));
                         }}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>
@@ -399,9 +350,6 @@ const InputWarp = ({
                         type="number"
                         placeholder="Enter Body Warp Weight..."
                         value={warp.totalweight}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>
@@ -412,22 +360,16 @@ const InputWarp = ({
                         type="number"
                         placeholder="Enter Yarn Price..."
                         value={warp.yarnprice}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>
             <tr>
-                <td style={{ padding: "0px 0px 25px 0px" }}>Yarn Cost</td>
-                <td style={{ padding: "0px 0px 25px 0px" }}>
+                <td>Yarn Cost</td>
+                <td>
                     <input
                         type="number"
                         placeholder="Enter Yarn Cost..."
                         value={warp.yarncost}
-                        onFocus={handleFocus}
-                        onKeyDown={captureEnter}
-                        required
                     />
                 </td>
             </tr>

@@ -5,6 +5,7 @@ import axios from "../../axios.js";
 import catchAxiosError from "../../Util/catchAxiosError";
 import InputWarp from "./InputWarp.js";
 import InputFeeder from "../Desgin/InputFeeder";
+import handleFocus from "../../Util/handleFocus";
 
 function UpdateQuality() {
     let history = useHistory();
@@ -118,6 +119,8 @@ function UpdateQuality() {
 
     useEffect(async () => {
         try {
+            document.addEventListener("keydown", captureEnter, false);
+            document.addEventListener("focus", handleFocus, true);
             if (location.state) {
                 setQualityid(location.state.qualityid);
                 console.log(`/quality/${location.state.qualityid}/update`);
@@ -280,10 +283,6 @@ function UpdateQuality() {
         }
     };
 
-    const handleFocus = (event) => {
-        event.target.select();
-    };
-
     const captureEnter = (event) => {
         let kC = event.keyCode;
         if (kC == 27 && window.confirm("Are you sure you want to save?"))
@@ -306,13 +305,15 @@ function UpdateQuality() {
             {load && <div>Loading...</div>}
             {!load && (
                 <form>
-                    <table>
+                    <table
+                        className="table table-bordered table-hover table-responsive"
+                        style={{ verticalAlign: "middle" }}
+                    >
                         <tbody>
                             <tr>
                                 <td colSpan="2">Quality Name</td>
                                 <td>
                                     <input
-                                        type="text"
                                         placeholder="Enter Quality Name..."
                                         value={qualityname}
                                         onChange={(e) => {
@@ -320,10 +321,7 @@ function UpdateQuality() {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
                                         autoFocus
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -337,9 +335,6 @@ function UpdateQuality() {
                                         onChange={(e) => {
                                             setDesignLength(e.target.value);
                                         }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -353,9 +348,6 @@ function UpdateQuality() {
                                         onChange={(e) => {
                                             setUnitLength(e.target.value);
                                         }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -369,9 +361,6 @@ function UpdateQuality() {
                                         onChange={(e) => {
                                             setWeftWastage(e.target.value);
                                         }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -385,9 +374,6 @@ function UpdateQuality() {
                                         onChange={(e) => {
                                             setJobcharge(e.target.value);
                                         }}
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -420,7 +406,7 @@ function UpdateQuality() {
                             />
                         </tbody>
                     </table>
-                    <table>
+                    <table className="table table-bordered table-hover table-responsive">
                         <tbody>
                             <tr>
                                 <th width="5%">Sr. No</th>
@@ -453,10 +439,13 @@ function UpdateQuality() {
                             justifyContent: "center",
                         }}
                     >
-                        <table style={{ marginTop: "50px" }}>
+                        <table
+                            className="table table-bordered table-hover table-responsive"
+                            style={{ marginTop: "50px", textAlign: "center" }}
+                        >
                             <tbody>
                                 <tr>
-                                    <td colSpan="2">Pick on loom</td>
+                                    <td>Pick on loom</td>
                                     <td>
                                         <input
                                             type="number"
@@ -465,14 +454,11 @@ function UpdateQuality() {
                                             onChange={(e) => {
                                                 setPickonloom(e.target.value);
                                             }}
-                                            onFocus={handleFocus}
-                                            onKeyDown={captureEnter}
-                                            required
                                         />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan="2">Butta Charge</td>
+                                    <td>Butta Charge</td>
                                     <td>
                                         <input
                                             type="number"
@@ -481,14 +467,11 @@ function UpdateQuality() {
                                             onChange={(e) => {
                                                 setButtacharge(e.target.value);
                                             }}
-                                            onFocus={handleFocus}
-                                            onKeyDown={captureEnter}
-                                            required
                                         />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan="2">Laser Charge</td>
+                                    <td>Laser Charge</td>
                                     <td>
                                         <input
                                             type="number"
@@ -497,14 +480,11 @@ function UpdateQuality() {
                                             onChange={(e) => {
                                                 setLasercharge(e.target.value);
                                             }}
-                                            onFocus={handleFocus}
-                                            onKeyDown={captureEnter}
-                                            required
                                         />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan="2">Design Charge</td>
+                                    <td>Design Charge</td>
                                     <td>
                                         <input
                                             type="number"
@@ -513,14 +493,11 @@ function UpdateQuality() {
                                             onChange={(e) => {
                                                 setDesigncharge(e.target.value);
                                             }}
-                                            onFocus={handleFocus}
-                                            onKeyDown={captureEnter}
-                                            required
                                         />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan="2">Finishing Charge</td>
+                                    <td>Finishing Charge</td>
                                     <td>
                                         <input
                                             type="number"
@@ -531,14 +508,11 @@ function UpdateQuality() {
                                                     e.target.value
                                                 );
                                             }}
-                                            onFocus={handleFocus}
-                                            onKeyDown={captureEnter}
-                                            required
                                         />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan="2">Value Addition Charge</td>
+                                    <td>Value Addition Charge</td>
                                     <td>
                                         <input
                                             type="number"
@@ -549,14 +523,11 @@ function UpdateQuality() {
                                                     e.target.value
                                                 );
                                             }}
-                                            onFocus={handleFocus}
-                                            onKeyDown={captureEnter}
-                                            required
                                         />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan="2">Seconds Ratio</td>
+                                    <td>Seconds Ratio</td>
                                     <td>
                                         <input
                                             type="number"
@@ -565,14 +536,11 @@ function UpdateQuality() {
                                             onChange={(e) => {
                                                 setSecondsRatio(e.target.value);
                                             }}
-                                            onFocus={handleFocus}
-                                            onKeyDown={captureEnter}
-                                            required
                                         />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan="2">Agent Charge</td>
+                                    <td>Agent Charge</td>
                                     <td>
                                         <input
                                             type="number"
@@ -581,14 +549,11 @@ function UpdateQuality() {
                                             onChange={(e) => {
                                                 setAgentcharge(e.target.value);
                                             }}
-                                            onFocus={handleFocus}
-                                            onKeyDown={captureEnter}
-                                            required
                                         />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan="2">Dyeing Charge</td>
+                                    <td>Dyeing Charge</td>
                                     <td>
                                         <input
                                             type="number"
@@ -597,14 +562,11 @@ function UpdateQuality() {
                                             onChange={(e) => {
                                                 setDyeingCharge(e.target.value);
                                             }}
-                                            onFocus={handleFocus}
-                                            onKeyDown={captureEnter}
-                                            required
                                         />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan="2">Market Margin</td>
+                                    <td>Market Margin</td>
                                     <td>
                                         <input
                                             type="number"
@@ -613,14 +575,11 @@ function UpdateQuality() {
                                             onChange={(e) => {
                                                 setMarketMargin(e.target.value);
                                             }}
-                                            onFocus={handleFocus}
-                                            onKeyDown={captureEnter}
-                                            required
                                         />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan="2">Discount</td>
+                                    <td>Discount</td>
                                     <td>
                                         <input
                                             type="number"
@@ -629,9 +588,6 @@ function UpdateQuality() {
                                             onChange={(e) => {
                                                 setDiscount(e.target.value);
                                             }}
-                                            onFocus={handleFocus}
-                                            onKeyDown={captureEnter}
-                                            required
                                         />
                                     </td>
                                 </tr>

@@ -62,6 +62,11 @@ const Nav = ({ loggedIn, setLoggedIn }) => {
                                             Harness
                                         </button>
                                     </Link>
+                                    <Link to="/catalogue">
+                                        <button className={styles.nav_button}>
+                                            Catalogue
+                                        </button>
+                                    </Link>
                                 </div>
                             </div>
                         )}
@@ -85,6 +90,36 @@ const Nav = ({ loggedIn, setLoggedIn }) => {
                                     <Link to="/agent">
                                         <button className={styles.nav_button}>
                                             Agent
+                                        </button>
+                                    </Link>
+                                    <Link to="/firm">
+                                        <button className={styles.nav_button}>
+                                            Firm
+                                        </button>
+                                    </Link>
+                                </div>
+                            </div>
+                        )}
+                        {loggedIn && (
+                            <div className={styles.dropdown}>
+                                <button className={styles.dropbtn}>
+                                    Sales
+                                    <i className="fa fa-caret-down"></i>
+                                </button>
+                                <div className={styles.dropdown_content}>
+                                    <Link to="/salesorder">
+                                        <button className={styles.nav_button}>
+                                            Sales Order
+                                        </button>
+                                    </Link>
+                                    <Link to="/challan">
+                                        <button className={styles.nav_button}>
+                                            Challan
+                                        </button>
+                                    </Link>
+                                    <Link to="/salesbill">
+                                        <button className={styles.nav_button}>
+                                            Sales Bill
                                         </button>
                                     </Link>
                                 </div>

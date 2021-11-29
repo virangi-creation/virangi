@@ -15,6 +15,19 @@ a {
     pointer-events: none;
 }
 
+.table {
+    word-wrap: break-word;
+    display: "block";
+}
+
+.btn > a {
+    text-decoration: none;
+}
+
+.btn > a:hover {
+    color: white;
+}
+
 @media (prefers-reduced-motion: no-preference) {
     .App-logo {
         animation: App-logo-spin infinite 20s linear;

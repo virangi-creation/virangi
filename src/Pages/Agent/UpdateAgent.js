@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import buttonStyles from "../../Modules/Button.module.css";
 import { useHistory, useLocation } from "react-router";
 import catchAxiosError from "../../Util/catchAxiosError.js";
+import handleFocus from "../../Util/handleFocus.js";
 
 const UpdateAgent = () => {
     const location = useLocation();
@@ -25,6 +26,8 @@ const UpdateAgent = () => {
     useEffect(async () => {
         try {
             document.title = "Add Agent";
+            document.addEventListener("keydown", captureEnter, false);
+            document.addEventListener("focus", handleFocus, true);
             if (location.state) {
                 setAgentid(location.state.agentid);
                 setLoad(true);
@@ -96,10 +99,6 @@ const UpdateAgent = () => {
             event.preventDefault();
         }
     };
-
-    const handleFocus = (event) => {
-        event.target.select();
-    };
     return (
         <div
             style={{
@@ -110,7 +109,7 @@ const UpdateAgent = () => {
             {load && <div>Loading...</div>}
             {!load && (
                 <form>
-                    <table>
+                    <table className="table table-bordered table-hover table-responsive">
                         <tbody>
                             <tr>
                                 <td>Agent Name</td>
@@ -124,9 +123,6 @@ const UpdateAgent = () => {
                                                 e.target.value.toUpperCase()
                                             )
                                         }
-                                        onKeyDown={captureEnter}
-                                        required
-                                        onFocus={handleFocus}
                                         autoFocus
                                     />
                                 </td>
@@ -141,9 +137,6 @@ const UpdateAgent = () => {
                                         onChange={(e) =>
                                             setGST(e.target.value.toUpperCase())
                                         }
-                                        onFocus={handleFocus}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -158,8 +151,6 @@ const UpdateAgent = () => {
                                         onChange={(e) =>
                                             setPAN(e.target.value.toUpperCase())
                                         }
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -176,8 +167,6 @@ const UpdateAgent = () => {
                                                 e.target.value.toUpperCase()
                                             )
                                         }
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -194,8 +183,6 @@ const UpdateAgent = () => {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -211,8 +198,6 @@ const UpdateAgent = () => {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -228,8 +213,6 @@ const UpdateAgent = () => {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -245,8 +228,6 @@ const UpdateAgent = () => {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>
@@ -262,8 +243,6 @@ const UpdateAgent = () => {
                                                 e.target.value.toUpperCase()
                                             );
                                         }}
-                                        onKeyDown={captureEnter}
-                                        required
                                     />
                                 </td>
                             </tr>

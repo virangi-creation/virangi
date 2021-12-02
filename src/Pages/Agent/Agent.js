@@ -93,10 +93,7 @@ function Agent() {
             </div>
             {load && <div>Loading...</div>}
             {!load && (
-                <table
-                    border="1"
-                    className="table table-bordered table-hover table-responsive"
-                >
+                <table className="table table-bordered table-hover table-responsive">
                     <tbody>
                         <tr>
                             <th>Agent ID</th>

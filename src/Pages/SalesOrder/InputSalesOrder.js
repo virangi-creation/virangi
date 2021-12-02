@@ -62,6 +62,7 @@ function InputSalesOrder() {
                 .get(`/salesorder/add/`)
                 .then(({ data }) => {
                     console.log(data);
+                    setOrderId(data.orderid);
                     setParties(data.parties);
                     setAgents(data.agents);
                     setCatalogues(data.catalogue);
@@ -153,13 +154,13 @@ function InputSalesOrder() {
         setSalesOrderDesigns([...tempSalesOrderDesigns]);
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         let tempTotalSarees = 0;
-        catalogues.map(
-            (catalogue) => (tempTotalSarees += parseInt(catalogue.pieces))
-        );
+        await salesOrderDesigns.map((catalogue) => {
+            if (catalogue.pieces) tempTotalSarees += parseInt(catalogue.pieces);
+        });
         setTotalSarees(tempTotalSarees);
-    }, [catalogues]);
+    }, [salesOrderDesigns]);
 
     const updateCatalogue = async (e, index, property) => {
         let tempSalesOrderDesigns = salesOrderDesigns;
@@ -240,14 +241,16 @@ function InputSalesOrder() {
 
     const onUpdateCatalogueNo = async (e, index) => {
         let selectedCatalogueNo = e.target.value.toUpperCase();
-        let tempCatalogues = catalogues;
-        tempCatalogues[index].cataloguename = selectedCatalogueNo;
+        let tempSalesOrderDesigns = salesOrderDesigns;
+        tempSalesOrderDesigns[index].cataloguename = selectedCatalogueNo;
         await catalogues.map((catalogue) => {
             if (catalogue.catalogueno === selectedCatalogueNo) {
-                tempCatalogues[index].catalogueno = catalogue.catalogueno;
+                tempSalesOrderDesigns[index].catalogueno =
+                    catalogue.catalogueno;
+                tempSalesOrderDesigns[index].rate = catalogue.manufacturerprice;
             }
         });
-        setCatalogues([...tempCatalogues]);
+        setSalesOrderDesigns([...tempSalesOrderDesigns]);
     };
 
     return (
@@ -264,213 +267,154 @@ function InputSalesOrder() {
                             maxHeight: "800px",
                         }}
                     >
-                        <tr>
-                            <td>Order Id</td>
-                            <td>
-                                <input
-                                    type="number"
-                                    value={orderId}
-                                    placeholder="Enter Order Id..."
-                                    onChange={(e) => {
-                                        setOrderId(e.target.value);
-                                    }}
-                                    autoFocus
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Date</td>
-                            <td>
-                                <input
-                                    type="date"
-                                    value={orderdate}
-                                    onChange={updateOrderDate}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Firm</td>
-                            <td>
-                                <input
-                                    list="firmlist"
-                                    onChange={onUpdateFirm}
-                                    value={firmName}
-                                    autoCapitalize
-                                    placeholder="Firm"
-                                />
+                        <tbody>
+                            <tr>
+                                <td>Order Id</td>
+                                <td>
+                                    <input
+                                        type="number"
+                                        value={orderId}
+                                        placeholder="Enter Order Id..."
+                                        onChange={(e) => {
+                                            setOrderId(e.target.value);
+                                        }}
+                                        autoFocus
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Date</td>
+                                <td>
+                                    <input
+                                        type="date"
+                                        value={orderdate}
+                                        onChange={updateOrderDate}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Firm</td>
+                                <td>
+                                    <input
+                                        list="firmlist"
+                                        onChange={onUpdateFirm}
+                                        value={firmName}
+                                        autoCapitalize
+                                        placeholder="Firm"
+                                    />
 
-                                <datalist id="firmlist">
-                                    {firms.length > 0 &&
-                                        firms.map((firm, key) => (
-                                            <option value={firm.firmname} />
-                                        ))}
-                                </datalist>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Party</td>
-                            <td>
-                                <input
-                                    list="partylist"
-                                    onChange={onUpdateParty}
-                                    value={partyName}
-                                    autoCapitalize
-                                    placeholder="Party"
-                                />
+                                    <datalist id="firmlist">
+                                        {firms.length > 0 &&
+                                            firms.map((firm, key) => (
+                                                <option value={firm.firmname} />
+                                            ))}
+                                    </datalist>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Party</td>
+                                <td>
+                                    <input
+                                        list="partylist"
+                                        onChange={onUpdateParty}
+                                        value={partyName}
+                                        autoCapitalize
+                                        placeholder="Party"
+                                    />
 
-                                <datalist id="partylist">
-                                    {parties.length > 0 &&
-                                        parties.map((party, key) => (
-                                            <option value={party.partyname} />
-                                        ))}
-                                </datalist>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Agent Name</td>
-                            <td>
-                                <input
-                                    list="agentlist"
-                                    onChange={onUpdateAgent}
-                                    value={agentName}
-                                    autoCapitalize
-                                    placeholder="Agent Name"
-                                />
+                                    <datalist id="partylist">
+                                        {parties.length > 0 &&
+                                            parties.map((party, key) => (
+                                                <option
+                                                    value={party.partyname}
+                                                />
+                                            ))}
+                                    </datalist>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Agent Name</td>
+                                <td>
+                                    <input
+                                        list="agentlist"
+                                        onChange={onUpdateAgent}
+                                        value={agentName}
+                                        autoCapitalize
+                                        placeholder="Agent Name"
+                                    />
 
-                                <datalist id="agentlist">
-                                    {agents.length > 0 &&
-                                        agents.map((agent, key) => (
-                                            <option value={agent.agentname} />
-                                        ))}
-                                </datalist>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Party GST No. </td>
-                            <td>
-                                <input
-                                    value={partyGst}
-                                    readOnly="readonly"
-                                    placeholder="Party GST"
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Delivery Party</td>
-                            <td>
-                                <input
-                                    list="deliverypartylist"
-                                    onChange={onUpdateDeliveryParty}
-                                    value={deliveryPartyName}
-                                    autoCapitalize
-                                    placeholder="Devliery Party"
-                                />
+                                    <datalist id="agentlist">
+                                        {agents.length > 0 &&
+                                            agents.map((agent, key) => (
+                                                <option
+                                                    value={agent.agentname}
+                                                />
+                                            ))}
+                                    </datalist>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Party GST No. </td>
+                                <td>
+                                    <input
+                                        value={partyGst}
+                                        readOnly="readonly"
+                                        placeholder="Party GST"
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Delivery Party</td>
+                                <td>
+                                    <input
+                                        list="deliverypartylist"
+                                        onChange={onUpdateDeliveryParty}
+                                        value={deliveryPartyName}
+                                        autoCapitalize
+                                        placeholder="Devliery Party"
+                                    />
 
-                                <datalist id="deliverypartylist">
-                                    {parties.length > 0 &&
-                                        parties.map((party, key) => (
-                                            <option value={party.partyname} />
-                                        ))}
-                                </datalist>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Delivery Address</td>
-                            <td>
-                                <textarea
-                                    value={deliveryAdd}
-                                    readOnly="readonly"
-                                    cols="30"
-                                    rows="3"
-                                ></textarea>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Total Sarees</td>
-                            <td>{totalSarees}</td>
-                        </tr>
+                                    <datalist id="deliverypartylist">
+                                        {parties.length > 0 &&
+                                            parties.map((party, key) => (
+                                                <option
+                                                    value={party.partyname}
+                                                />
+                                            ))}
+                                    </datalist>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Delivery Address</td>
+                                <td>
+                                    <textarea
+                                        value={deliveryAdd}
+                                        readOnly="readonly"
+                                        cols="30"
+                                        rows="3"
+                                    ></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Total Sarees</td>
+                                <td>{totalSarees}</td>
+                            </tr>
+                        </tbody>
                     </table>
 
                     <table
                         className="table table-bordered table-hover table-responsive"
-                        style={{ margin: "50px 10%" }}
+                        style={{ margin: "50px 10%", width: "80%" }}
                     >
-                        <tr>
-                            <th>Sr. No.</th>
-                            <th>Catalogue No.</th>
-                            <th>Colour</th>
-                            <th>Pieces</th>
-                            <th>
-                                <button
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        margin: "20px auto",
-                                    }}
-                                    type="button"
-                                    onClick={enterNew}
-                                >
-                                    Add Catalogue
-                                </button>
-                            </th>
-                        </tr>
-                        {salesOrderDesigns.map((salesOrderDesign, index) => {
-                            return (
-                                <tr>
-                                    <td>{index + 1}</td>
-                                    <td>
-                                        <input
-                                            id={`${index}catalogueno`}
-                                            list="cataloguelist"
-                                            onChange={(e) => {
-                                                onUpdateCatalogueNo(e, index);
-                                            }}
-                                            value={
-                                                salesOrderDesign.cataloguename
-                                            }
-                                            autoCapitalize
-                                            placeholder="Catalogue No"
-                                        />
-
-                                        <datalist id="cataloguelist">
-                                            {catalogues.length > 0 &&
-                                                catalogues.map((catalogue) => (
-                                                    <option
-                                                        value={
-                                                            catalogue.catalogueno
-                                                        }
-                                                    />
-                                                ))}
-                                        </datalist>
-                                    </td>
-                                    <td>
-                                        <input
-                                            placeholder="Enter Colour..."
-                                            onChange={(e) =>
-                                                updateCatalogue(
-                                                    e,
-                                                    index,
-                                                    "colour"
-                                                )
-                                            }
-                                            value={salesOrderDesign.colour}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="number"
-                                            placeholder="Enter Pieces..."
-                                            onChange={(e) =>
-                                                updateCatalogue(
-                                                    e,
-                                                    index,
-                                                    "pieces"
-                                                )
-                                            }
-                                            value={salesOrderDesign.pieces}
-                                        />
-                                    </td>
-                                    <td>
+                        <tbody>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Catalogue No.</th>
+                                <th>Colour</th>
+                                <th>Pieces</th>
+                                <th>Rate</th>
+                                <th>
+                                    {salesOrderDesigns.length > 0 && (
                                         <button
                                             style={{
                                                 display: "flex",
@@ -478,20 +422,137 @@ function InputSalesOrder() {
                                                 margin: "20px auto",
                                             }}
                                             type="button"
-                                            onClick={() => {
-                                                removeElement(index);
-                                            }}
+                                            onClick={enterNew}
                                         >
-                                            Remove
+                                            Add Catalogue
+                                        </button>
+                                    )}
+                                </th>
+                            </tr>
+                            {salesOrderDesigns.length === 0 && (
+                                <tr>
+                                    <td colSpan="5">
+                                        <button
+                                            style={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                margin: "20px auto",
+                                            }}
+                                            type="button"
+                                            onClick={enterNew}
+                                        >
+                                            Add Catalogue
                                         </button>
                                     </td>
                                 </tr>
-                            );
-                        })}
-                        <tr>
-                            <td colSpan="3"></td>
-                            <td>{totalSarees}</td>
-                        </tr>
+                            )}
+                            {salesOrderDesigns.map(
+                                (salesOrderDesign, index) => {
+                                    return (
+                                        <tr>
+                                            <td>{index + 1}</td>
+                                            <td>
+                                                <input
+                                                    id={`${index}catalogueno`}
+                                                    list="cataloguelist"
+                                                    onChange={(e) => {
+                                                        onUpdateCatalogueNo(
+                                                            e,
+                                                            index
+                                                        );
+                                                    }}
+                                                    value={
+                                                        salesOrderDesign.cataloguename
+                                                    }
+                                                    autoCapitalize
+                                                    placeholder="Catalogue No"
+                                                />
+
+                                                <datalist id="cataloguelist">
+                                                    {catalogues.length > 0 &&
+                                                        catalogues.map(
+                                                            (catalogue) => (
+                                                                <option
+                                                                    value={
+                                                                        catalogue.catalogueno
+                                                                    }
+                                                                />
+                                                            )
+                                                        )}
+                                                </datalist>
+                                            </td>
+                                            <td>
+                                                <input
+                                                    placeholder="Enter Colour..."
+                                                    onChange={(e) =>
+                                                        updateCatalogue(
+                                                            e,
+                                                            index,
+                                                            "colour"
+                                                        )
+                                                    }
+                                                    value={
+                                                        salesOrderDesign.colour
+                                                    }
+                                                />
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="number"
+                                                    placeholder="Enter Pieces..."
+                                                    onChange={(e) =>
+                                                        updateCatalogue(
+                                                            e,
+                                                            index,
+                                                            "pieces"
+                                                        )
+                                                    }
+                                                    value={
+                                                        salesOrderDesign.pieces
+                                                    }
+                                                />
+                                            </td>
+                                            <td>
+                                                <input
+                                                    type="number"
+                                                    placeholder="Enter Rate..."
+                                                    onChange={(e) =>
+                                                        updateCatalogue(
+                                                            e,
+                                                            index,
+                                                            "rate"
+                                                        )
+                                                    }
+                                                    value={
+                                                        salesOrderDesign.rate
+                                                    }
+                                                />
+                                            </td>
+                                            <td>
+                                                <button
+                                                    style={{
+                                                        display: "flex",
+                                                        justifyContent:
+                                                            "center",
+                                                        margin: "20px auto",
+                                                    }}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        removeElement(index);
+                                                    }}
+                                                >
+                                                    Remove
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    );
+                                }
+                            )}
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td>{totalSarees}</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </form>
             )}

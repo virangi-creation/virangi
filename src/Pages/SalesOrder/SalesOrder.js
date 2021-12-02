@@ -106,118 +106,123 @@ function SalesOrder() {
                                 <th>Total Saress</th>
                             </tr>
                         </thead>
-                        {searchedOrders.map((order) => {
-                            let date = order.orderdate.substr(0, 10);
-                            return (
-                                <tr style={{ border: "1px solid black" }}>
-                                    <td
-                                        style={{
-                                            width: "7%",
-                                        }}
-                                    >
-                                        {order.orderid}
-                                    </td>
-                                    <td
-                                        style={{
-                                            width: "5%",
-                                        }}
-                                    >
-                                        <Link
-                                            style={{ color: "white" }}
-                                            to={{
-                                                pathname: "/salesorder/print",
-                                                state: {
-                                                    orderid: order.orderid,
-                                                },
+                        {searchedOrders.length > 0 &&
+                            searchedOrders.map((order) => {
+                                let date = order.orderdate.substr(0, 10);
+                                return (
+                                    <tr style={{ border: "1px solid black" }}>
+                                        <td
+                                            style={{
+                                                width: "7%",
                                             }}
                                         >
-                                            <Button
-                                                type="button"
-                                                style={{
-                                                    cursor: "pointer",
-                                                    border: "1px solid black",
-                                                }}
-                                            >
-                                                Print
-                                            </Button>
-                                        </Link>
-                                    </td>
-                                    <td
-                                        style={{
-                                            width: "7%",
-                                        }}
-                                    >
-                                        <Link
-                                            style={{ color: "white" }}
-                                            to={{
-                                                pathname: "/order/update",
-                                                state: {
-                                                    orderid: order.orderid,
-                                                },
+                                            {order.orderid}
+                                        </td>
+                                        <td
+                                            style={{
+                                                width: "5%",
                                             }}
                                         >
-                                            <Button
-                                                type="button"
-                                                style={{
-                                                    cursor: "pointer",
-                                                    border: "1px solid black",
+                                            <Link
+                                                style={{ color: "white" }}
+                                                to={{
+                                                    pathname:
+                                                        "/salesorder/print",
+                                                    state: {
+                                                        orderid: order.orderid,
+                                                    },
                                                 }}
                                             >
-                                                Update
-                                            </Button>
-                                        </Link>
-                                    </td>
+                                                <Button
+                                                    type="button"
+                                                    style={{
+                                                        cursor: "pointer",
+                                                        border: "1px solid black",
+                                                    }}
+                                                >
+                                                    Print
+                                                </Button>
+                                            </Link>
+                                        </td>
+                                        <td
+                                            style={{
+                                                width: "7%",
+                                            }}
+                                        >
+                                            <Link
+                                                style={{ color: "white" }}
+                                                to={{
+                                                    pathname: "/order/update",
+                                                    state: {
+                                                        orderid: order.orderid,
+                                                    },
+                                                }}
+                                            >
+                                                <Button
+                                                    type="button"
+                                                    style={{
+                                                        cursor: "pointer",
+                                                        border: "1px solid black",
+                                                    }}
+                                                >
+                                                    Update
+                                                </Button>
+                                            </Link>
+                                        </td>
 
-                                    <td
-                                        style={{
-                                            fontSize: "medium",
-                                            width: "8%",
-                                        }}
-                                    >
-                                        {date}
-                                    </td>
-                                    <td
-                                        style={{
-                                            width: "20%",
-                                            fontSize: "medium",
-                                        }}
-                                    >
-                                        {order.partyname}
-                                    </td>
-                                    <td
-                                        style={{
-                                            width: "20%",
-                                            fontSize: "medium",
-                                        }}
-                                    >
-                                        {order.agentname}
-                                    </td>
-                                    <td
-                                        style={{
-                                            width: "15%",
-                                            fontSize: "large",
-                                        }}
-                                    >
-                                        {order.deliverypartyname}
-                                    </td>
-                                    <td
-                                        style={{
-                                            width: "15%",
-                                            fontSize: "large",
-                                        }}
-                                    >
-                                        {order.deliveryaddress}
-                                    </td>
-                                    <td
-                                        style={{
-                                            width: "5%",
-                                        }}
-                                    >
-                                        {amountFormatter(order.totalsarees, 0)}
-                                    </td>
-                                </tr>
-                            );
-                        })}
+                                        <td
+                                            style={{
+                                                fontSize: "medium",
+                                                width: "8%",
+                                            }}
+                                        >
+                                            {date}
+                                        </td>
+                                        <td
+                                            style={{
+                                                width: "20%",
+                                                fontSize: "medium",
+                                            }}
+                                        >
+                                            {order.partyname}
+                                        </td>
+                                        <td
+                                            style={{
+                                                width: "20%",
+                                                fontSize: "medium",
+                                            }}
+                                        >
+                                            {order.agentname}
+                                        </td>
+                                        <td
+                                            style={{
+                                                width: "15%",
+                                                fontSize: "large",
+                                            }}
+                                        >
+                                            {order.deliverypartyname}
+                                        </td>
+                                        <td
+                                            style={{
+                                                width: "15%",
+                                                fontSize: "large",
+                                            }}
+                                        >
+                                            {order.deliveryaddress}
+                                        </td>
+                                        <td
+                                            style={{
+                                                width: "5%",
+                                            }}
+                                        >
+                                            {amountFormatter(
+                                                order.totalsarees,
+                                                0
+                                            )}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                     </table>
                 </div>
             )}

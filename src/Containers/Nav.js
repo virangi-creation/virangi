@@ -67,6 +67,11 @@ const Nav = ({ loggedIn, setLoggedIn }) => {
                                             Catalogue
                                         </button>
                                     </Link>
+                                    <Link to="/matching/add">
+                                        <button className={styles.nav_button}>
+                                            Matching
+                                        </button>
+                                    </Link>
                                 </div>
                             </div>
                         )}

@@ -226,7 +226,7 @@ function InputSalesOrder() {
 
     const onUpdateAgent = (e) => {
         let q = e.target.value;
-        if (q) setAgentName(q);
+        setAgentName(q);
         setAgentId(null);
         agents.map((agent) => {
             if (agent.agentname === q) setAgentId(agent.agentid);

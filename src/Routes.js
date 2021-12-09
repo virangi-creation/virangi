@@ -48,6 +48,9 @@ import InputFirm from "./Pages/Firm/InputFirm";
 import UpdateFirm from "./Pages/Firm/UpdateFirm";
 import SalesOrder from "./Pages/SalesOrder/SalesOrder";
 import InputSalesOrder from "./Pages/SalesOrder/InputSalesOrder";
+import Matching from "./Pages/Matching/Matching";
+import InputMatching from "./Pages/Matching/InputMatching";
+import UpdateMatching from "./Pages/Matching/UpdateMatching";
 
 export const siteMap = {
     HomePage: {
@@ -154,6 +157,13 @@ const BrowserRoutes = ({ setLoggedIn, loggedIn }) => {
                     exact
                     component={UpdatePurchaseOrder}
                 />
+                <Route path="/matching/add" exact component={InputMatching} />
+                <Route
+                    path="/matching/update"
+                    exact
+                    component={UpdateMatching}
+                />
+                {/* <Route path="/matching" exact component={Matching} /> */}
                 <Route path="/login" exact>
                     {loggedIn && <Redirect to="/" />}
                     {!loggedIn && (

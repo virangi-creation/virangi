@@ -72,6 +72,11 @@ const Nav = ({ loggedIn, setLoggedIn }) => {
                                             Matching
                                         </button>
                                     </Link>
+                                    <Link to="/machine">
+                                        <button className={styles.nav_button}>
+                                            Machine
+                                        </button>
+                                    </Link>
                                 </div>
                             </div>
                         )}

@@ -51,6 +51,9 @@ import InputSalesOrder from "./Pages/SalesOrder/InputSalesOrder";
 import Matching from "./Pages/Matching/Matching";
 import InputMatching from "./Pages/Matching/InputMatching";
 import UpdateMatching from "./Pages/Matching/UpdateMatching";
+import Machine from "./Pages/Machine/Machine";
+import InputMachine from "./Pages/Machine/InputMachine";
+import UpdateMachine from "./Pages/Machine/UpdateMachine";
 
 export const siteMap = {
     HomePage: {
@@ -117,6 +120,9 @@ const BrowserRoutes = ({ setLoggedIn, loggedIn }) => {
                 <Route path="/harness" exact component={Harness} />
                 <Route path="/harness/add" exact component={InputHarness} />
                 <Route path="/harness/update" exact component={UpdateHarness} />
+                <Route path="/machine" exact component={Machine} />
+                <Route path="/machine/add" exact component={InputMachine} />
+                <Route path="/machine/update" exact component={UpdateMachine} />
                 <Route path="/salesorder" exact component={SalesOrder} />
                 <Route
                     path="/salesorder/add"

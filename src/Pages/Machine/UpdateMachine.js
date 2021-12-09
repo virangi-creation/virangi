@@ -183,6 +183,8 @@ function UpdateMachine() {
                                                         harnessType.harnessid
                                                     }
                                                 >
+                                                    {harnessType.harnessname}
+                                                    {" / "}
                                                     {harnessType.fulldetail}
                                                 </option>
                                             );

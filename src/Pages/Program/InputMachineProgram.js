@@ -57,11 +57,6 @@ function InputMachineProgram() {
         }
     }, []);
 
-    useEffect(() => {
-        console.log(selectedMatching);
-        if (selectedMatching.length > 0) console.log(selectedMatching);
-    }, [selectedMatching]);
-
     const onSubmitEvent = async () => {
         try {
             setLoad(true);
@@ -123,7 +118,6 @@ function InputMachineProgram() {
                     .then(({ data }) => {
                         setProgramno(data.programid);
                         setDesignFileNames(data.designs);
-                        console.log(data.designs);
                         setLoad(false);
                         document.getElementById("programtype").focus();
                     })
@@ -145,7 +139,6 @@ function InputMachineProgram() {
                 await axios
                     .get(`/machineprogram/add/matching/${designFileName}`)
                     .then(({ data }) => {
-                        console.log(data);
                         setMatchings(data.matchings);
                         setMatchingFeeders(data.matchingFeeders);
                         setLoad(false);
@@ -193,10 +186,6 @@ function InputMachineProgram() {
         setTotalPicks(repeats * totalPick);
     }, [repeats, panes, totalPick]);
 
-    useEffect(() => {
-        console.log(totalPicks);
-    }, [totalPicks]);
-
     const updateMatching = async (e) => {
         let q = e.target.value;
         setMatching(q);
@@ -215,11 +204,19 @@ function InputMachineProgram() {
         let tempSelecetedFeeders = [];
         let tempMatchingFeeders = matchingFeeders[keyIndex];
         await tempMatchingFeeders.map((matchingFeeder) => {
-            if (parseInt(matchingFeeder.designmatchingid) === designMatchingId)
+            if (
+                parseInt(matchingFeeder.designmatchingid) === designMatchingId
+            ) {
                 tempSelecetedFeeders.push(matchingFeeder);
+            }
         });
         setSelectedMatching(tempMatchingFeeders);
     }, [designMatchingId]);
+
+    useEffect(() => {
+        if (selectedMatching.length > 0)
+            document.getElementById("repeat").focus();
+    }, [selectedMatching]);
 
     return (
         <div>
@@ -331,10 +328,6 @@ function InputMachineProgram() {
                                             {designFileNames.length > 0 &&
                                                 designFileNames.map(
                                                     (design) => {
-                                                        console.log(
-                                                            design.harnessid,
-                                                            harnessId
-                                                        );
                                                         if (
                                                             design.harnessid ===
                                                             harnessId

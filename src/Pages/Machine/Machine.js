@@ -138,7 +138,7 @@ function Machine() {
                                             D{" "}
                                             {(
                                                 machine.timeRequired % 24
-                                            ).toFixed(2)}
+                                            ).toFixed(0)}
                                             Hr.
                                         </td>
                                         <td>

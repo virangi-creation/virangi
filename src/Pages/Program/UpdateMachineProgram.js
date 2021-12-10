@@ -49,10 +49,34 @@ function UpdateMachineProgram() {
                 setPrevProgramNo(location.state.programid);
                 setLoad(true);
                 await axios
-                    .get(`/machineprogram/update/`)
+                    .get(
+                        `/machineprogram/update/${location.state.machineno}/${location.state.programid}`
+                    )
                     .then(({ data }) => {
+                        console.log(data);
                         setMachineNos(data.machinenos);
+                        setMachineNos(data.machinenos);
+                        setDesignFileNames(data.designfilenames);
+                        setMatchings(data.matchings);
+                        setMatchingFeeders(data.matchingFeeders);
+                        let program = data.program;
+                        setMachineNo(program.machineno);
 
+                        if (program.programid > 10000)
+                            setProgramType("production");
+                        setProgramno(program.programid % 10000);
+                        setMachineNo(program.machineno);
+                        setTempMachineNo(program.machineno);
+                        setDesignFileName(program.designfilename);
+                        setTempDesignFileName(program.designfilename);
+
+                        setDesignMatchingId(program.designmatchingid);
+
+                        setRepeats(program.totalrepeat);
+                        setUnits(program.totalpiece);
+                        setPanes(program.totalpiece / program.totalrepeat);
+                        setTotalPicks(program.totalpicks);
+                        setOrderno(program.orderno);
                         setLoad(false);
                     })
                     .catch((err) => {
@@ -84,9 +108,7 @@ function UpdateMachineProgram() {
                 })
                 .then(() => {
                     setLoad(false);
-                    if (window.confirm("Add another program?"))
-                        window.location.reload();
-                    else history.push(`/machine`);
+                    history.push(`/machineprogram`);
                 })
                 .catch((err) => {
                     setLoad(false);
@@ -162,8 +184,6 @@ function UpdateMachineProgram() {
                         setMatchings(data.matchings);
                         setMatchingFeeders(data.matchingFeeders);
                         setLoad(false);
-                        if (data.matchings.length > 0)
-                            document.getElementById("matching").focus();
                     })
                     .catch((err) => {
                         setLoad(false);
@@ -175,41 +195,6 @@ function UpdateMachineProgram() {
             catchAxiosError(err);
         }
     }, [designFileName]);
-
-    useEffect(async () => {
-        try {
-            if (machineNo && programno) {
-                setLoad(true);
-                await axios
-                    .get(`/machineprogram/add/matching/${designFileName}`)
-                    .then(({ data }) => {
-                        console.log(data);
-                        setDesignFileNames(data.designfilenames);
-                        setMatchings(data.matchings);
-                        setMatchingFeeders(data.matchingFeeders);
-                        let program = data.program;
-                        setMachineNo(program.machineno);
-
-                        setProgramno(program.programid);
-                        setDesignFileName(program.designfilename);
-                        setDesignMatchingId(program.designmatchingid);
-                        setRepeats(program.totalrepeat);
-                        setUnits(program.totalpiece);
-                        setPanes(program.totalpiece / program.totalrepeat);
-                        setTotalPicks(program.totalpicks);
-                        setOrderno(program.orderno);
-                        setLoad(false);
-                    })
-                    .catch((err) => {
-                        setLoad(false);
-                        catchAxiosError(err);
-                    });
-            }
-        } catch (err) {
-            alert(err.message);
-            catchAxiosError(err);
-        }
-    }, [machineNo, programno]);
 
     const updateMachineNo = async (e) => {
         let q = parseInt(e.target.value);
@@ -241,9 +226,6 @@ function UpdateMachineProgram() {
         setTotalPicks(repeats * totalPick);
     }, [repeats, panes, totalPick]);
 
-    useEffect(() => {
-        console.log(totalPicks);
-    }, [totalPicks]);
     const updateMatching = async (e) => {
         let q = e.target.value;
         setMatching(q);
@@ -262,10 +244,22 @@ function UpdateMachineProgram() {
         let tempSelecetedFeeders = [];
         let tempMatchingFeeders = matchingFeeders[keyIndex];
         await tempMatchingFeeders.map((matchingFeeder) => {
-            if (parseInt(matchingFeeder.designmatchingid) === designMatchingId)
+            if (
+                parseInt(matchingFeeder.designmatchingid) === designMatchingId
+            ) {
                 tempSelecetedFeeders.push(matchingFeeder);
+            }
         });
         setSelectedMatching(tempMatchingFeeders);
+        await matchings.map((matching, index) => {
+            setKeyIndex(index);
+            if (matching.designmatchingid === designMatchingId) {
+                setMatchingObject(matching);
+                setMatching(
+                    `${matching.matchingcode} - ${matching.bodycolour} - ${matching.bordercolour}`
+                );
+            }
+        });
     }, [designMatchingId]);
 
     return (

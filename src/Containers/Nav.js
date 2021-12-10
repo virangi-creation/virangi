@@ -82,7 +82,7 @@ const Nav = ({ loggedIn, setLoggedIn }) => {
                                             Machine
                                         </button>
                                     </Link>
-                                    <Link to="/machineprogram/add">
+                                    <Link to="/machineprogram/">
                                         <button className={styles.nav_button}>
                                             Machine Program
                                         </button>

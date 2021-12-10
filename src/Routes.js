@@ -59,6 +59,8 @@ import PrintMachineProgram from "./Pages/Program/PrintMachineProgram";
 import CostDesign from "./Pages/Desgin/CostDesign";
 import UpdateMachineProgram from "./Pages/Program/UpdateMachineProgram";
 import AddSimilarDesign from "./Pages/Desgin/AddSimilarDesign";
+import MachineProgram from "./Pages/Program/MachineProgram";
+import CloseMachineProgram from "./Pages/Program/CloseMachineProgram";
 
 export const siteMap = {
     HomePage: {
@@ -181,9 +183,19 @@ const BrowserRoutes = ({ setLoggedIn, loggedIn }) => {
                     component={UpdateMatching}
                 />
                 <Route
+                    path="/machineprogram"
+                    exact
+                    component={MachineProgram}
+                />
+                <Route
                     path="/machineprogram/add"
                     exact
                     component={InputMachineProgram}
+                />
+                <Route
+                    path="/machineprogram/close"
+                    exact
+                    component={CloseMachineProgram}
                 />
                 <Route
                     path="/machineprogram/print"

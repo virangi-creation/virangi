@@ -50,8 +50,7 @@ function PrintMachineProgram() {
                         return (
                             <div
                                 style={{
-                                    minHeight: "684px",
-                                    border: "1px solid black",
+                                    minHeight: "685px",
                                     display: "flex",
                                     verticalAlign: "middle",
                                     margin: "10px",
@@ -65,13 +64,12 @@ function PrintMachineProgram() {
                                     }}
                                     className="table table-bordered table-hover table-responsive border-dark"
                                 >
-                                    <thead>
-                                        <tr style={{ verticalAlign: "middle" }}>
+                                    <thead style={{ verticalAlign: "middle" }}>
+                                        <tr>
                                             <td
                                                 rowSpan="2"
                                                 style={{
                                                     fontSize: "x-large",
-                                                    verticalAlign: "middle",
                                                     textAlign: "center",
                                                 }}
                                             >
@@ -113,7 +111,7 @@ function PrintMachineProgram() {
                                                 }
                                             </td>
                                         </tr>
-                                        <tr style={{ verticalAlign: "middle" }}>
+                                        <tr>
                                             <td>
                                                 File Name - <br />
                                                 <span
@@ -142,7 +140,7 @@ function PrintMachineProgram() {
                                             </td>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody style={{ verticalAlign: "middle" }}>
                                         <tr>
                                             <td>Feeder No</td>
                                             <td>Yarn Quality</td>
@@ -189,14 +187,18 @@ function PrintMachineProgram() {
                                                 )}
                                             </td>
                                             <td>
-                                                Start ___ / ___ / _____ <br />
-                                                ___ : ___
+                                                Start : ___ / ___ / _____ <br />
+                                                ___ : ___ | ___
                                             </td>
                                             <td>
-                                                End ___ / ___ / _____ <br /> ___
-                                                : ___
+                                                End : ___ / ___ / _____ <br />{" "}
+                                                ___ : ___ | ___
                                             </td>
-                                            <td>Actual Time Period</td>
+                                            <td style={{ textAlign: "start" }}>
+                                                Actual <br />
+                                                Time &emsp; : <br />
+                                                Period
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>

@@ -4,12 +4,14 @@ import logo from "./Pictures/logo.png";
 import styles from "../Modules/Nav.module.css";
 import { useHistory } from "react-router";
 
-const Nav = ({ loggedIn, setLoggedIn }) => {
+const Nav = ({ loggedIn, setLoggedIn, user, setUser }) => {
     const history = useHistory();
 
     const logout = () => {
         setLoggedIn(false);
+        setUser({});
         window.localStorage.setItem("loggedIn", false);
+        window.localStorage.setItem("rjuser", JSON.stringify({}));
         window.localStorage.setItem("vcpltokenrepier", "NA");
         history.push("/login");
         window.location.reload();
@@ -30,143 +32,239 @@ const Nav = ({ loggedIn, setLoggedIn }) => {
                 </div>
                 <div className="list_item">
                     <ul>
-                        {loggedIn && (
+                        {(user.qualityp ||
+                            user.yarnqualityp ||
+                            user.yarnshadep ||
+                            user.cdesignp ||
+                            user.designp ||
+                            user.harnessp ||
+                            user.cataloguep ||
+                            user.matchingp ||
+                            user.machinep ||
+                            user.machineprogram) && (
                             <div className={styles.dropdown}>
                                 <button className={styles.dropbtn}>
                                     Inventory
                                     <i className="fa fa-caret-down"></i>
                                 </button>
                                 <div className={styles.dropdown_content}>
-                                    <Link to="/quality">
-                                        <button className={styles.nav_button}>
-                                            Quality
-                                        </button>
-                                    </Link>
-                                    <Link to="/yarnquality">
-                                        <button className={styles.nav_button}>
-                                            Yarn Quality
-                                        </button>
-                                    </Link>
-                                    <Link to="/yarnshade">
-                                        <button className={styles.nav_button}>
-                                            Yarn Shade
-                                        </button>
-                                    </Link>
-                                    {/* <Link to="/design/cost">
-                                        <button className={styles.nav_button}>
-                                            Design Cost
-                                        </button>
-                                    </Link> */}
-                                    <Link to="/design">
-                                        <button className={styles.nav_button}>
-                                            Design
-                                        </button>
-                                    </Link>
-                                    <Link to="/harness">
-                                        <button className={styles.nav_button}>
-                                            Harness
-                                        </button>
-                                    </Link>
-                                    <Link to="/catalogue">
-                                        <button className={styles.nav_button}>
-                                            Catalogue
-                                        </button>
-                                    </Link>
-                                    <Link to="/matching/add">
-                                        <button className={styles.nav_button}>
-                                            Matching
-                                        </button>
-                                    </Link>
-                                    <Link to="/machine">
-                                        <button className={styles.nav_button}>
-                                            Machine
-                                        </button>
-                                    </Link>
-                                    <Link to="/machineprogram/">
-                                        <button className={styles.nav_button}>
-                                            Machine Program
-                                        </button>
-                                    </Link>
+                                    {user.qualityp && (
+                                        <Link to="/quality">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Quality
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.yarnqualityp && (
+                                        <Link to="/yarnquality">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Yarn Quality
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.yarnshadep && (
+                                        <Link to="/yarnshade">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Yarn Shade
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.cdesignp && (
+                                        <Link to="/design/cost">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Design Cost
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.designp && (
+                                        <Link to="/design">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Design
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.harnessp && (
+                                        <Link to="/harness">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Harness
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.cataloguep && (
+                                        <Link to="/catalogue">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Catalogue
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.amatchingp && (
+                                        <Link to="/matching/add">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Matching
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.machinep && (
+                                        <Link to="/machine">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Machine
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.machineprogramp && (
+                                        <Link to="/machineprogram/">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Machine Program
+                                            </button>
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
                         )}
-                        {loggedIn && (
+                        {(user.bankp ||
+                            user.partyp ||
+                            user.agentp ||
+                            user.firmp) && (
                             <div className={styles.dropdown}>
                                 <button className={styles.dropbtn}>
                                     Accounts
                                     <i className="fa fa-caret-down"></i>
                                 </button>
                                 <div className={styles.dropdown_content}>
-                                    <Link to="/bank">
-                                        <button className={styles.nav_button}>
-                                            Bank
-                                        </button>
-                                    </Link>
-                                    <Link to="/party">
-                                        <button className={styles.nav_button}>
-                                            Party
-                                        </button>
-                                    </Link>
-                                    <Link to="/agent">
-                                        <button className={styles.nav_button}>
-                                            Agent
-                                        </button>
-                                    </Link>
-                                    <Link to="/firm">
-                                        <button className={styles.nav_button}>
-                                            Firm
-                                        </button>
-                                    </Link>
+                                    {user.bankp && (
+                                        <Link to="/bank">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Bank
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.partyp && (
+                                        <Link to="/party">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Party
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.agentp && (
+                                        <Link to="/agent">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Agent
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.firmp && (
+                                        <Link to="/firm">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Firm
+                                            </button>
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
                         )}
-                        {loggedIn && (
+                        {(user.salesorderp ||
+                            user.challanp ||
+                            user.salesbillp) && (
                             <div className={styles.dropdown}>
                                 <button className={styles.dropbtn}>
                                     Sales
                                     <i className="fa fa-caret-down"></i>
                                 </button>
                                 <div className={styles.dropdown_content}>
-                                    <Link to="/salesorder">
-                                        <button className={styles.nav_button}>
-                                            Sales Order
-                                        </button>
-                                    </Link>
-                                    <Link to="/challan">
-                                        <button className={styles.nav_button}>
-                                            Challan
-                                        </button>
-                                    </Link>
-                                    <Link to="/salesbill">
-                                        <button className={styles.nav_button}>
-                                            Sales Bill
-                                        </button>
-                                    </Link>
+                                    {user.salesorderp && (
+                                        <Link to="/salesorder">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Sales Order
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.challanp && (
+                                        <Link to="/challan">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Challan
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.salesbillp && (
+                                        <Link to="/salesbill">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Sales Bill
+                                            </button>
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
                         )}
-                        {loggedIn && (
+                        {(user.purchaseorderp ||
+                            user.purchasebillp ||
+                            user.purchasechallanp) && (
                             <div className={styles.dropdown}>
                                 <button className={styles.dropbtn}>
                                     Purchase
                                     <i className="fa fa-caret-down"></i>
                                 </button>
                                 <div className={styles.dropdown_content}>
-                                    <Link to="/purchaseorder">
-                                        <button className={styles.nav_button}>
-                                            Purchase Orders
-                                        </button>
-                                    </Link>
-                                    <Link to="/party">
-                                        <button className={styles.nav_button}>
-                                            Purchase Bill
-                                        </button>
-                                    </Link>
-                                    <Link to="/agent">
-                                        <button className={styles.nav_button}>
-                                            Purchase Challan
-                                        </button>
-                                    </Link>
+                                    {user.purchaseorderp && (
+                                        <Link to="/purchaseorder">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Purchase Orders
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.purchasebillp && (
+                                        <Link to="/party">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Purchase Bill
+                                            </button>
+                                        </Link>
+                                    )}
+                                    {user.purchasechallanp && (
+                                        <Link to="/agent">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Purchase Challan
+                                            </button>
+                                        </Link>
+                                    )}
                                 </div>
                             </div>
                         )}

@@ -61,166 +61,356 @@ import UpdateMachineProgram from "./Pages/Program/UpdateMachineProgram";
 import AddSimilarDesign from "./Pages/Desgin/AddSimilarDesign";
 import MachineProgram from "./Pages/Program/MachineProgram";
 import CloseMachineProgram from "./Pages/Program/CloseMachineProgram";
+import InputUser from "./Pages/User/InputUser";
 
-export const siteMap = {
-    HomePage: {
-        title: "Home",
-        path: "/",
-        description: "My home page",
-    },
-};
-
-const BrowserRoutes = ({ setLoggedIn, loggedIn }) => {
+const BrowserRoutes = ({ setLoggedIn, loggedIn, user, setUser }) => {
     let pathName = window.location.hash;
     pathName = pathName.split("/");
     pathName = pathName[pathName.length - 1];
-
     return (
         <div>
             {pathName !== "print" ? (
-                <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+                <Nav
+                    loggedIn={loggedIn}
+                    setLoggedIn={setLoggedIn}
+                    user={user}
+                    setUser={setUser}
+                />
             ) : null}
             <Switch>
-                <Route path="/quality" exact component={Quality} />
-                <Route path="/quality/add" exact component={InputQuality} />
-                <Route path="/quality/update" exact component={UpdateQuality} />
-                <Route path="/yarnshade" exact component={YarnShade} />
-                <Route path="/yarnshade/add" exact component={InputYarnShade} />
-                <Route
-                    path="/yarnshade/update"
-                    exact
-                    component={UpdateYarnShade}
-                />
-                <Route path="/yarnquality" exact component={YarnQuality} />
-                <Route
-                    path="/yarnquality/add"
-                    exact
-                    component={InputYarnQuality}
-                />
-                <Route
-                    path="/yarnquality/update"
-                    exact
-                    component={UpdateYarnQuality}
-                />
-                <Route path="/bank" exact component={Bank} />
-                <Route path="/bank/add" exact component={InputBank} />
-                <Route path="/bank/update" exact component={UpdateBank} />
-                <Route path="/catalogue" exact component={Catalogue} />
-                <Route path="/catalogue/add" exact component={InputCatalogue} />
-                <Route
-                    path="/catalogue/update"
-                    exact
-                    component={UpdateCatalogue}
-                />
-                <Route path="/party" exact component={Party} />
-                <Route path="/party/add" exact component={InputParty} />
-                <Route path="/party/update" exact component={UpdateParty} />
-                <Route path="/firm" exact component={Firm} />
-                <Route path="/firm/add" exact component={InputFirm} />
-                <Route path="/firm/update" exact component={UpdateFirm} />
-                <Route path="/agent" exact component={Agent} />
-                <Route path="/agent/add" exact component={InputAgent} />
-                <Route path="/agent/update" exact component={UpdateAgent} />
-                <Route path="/design" exact component={Design} />
-                <Route path="/design/cost" exact component={CostDesign} />
-                <Route path="/design/add" exact component={InputDesign} />
-                <Route
-                    path="/design/add/similar"
-                    exact
-                    component={AddSimilarDesign}
-                />
-                <Route path="/design/update" exact component={UpdateDesign} />
-                <Route path="/harness" exact component={Harness} />
-                <Route path="/harness/add" exact component={InputHarness} />
-                <Route path="/harness/update" exact component={UpdateHarness} />
-                <Route path="/machine" exact component={Machine} />
-                <Route path="/machine/add" exact component={InputMachine} />
-                <Route path="/machine/update" exact component={UpdateMachine} />
-                <Route path="/salesorder" exact component={SalesOrder} />
-                <Route
-                    path="/salesorder/add"
-                    exact
-                    component={InputSalesOrder}
-                />
-                <Route
-                    path="/salesorder/update"
-                    exact
-                    component={InputSalesOrder}
-                />
-                <Route path="/salesorder/print" exact component={SalesOrder} />
-
-                <Route path="/purchaseorder" exact component={PurchaseOrder} />
-                <Route
-                    path="/purchaseorder/add"
-                    exact
-                    component={InputPurchaseOrder}
-                />
-                <Route
-                    path="/salesbill/print"
-                    exact
-                    component={PrintSalesBill}
-                />
-                <Route path="/salesbill/add" exact component={InputSalesBill} />
-                <Route path="/salesbill/" exact component={SalesBill} />
-                <Route
-                    path="/salesbill/update"
-                    exact
-                    component={UpdateSalesBill}
-                />
-                <Route path="/challan/print" exact component={PrintChallan} />
-                <Route path="/challan/add" exact component={InputChallan} />
-                <Route path="/challan/" exact component={Challan} />
-                <Route path="/challan/update" exact component={UpdateChallan} />
-                <Route
-                    path="/purchaseorder/update"
-                    exact
-                    component={UpdatePurchaseOrder}
-                />
-                <Route path="/matching/add" exact component={InputMatching} />
-                <Route
-                    path="/matching/update"
-                    exact
-                    component={UpdateMatching}
-                />
-                <Route
-                    path="/machineprogram"
-                    exact
-                    component={MachineProgram}
-                />
-                <Route
-                    path="/machineprogram/add"
-                    exact
-                    component={InputMachineProgram}
-                />
-                <Route
-                    path="/machineprogram/close"
-                    exact
-                    component={CloseMachineProgram}
-                />
-                <Route
-                    path="/machineprogram/print"
-                    exact
-                    component={PrintMachineProgram}
-                />
-                <Route
-                    path="/machineprogram/update"
-                    exact
-                    component={UpdateMachineProgram}
-                />
-
-                {/* <Route path="/matching" exact component={Matching} /> */}
+                <Route path="/quality" exact>
+                    {user.qualityp ? <Quality /> : <Redirect to="/login" />}
+                </Route>
+                <Route path="/quality/add" exact>
+                    {user.aqualityp ? (
+                        <InputQuality />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/quality/update" exact>
+                    {user.uqualityp ? (
+                        <UpdateQuality />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/yarnshade" exact>
+                    {user.yarnshadep ? <YarnShade /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/yarnshade/add" exact>
+                    {user.ayarnshadep ? (
+                        <InputYarnShade />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/yarnshade/update" exact>
+                    {user.uyarnshadep ? (
+                        <UpdateYarnShade />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/yarnquality" exact>
+                    {user.yarnqualityp ? (
+                        <YarnQuality />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/yarnquality/add" exact>
+                    {user.ayarnqualityp ? (
+                        <InputYarnQuality />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/yarnquality/update" exact>
+                    {user.uyarnqualityp ? (
+                        <UpdateYarnQuality />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/bank" exact>
+                    {user.bankp ? <Bank /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/bank/add" exact>
+                    {user.abankp ? <InputBank /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/bank/update" exact>
+                    {user.ubankp ? <UpdateBank /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/catalogue" exact>
+                    {user.cataloguep ? <Catalogue /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/catalogue/add" exact>
+                    {user.acataloguep ? (
+                        <InputCatalogue />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/catalogue/update" exact>
+                    {user.ucataloguep ? (
+                        <UpdateCatalogue />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/party" exact>
+                    {user.partyp ? <Party /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/party/add" exact>
+                    {user.apartyp ? <InputParty /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/party/update" exact>
+                    {user.upartyp ? <UpdateParty /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/firm" exact>
+                    {user.firmp ? <Firm /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/firm/add" exact>
+                    {user.afirmp ? <InputFirm /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/firm/update" exact>
+                    {user.ufirmp ? <UpdateFirm /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/agent" exact>
+                    {user.agentp ? <Agent /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/agent/add" exact>
+                    {user.aagentp ? <InputAgent /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/agent/update" exact>
+                    {user.uagentp ? <UpdateAgent /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/design" exact>
+                    {user.designp ? <Design /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/design/cost" exact>
+                    {user.cdesignp ? <CostDesign /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/design/add" exact>
+                    {user.adesignp ? <InputDesign /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/design/add/similar" exact>
+                    {user.adesignp ? (
+                        <AddSimilarDesign />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/design/update" exact>
+                    {user.udesignp ? (
+                        <UpdateDesign />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/harness" exact>
+                    {user.harnessp ? <Harness /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/harness/add" exact>
+                    {user.aharnessp ? (
+                        <InputHarness />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/harness/update" exact>
+                    {user.uharnessp ? (
+                        <UpdateHarness />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/machine" exact>
+                    {user.machinep ? <Machine /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/machine/add" exact>
+                    {user.amachinep ? (
+                        <InputMachine />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/machine/update" exact>
+                    {user.umachinep ? (
+                        <UpdateMachine />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/salesorder" exact>
+                    {user.salesorderp ? (
+                        <SalesOrder />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/salesorder/add" exact>
+                    {user.asalesorderp ? (
+                        <InputSalesOrder />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/salesorder/update" exact>
+                    {user.usalesorderp ? (
+                        <InputSalesOrder />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/salesorder/print" exact>
+                    {user.psalesorderp ? (
+                        <SalesOrder />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/purchaseorder" exact>
+                    {user.purchaseorderp ? (
+                        <PurchaseOrder />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/purchaseorder/add" exact>
+                    {user.apurchaseorderp ? (
+                        <InputPurchaseOrder />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/purchaseorder/update" exact>
+                    {user.upurchaseorderp ? (
+                        <UpdatePurchaseOrder />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/salesbill/print" exact>
+                    {user.psalesbillp ? (
+                        <PrintSalesBill />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/salesbill/add" exact>
+                    {user.asalesbillp ? (
+                        <InputSalesBill />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/salesbill/" exact>
+                    {user.salesbillp ? <SalesBill /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/salesbill/update" exact>
+                    {user.usalesbillp ? (
+                        <UpdateSalesBill />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/challan/print" exact>
+                    {user.pchallanp ? (
+                        <PrintChallan />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/challan/add" exact>
+                    {user.achallanp ? (
+                        <InputChallan />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/challan/" exact>
+                    {user.challanp ? <Challan /> : <Redirect to="/login" />}{" "}
+                </Route>
+                <Route path="/challan/update" exact>
+                    {user.uchallanp ? (
+                        <UpdateChallan />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/matching/add" exact>
+                    {user.amatchingp ? (
+                        <InputMatching />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
+                <Route path="/matching/update" exact>
+                    {user.umatchingp ? (
+                        <UpdateMatching />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/machineprogram" exact>
+                    {user.matchingprogramp ? (
+                        <MachineProgram />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/machineprogram/add" exact>
+                    {user.amatchingprogramp ? (
+                        <InputMachineProgram />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/machineprogram/close" exact>
+                    {user.cmatchingprogramp ? (
+                        <CloseMachineProgram />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/machineprogram/print" exact>
+                    {user.pmatchingprogramp ? (
+                        <PrintMachineProgram />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/machineprogram/update" exact>
+                    {user.umatchingprogramp ? (
+                        <UpdateMachineProgram />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+                <Route path="/user/create" exact>
+                    {user.auserp ? <InputUser /> : <Redirect to="/login" />}
+                </Route>
+                {/* <Route path="/matching" exact >{user.matchingp?<Matching/>:<Redirect to="/login"/>} </Route> */}
                 <Route path="/login" exact>
                     {loggedIn && <Redirect to="/" />}
                     {!loggedIn && (
                         <Login
+                            user={user}
+                            setUser={setUser}
                             loggedIn={loggedIn}
                             setLoggedIn={setLoggedIn}
                             setLoggedIn={setLoggedIn}
                         />
                     )}
                 </Route>
-                <Route path="/" exact component={Home} />
-                <Route component={Page404} />
+                <Route path="/" exact>
+                    <Home />
+                </Route>
+                <Route path="*">
+                    <Page404 />
+                </Route>
             </Switch>
         </div>
     );

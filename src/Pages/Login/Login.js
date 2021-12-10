@@ -6,22 +6,28 @@ import { useHistory } from "react-router";
 import handleFocus from "../../Util/handleFocus";
 import "./login.css";
 
-function Login({ setLoggedIn }) {
+function Login({ setLoggedIn, user, setUser }) {
     const history = useHistory();
     let [load, setLoad] = useState(false);
     let [username, setUserName] = useState("");
     let [password, setPassword] = useState("");
 
+    console.log(user);
+
     const login = (data) => {
         setLoggedIn(true);
+        setUser(data.user);
         window.localStorage.setItem("loggedIn", true);
+        window.localStorage.setItem("rjuser", JSON.stringify(data.user));
         window.localStorage.setItem("vcpltokenrepier", data.token);
         history.push("/");
         window.location.reload();
     };
     const logout = () => {
         setLoggedIn(false);
+        setUser({});
         window.localStorage.setItem("loggedIn", false);
+        window.localStorage.setItem("rjuser", JSON.stringify({}));
         window.localStorage.setItem("vcpltokenrepier", "NA");
         history.push("/login");
         window.location.reload();
@@ -53,6 +59,7 @@ function Login({ setLoggedIn }) {
                     password,
                 })
                 .then(({ data }) => {
+                    console.log(data);
                     setLoad(false);
                     login(data);
                 })

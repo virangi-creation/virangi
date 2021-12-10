@@ -1,7 +1,7 @@
 import axios from "../../axios.js";
 import React, { useEffect, useState } from "react";
 import buttonStyles from "../../Modules/Button.module.css";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router";
 import catchAxiosError from "../../Util/catchAxiosError.js";
 import handleFocus from "../../Util/handleFocus.js";
 import MatchingTable from "../Matching/MatchingTable.js";
@@ -32,6 +32,7 @@ function UpdateMachineProgram() {
     const [prevMachineNo, setPrevMachineNo] = useState("");
     const [prevProgramNo, setPrevProgramNo] = useState("");
     const history = useHistory();
+    const location = useLocation();
     const [harnessId, setHarnessId] = useState("");
 
     useEffect(async () => {
@@ -48,25 +49,9 @@ function UpdateMachineProgram() {
                 setPrevProgramNo(location.state.programid);
                 setLoad(true);
                 await axios
-                    .get(
-                        `/machineprogram/update/${location.state.machineno}/${location.state.programid}`
-                    )
+                    .get(`/machineprogram/update/`)
                     .then(({ data }) => {
                         setMachineNos(data.machinenos);
-                        setDesignFileNames(data.designfilenames);
-                        setMatchings(data.matchings);
-                        setMatchingFeeders(data.matchingFeeders);
-                        let program = data.program;
-                        setMachineNo(program.machineno);
-
-                        setProgramno(program.programid);
-                        setDesignFileName(program.designfilename);
-                        setDesignMatchingId(program.designmatchingid);
-                        setRepeats(program.totalrepeat);
-                        setUnits(program.totalpiece);
-                        setPanes(program.totalpiece / program.totalrepeat);
-                        setTotalPicks(program.totalpicks);
-                        setOrderno(program.orderno);
 
                         setLoad(false);
                     })
@@ -190,6 +175,41 @@ function UpdateMachineProgram() {
             catchAxiosError(err);
         }
     }, [designFileName]);
+
+    useEffect(async () => {
+        try {
+            if (machineNo && programno) {
+                setLoad(true);
+                await axios
+                    .get(`/machineprogram/add/matching/${designFileName}`)
+                    .then(({ data }) => {
+                        console.log(data);
+                        setDesignFileNames(data.designfilenames);
+                        setMatchings(data.matchings);
+                        setMatchingFeeders(data.matchingFeeders);
+                        let program = data.program;
+                        setMachineNo(program.machineno);
+
+                        setProgramno(program.programid);
+                        setDesignFileName(program.designfilename);
+                        setDesignMatchingId(program.designmatchingid);
+                        setRepeats(program.totalrepeat);
+                        setUnits(program.totalpiece);
+                        setPanes(program.totalpiece / program.totalrepeat);
+                        setTotalPicks(program.totalpicks);
+                        setOrderno(program.orderno);
+                        setLoad(false);
+                    })
+                    .catch((err) => {
+                        setLoad(false);
+                        catchAxiosError(err);
+                    });
+            }
+        } catch (err) {
+            alert(err.message);
+            catchAxiosError(err);
+        }
+    }, [machineNo, programno]);
 
     const updateMachineNo = async (e) => {
         let q = parseInt(e.target.value);
@@ -421,21 +441,19 @@ function UpdateMachineProgram() {
                                         <td>Pieces</td>
                                         <td>{units}</td>
                                     </tr>
-                                    <tr>
-                                        <td colSpan="2">
-                                            <button
-                                                type="button"
-                                                className={
-                                                    buttonStyles.inputbutton
-                                                }
-                                                onClick={onSubmitEvent}
-                                            >
-                                                Save Program
-                                            </button>
-                                        </td>
-                                    </tr>
                                 </>
                             )}
+                            <tr>
+                                <td colSpan="2">
+                                    <button
+                                        type="button"
+                                        className={buttonStyles.inputbutton}
+                                        onClick={onSubmitEvent}
+                                    >
+                                        Save Program
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                     {selectedMatching.length > 0 && (

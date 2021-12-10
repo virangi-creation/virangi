@@ -248,12 +248,48 @@ function UpdateMatching() {
                                                     </td>
 
                                                     <td>
-                                                        Body -{" "}
-                                                        {matching.bodyColour}
+                                                        Body -
+                                                        <input
+                                                            value={
+                                                                matching.bodyColour
+                                                            }
+                                                            placeholder="Body Colour"
+                                                            onChange={(e) => {
+                                                                let tempMatchings =
+                                                                    [
+                                                                        ...matchings,
+                                                                    ];
+                                                                tempMatchings[
+                                                                    key
+                                                                ].bodyColour =
+                                                                    e.target.value.toUpperCase();
+                                                                setMatchings([
+                                                                    ...tempMatchings,
+                                                                ]);
+                                                            }}
+                                                        />
                                                     </td>
                                                     <td>
                                                         Border -
-                                                        {matching.borderColour}
+                                                        <input
+                                                            value={
+                                                                matching.borderColour
+                                                            }
+                                                            placeholder="Body Colour"
+                                                            onChange={(e) => {
+                                                                let tempMatchings =
+                                                                    [
+                                                                        ...matchings,
+                                                                    ];
+                                                                tempMatchings[
+                                                                    key
+                                                                ].borderColour =
+                                                                    e.target.value.toUpperCase();
+                                                                setMatchings([
+                                                                    ...tempMatchings,
+                                                                ]);
+                                                            }}
+                                                        />
                                                     </td>
                                                     <td>
                                                         <button

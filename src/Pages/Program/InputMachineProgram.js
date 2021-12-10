@@ -123,6 +123,7 @@ function InputMachineProgram() {
                     .then(({ data }) => {
                         setProgramno(data.programid);
                         setDesignFileNames(data.designs);
+                        console.log(data.designs);
                         setLoad(false);
                         document.getElementById("programtype").focus();
                     })
@@ -330,6 +331,10 @@ function InputMachineProgram() {
                                             {designFileNames.length > 0 &&
                                                 designFileNames.map(
                                                     (design) => {
+                                                        console.log(
+                                                            design.harnessid,
+                                                            harnessId
+                                                        );
                                                         if (
                                                             design.harnessid ===
                                                             harnessId
@@ -393,21 +398,19 @@ function InputMachineProgram() {
                                         <td>Pieces</td>
                                         <td>{units}</td>
                                     </tr>
-                                    <tr>
-                                        <td colSpan="2">
-                                            <button
-                                                type="button"
-                                                className={
-                                                    buttonStyles.inputbutton
-                                                }
-                                                onClick={onSubmitEvent}
-                                            >
-                                                Save Program
-                                            </button>
-                                        </td>
-                                    </tr>
                                 </>
                             )}
+                            <tr>
+                                <td colSpan="2">
+                                    <button
+                                        type="button"
+                                        className={buttonStyles.inputbutton}
+                                        onClick={onSubmitEvent}
+                                    >
+                                        Save Program
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                     {selectedMatching.length > 0 && (

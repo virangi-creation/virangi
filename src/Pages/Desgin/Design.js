@@ -32,14 +32,14 @@ function Design() {
                             >
                                 <Link
                                     to={{
-                                        pathname: "/design/detail",
+                                        pathname: "/design/add/similar",
                                         state: {
                                             designfilename:
                                                 design.designfilename,
                                         },
                                     }}
                                 >
-                                    Details
+                                    Add Similar
                                 </Link>
                             </button>
                         </td>

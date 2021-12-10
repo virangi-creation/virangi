@@ -11,6 +11,8 @@ function InputMachine() {
     const [harness, setHarness] = useState(3);
     const [jacquardHooks, setJacquardHooks] = useState("");
     const [panes, setPanes] = useState("");
+    const [avgRPM, setAvgRPM] = useState("");
+    const [avgEfficiency, setAvgEfficiency] = useState("");
 
     const [prevMachinenos, setPrevMachinenos] = useState([]);
     const [harnessTypes, setHarnessTypes] = useState([]);
@@ -54,6 +56,8 @@ function InputMachine() {
                     harness,
                     jacquardHooks,
                     panes,
+                    avgRPM,
+                    avgEfficiency,
                 })
                 .then(() => {
                     setLoad(false);
@@ -181,7 +185,32 @@ function InputMachine() {
                                     </select>
                                 </td>
                             </tr>
-
+                            <tr>
+                                <td>Avg. RPM</td>
+                                <td>
+                                    <input
+                                        type="number"
+                                        placeholder="Avg. RPM"
+                                        value={avgRPM}
+                                        onChange={(e) => {
+                                            setAvgRPM(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Avg. Efficiency</td>
+                                <td>
+                                    <input
+                                        type="number"
+                                        placeholder="Avg. Efficiency"
+                                        value={avgEfficiency}
+                                        onChange={(e) => {
+                                            setAvgEfficiency(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                            </tr>
                             <tr>
                                 <td colSpan="2">
                                     <button

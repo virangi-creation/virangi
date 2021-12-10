@@ -117,8 +117,8 @@ function Catalogue() {
                         <tr>
                             <th>Catalogue No</th>
                             <th>Design No</th>
-                            <th>Manufacturer Sell Price</th>
-                            <th>Sell Price</th>
+                            <th>Manufacturer Cost Price</th>
+                            <th>Sale Price</th>
                             <th></th>
                             <th></th>
                         </tr>

@@ -101,7 +101,7 @@ function Machine() {
             {load && <div>Loading...</div>}
             {!load && (
                 <table
-                    className="table table-bordered table-hover table-responsive"
+                    className="table table-bordered table-hover table-responsive "
                     style={{ verticalAlign: "middle" }}
                 >
                     <tbody>
@@ -110,6 +110,8 @@ function Machine() {
                             <th>Panes</th>
                             <th>Jacquard Hooks</th>
                             <th>Harness</th>
+                            <th>Avg. RPM</th>
+                            <th>Avg. Eff.</th>
                             <th>Remaining Program</th>
                             <th></th>
                             <th></th>
@@ -127,7 +129,37 @@ function Machine() {
                                         <td>{machine.panes}</td>
                                         <td>{machine.jacquardhooks}</td>
                                         <td>{machine.harness}</td>
-                                        <td>{machine.remainingprogram}</td>
+                                        <td>{machine.avgrpm}</td>
+                                        <td>{machine.avgefficiency}</td>
+                                        <td>
+                                            {machine.timeRequired / 24 -
+                                                ((machine.timeRequired / 24) %
+                                                    1)}
+                                            D{" "}
+                                            {(
+                                                machine.timeRequired % 24
+                                            ).toFixed(2)}
+                                            Hr.
+                                        </td>
+                                        <td>
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-warning"
+                                            >
+                                                <Link
+                                                    to={{
+                                                        pathname:
+                                                            "/machineprogram/print",
+                                                        state: {
+                                                            machineno:
+                                                                machine.machineno,
+                                                        },
+                                                    }}
+                                                >
+                                                    Print Program
+                                                </Link>
+                                            </button>
+                                        </td>
                                         <td>
                                             <button
                                                 type="button"

@@ -111,8 +111,8 @@ function InputCatalogue() {
             await designs.map((design) => {
                 if (design.designno === designNo) {
                     tempSelectedDesigns.push(design);
-                    if (design.manufaturersellprice > tempMaxManufacturerPrice)
-                        tempMaxManufacturerPrice = design.manufaturersellprice;
+                    if (design.manufacturersellprice > tempMaxManufacturerPrice)
+                        tempMaxManufacturerPrice = design.manufacturersellprice;
                     if (design.sellprice > tempMaxSellPrice)
                         tempMaxSellPrice = design.sellprice;
                 }
@@ -190,7 +190,7 @@ function InputCatalogue() {
                                     <tr>
                                         <td>{design.designfilename}</td>
                                         <td>{design.totalamountdesign}</td>
-                                        <td>{design.manufaturersellprice}</td>
+                                        <td>{design.manufacturersellprice}</td>
                                         <td>{design.sellprice}</td>
                                     </tr>
                                 ))}

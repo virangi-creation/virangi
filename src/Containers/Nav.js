@@ -52,6 +52,11 @@ const Nav = ({ loggedIn, setLoggedIn }) => {
                                             Yarn Shade
                                         </button>
                                     </Link>
+                                    {/* <Link to="/design/cost">
+                                        <button className={styles.nav_button}>
+                                            Design Cost
+                                        </button>
+                                    </Link> */}
                                     <Link to="/design">
                                         <button className={styles.nav_button}>
                                             Design
@@ -75,6 +80,11 @@ const Nav = ({ loggedIn, setLoggedIn }) => {
                                     <Link to="/machine">
                                         <button className={styles.nav_button}>
                                             Machine
+                                        </button>
+                                    </Link>
+                                    <Link to="/machineprogram/add">
+                                        <button className={styles.nav_button}>
+                                            Machine Program
                                         </button>
                                     </Link>
                                 </div>

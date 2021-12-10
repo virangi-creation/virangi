@@ -54,6 +54,9 @@ import UpdateMatching from "./Pages/Matching/UpdateMatching";
 import Machine from "./Pages/Machine/Machine";
 import InputMachine from "./Pages/Machine/InputMachine";
 import UpdateMachine from "./Pages/Machine/UpdateMachine";
+import InputMachineProgram from "./Pages/Program/InputMachineProgram";
+import PrintMachineProgram from "./Pages/Program/PrintMachineProgram";
+import CostDesign from "./Pages/Desgin/CostDesign";
 
 export const siteMap = {
     HomePage: {
@@ -115,6 +118,7 @@ const BrowserRoutes = ({ setLoggedIn, loggedIn }) => {
                 <Route path="/agent/add" exact component={InputAgent} />
                 <Route path="/agent/update" exact component={UpdateAgent} />
                 <Route path="/design" exact component={Design} />
+                <Route path="/design/cost" exact component={CostDesign} />
                 <Route path="/design/add" exact component={InputDesign} />
                 <Route path="/design/update" exact component={UpdateDesign} />
                 <Route path="/harness" exact component={Harness} />
@@ -169,6 +173,17 @@ const BrowserRoutes = ({ setLoggedIn, loggedIn }) => {
                     exact
                     component={UpdateMatching}
                 />
+                <Route
+                    path="/machineprogram/add"
+                    exact
+                    component={InputMachineProgram}
+                />
+                <Route
+                    path="/machineprogram/print"
+                    exact
+                    component={PrintMachineProgram}
+                />
+
                 {/* <Route path="/matching" exact component={Matching} /> */}
                 <Route path="/login" exact>
                     {loggedIn && <Redirect to="/" />}

@@ -19,6 +19,7 @@ function InputDesign() {
 
     // Final Variables
     const [qualityid, setQualityid] = useState("");
+    const [designutility, setDesignutility] = useState("production");
     const [designno, setDesignNo] = useState("");
     const [designfilename, setDesignFileName] = useState("");
     const [designdescription, setDesignDescription] = useState("");
@@ -141,6 +142,7 @@ function InputDesign() {
             await axios
                 .post(`/design/`, {
                     qualityid,
+                    designutility,
                     designno,
                     designfilename,
                     designdescription,
@@ -558,6 +560,22 @@ function InputDesign() {
                     >
                         <tbody>
                             <tr>
+                                <td>Design Utility</td>
+                                <td>
+                                    <select
+                                        value={designutility}
+                                        onChange={(e) =>
+                                            setDesignutility(e.target.value)
+                                        }
+                                    >
+                                        <option value="production">
+                                            Production
+                                        </option>
+                                        <option value="cost">Cost</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>Design File Name</td>
                                 <td>
                                     <input
@@ -651,10 +669,6 @@ function InputDesign() {
                                             ))}
                                     </datalist>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Job Charge</td>
-                                <td>{jobcharge}</td>
                             </tr>
                             <tr>
                                 <td>RS</td>
@@ -804,7 +818,7 @@ function InputDesign() {
                                 <td>{calculatedavgpick.toFixed(2)}</td>
                             </tr>
 
-                            <tr style={{ height: "40px" }}>
+                            {/* <tr style={{ height: "40px" }}>
                                 <td colSpan="5"></td>
                                 <td
                                     colSpan="3"
@@ -962,20 +976,24 @@ function InputDesign() {
                             <tr>
                                 <td>.</td>
                             </tr>
-                            <tr>
-                                <td colSpan="3"></td>
-                                <td colSpan="3">Total Cost </td>
-                                <td></td>
-                                <td>
-                                    {(isNaN(totalCharges)
-                                        ? 0
-                                        : totalCharges
-                                    ).toFixed(2)}
-                                </td>
-                                <td>
-                                    {(totalCharges * unitlength).toFixed(2)}
-                                </td>
-                            </tr>
+                                    */}
+                            {designutility === "cost" && (
+                                <tr>
+                                    <td colSpan="3"></td>
+                                    <td colSpan="3">Total Cost </td>
+                                    <td></td>
+                                    <td>
+                                        {(isNaN(totalCharges)
+                                            ? 0
+                                            : totalCharges
+                                        ).toFixed(2)}
+                                    </td>
+                                    <td>
+                                        {(totalCharges * unitlength).toFixed(2)}
+                                    </td>
+                                </tr>
+                            )}
+                            {/* 
                             <tr>
                                 <td colSpan="3"></td>
                                 <td colSpan="3">
@@ -1102,18 +1120,20 @@ function InputDesign() {
                             </tr>
                             <tr>
                                 <td>.</td>
-                            </tr>
-                            <tr>
-                                <td colSpan="4"></td>
-                                <td colSpan="3">Total Amount :</td>
-                                <td>
-                                    {(totalamountdesign / unitlength).toFixed(
-                                        2
-                                    )}
-                                </td>
-                                <td>{totalamountdesign}</td>
-                            </tr>
-                            <tr>
+                                    </tr>*/}
+                            {designutility === "cost" && (
+                                <tr>
+                                    <td colSpan="4"></td>
+                                    <td colSpan="3">Total Amount :</td>
+                                    <td>
+                                        {(
+                                            totalamountdesign / unitlength
+                                        ).toFixed(2)}
+                                    </td>
+                                    <td>{totalamountdesign}</td>
+                                </tr>
+                            )}
+                            {/* <tr>
                                 <td colSpan="6"></td>
                                 <td>Selling Price :</td>
                                 <td>
@@ -1127,7 +1147,7 @@ function InputDesign() {
                                         }}
                                     />
                                 </td>
-                            </tr>
+                            </tr> */}
                         </tbody>
                     </table>
                     <button

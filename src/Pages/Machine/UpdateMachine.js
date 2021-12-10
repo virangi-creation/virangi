@@ -12,6 +12,8 @@ function UpdateMachine() {
     const [harness, setHarness] = useState("");
     const [jacquardHooks, setJacquardHooks] = useState("");
     const [panes, setPanes] = useState("");
+    const [avgRPM, setAvgRPM] = useState("");
+    const [avgEfficiency, setAvgEfficiency] = useState("");
 
     const [prevMachineno, setPrevMachineno] = useState("");
     const [prevMachinenos, setPrevMachinenos] = useState([]);
@@ -42,6 +44,8 @@ function UpdateMachine() {
                         setHarness(data.harness);
                         setJacquardHooks(data.jacquardhooks);
                         setPanes(data.panes);
+                        setAvgRPM(data.avgrpm);
+                        setAvgEfficiency(data.avgefficiency);
                         setHarnessTypes(data.harnessTypes);
                         setPrevMachinenos(data.prevMachinenos);
                         setLoad(false);
@@ -65,6 +69,8 @@ function UpdateMachine() {
                     harness,
                     jacquardHooks,
                     panes,
+                    avgRPM,
+                    avgEfficiency,
                 })
                 .then(() => {
                     setLoad(false);
@@ -192,7 +198,32 @@ function UpdateMachine() {
                                     </select>
                                 </td>
                             </tr>
-
+                            <tr>
+                                <td>Avg. RPM</td>
+                                <td>
+                                    <input
+                                        type="number"
+                                        placeholder="Avg. RPM"
+                                        value={avgRPM}
+                                        onChange={(e) => {
+                                            setAvgRPM(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Avg. Efficiency</td>
+                                <td>
+                                    <input
+                                        type="number"
+                                        placeholder="Avg. Efficiency"
+                                        value={avgEfficiency}
+                                        onChange={(e) => {
+                                            setAvgEfficiency(e.target.value);
+                                        }}
+                                    />
+                                </td>
+                            </tr>
                             <tr>
                                 <td colSpan="2">
                                     <button

@@ -5,6 +5,7 @@ function MatchingTable({ feeders }) {
     return (
         <tbody>
             {feeders.map((feeder, index) => {
+                console.log(feeder);
                 return (
                     <tr key={index}>
                         <td>{index + 1}</td>

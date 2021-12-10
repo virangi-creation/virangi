@@ -20,6 +20,7 @@ function UpdateDesign() {
 
     // Final Variables
     const [qualityid, setQualityid] = useState("");
+    const [designutility, setDesignutility] = useState("production");
     const [qualityname, setQualityname] = useState("");
     const [designno, setDesignNo] = useState("");
     const [designfilename, setDesignFileName] = useState("");
@@ -122,6 +123,7 @@ function UpdateDesign() {
                         console.log(data);
                         let design = data.design;
                         setQualityid(parseInt(design.qualityid));
+                        setDesignutility(design.designutility);
                         setDesignFileName(design.designfilename);
                         setDesignDescription(design.designdescription);
                         setDesignNo(design.designno);
@@ -251,6 +253,7 @@ function UpdateDesign() {
             await axios
                 .put(`/design/${location.state.designfilename}`, {
                     qualityid,
+                    designutility,
                     designno,
                     designfilename,
                     designdescription,
@@ -681,6 +684,22 @@ function UpdateDesign() {
                     >
                         <tbody>
                             <tr>
+                                <td>Design Utility</td>
+                                <td>
+                                    <select
+                                        value={designutility}
+                                        onChange={(e) =>
+                                            setDesignutility(e.target.value)
+                                        }
+                                    >
+                                        <option value="production">
+                                            Production
+                                        </option>
+                                        <option value="cost">Cost</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>Design File Name</td>
                                 <td>
                                     <input
@@ -775,10 +794,6 @@ function UpdateDesign() {
                                             ))}
                                     </datalist>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Job Charge</td>
-                                <td>{jobcharge}</td>
                             </tr>
                             <tr>
                                 <td>RS</td>
@@ -928,7 +943,7 @@ function UpdateDesign() {
                                 <td>{calculatedavgpick.toFixed(2)}</td>
                             </tr>
 
-                            <tr style={{ height: "40px" }}>
+                            {/* <tr style={{ height: "40px" }}>
                                 <td colSpan="5"></td>
                                 <td
                                     colSpan="3"
@@ -1085,22 +1100,24 @@ function UpdateDesign() {
                             </tr>
                             <tr>
                                 <td>.</td>
-                            </tr>
-                            <tr>
-                                <td colSpan="3"></td>
-                                <td colSpan="3">Total Cost </td>
-                                <td></td>
-                                <td>
-                                    {(isNaN(totalCharges)
-                                        ? 0
-                                        : totalCharges
-                                    ).toFixed(2)}
-                                </td>
-                                <td>
-                                    {(totalCharges * unitlength).toFixed(2)}
-                                </td>
-                            </tr>
-                            <tr>
+                            </tr> */}
+                            {designutility === "cost" && (
+                                <tr>
+                                    <td colSpan="3"></td>
+                                    <td colSpan="3">Total Cost </td>
+                                    <td></td>
+                                    <td>
+                                        {(isNaN(totalCharges)
+                                            ? 0
+                                            : totalCharges
+                                        ).toFixed(2)}
+                                    </td>
+                                    <td>
+                                        {(totalCharges * unitlength).toFixed(2)}
+                                    </td>
+                                </tr>
+                            )}
+                            {/* <tr>
                                 <td colSpan="3"></td>
                                 <td colSpan="3">
                                     Manufacturer Sell Price / UNIT
@@ -1228,18 +1245,20 @@ function UpdateDesign() {
                             </tr>
                             <tr>
                                 <td>.</td>
-                            </tr>
-                            <tr>
-                                <td colSpan="4"></td>
-                                <td colSpan="3">Total Amount :</td>
-                                <td>
-                                    {(totalamountdesign / unitlength).toFixed(
-                                        2
-                                    )}
-                                </td>
-                                <td>{totalamountdesign}</td>
-                            </tr>
-                            <tr>
+                            </tr> */}
+                            {designutility === "cost" && (
+                                <tr>
+                                    <td colSpan="4"></td>
+                                    <td colSpan="3">Total Amount :</td>
+                                    <td>
+                                        {(
+                                            totalamountdesign / unitlength
+                                        ).toFixed(2)}
+                                    </td>
+                                    <td>{totalamountdesign}</td>
+                                </tr>
+                            )}
+                            {/* <tr>
                                 <td colSpan="6"></td>
                                 <td>Selling Price :</td>
                                 <td>
@@ -1253,7 +1272,7 @@ function UpdateDesign() {
                                         }}
                                     />
                                 </td>
-                            </tr>
+                            </tr> */}
                         </tbody>
                     </table>
                     <button

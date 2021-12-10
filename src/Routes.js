@@ -61,7 +61,7 @@ import UpdateMachineProgram from "./Pages/Program/UpdateMachineProgram";
 import AddSimilarDesign from "./Pages/Desgin/AddSimilarDesign";
 import MachineProgram from "./Pages/Program/MachineProgram";
 import CloseMachineProgram from "./Pages/Program/CloseMachineProgram";
-import InputUser from "./Pages/User/InputUser";
+import RegisterUser from "./Pages/User/RegisterUser";
 
 const BrowserRoutes = ({ setLoggedIn, loggedIn, user, setUser }) => {
     let pathName = window.location.hash;
@@ -390,7 +390,7 @@ const BrowserRoutes = ({ setLoggedIn, loggedIn, user, setUser }) => {
                     )}
                 </Route>
                 <Route path="/user/create" exact>
-                    {user.auserp ? <InputUser /> : <Redirect to="/login" />}
+                    {user.auserp ? <RegisterUser /> : <Redirect to="/login" />}
                 </Route>
                 {/* <Route path="/matching" exact >{user.matchingp?<Matching/>:<Redirect to="/login"/>} </Route> */}
                 <Route path="/login" exact>

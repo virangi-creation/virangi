@@ -290,6 +290,15 @@ const Nav = ({ loggedIn, setLoggedIn, user, setUser }) => {
                                     <i className="fa fa-caret-down"></i>
                                 </button>
                                 <div className={styles.dropdown_content}>
+                                    {user.auserp && (
+                                        <Link to="/user/create">
+                                            <button
+                                                className={styles.nav_button}
+                                            >
+                                                Create User
+                                            </button>
+                                        </Link>
+                                    )}
                                     <Link to="/">
                                         <button
                                             className={styles.nav_button}

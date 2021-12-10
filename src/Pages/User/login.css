@@ -1,0 +1,54 @@
+.row1 {
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding: 20px;
+}
+
+.row2 {
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: space-between;
+
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+legend {
+    margin: auto;
+}
+
+article {
+    width: fit-content;
+    margin: 0px auto;
+}
+.register_user {
+    display: flex;
+    justify-content: center;
+}
+
+.register_user > ul,
+.register_user > ul > li > ul {
+    list-style: none;
+}
+
+.register_user > ul > li {
+    text-indent: 50px;
+    margin-bottom: 30px;
+}
+.register_user > ul > li > ul > li {
+    text-indent: 100px;
+}
+.register_user > ul > li > ul > li > input[type="checkbox"],
+.register_user > ul > li > ul > li > label {
+    text-indent: 100px;
+    cursor: pointer;
+    align-items: center;
+}
+
+.register_user > ul > li > ul > li > input[type="checkbox"] {
+    width: 30px;
+    height: 30px;
+    align-items: center;
+}

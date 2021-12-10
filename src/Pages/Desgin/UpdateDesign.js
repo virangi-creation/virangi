@@ -942,8 +942,7 @@ function UpdateDesign() {
                                 </td>
                                 <td>{calculatedavgpick.toFixed(2)}</td>
                             </tr>
-
-                            {/* <tr style={{ height: "40px" }}>
+                            <tr style={{ height: "40px" }}>
                                 <td colSpan="5"></td>
                                 <td
                                     colSpan="3"
@@ -953,7 +952,6 @@ function UpdateDesign() {
                                 </td>
                                 <td>{unitlength}</td>
                             </tr>
-
                             <tr>
                                 <td colSpan="6">Yarn Cost / MTR :</td>
                                 <td></td>
@@ -1100,7 +1098,7 @@ function UpdateDesign() {
                             </tr>
                             <tr>
                                 <td>.</td>
-                            </tr> */}
+                            </tr>{" "}
                             {designutility === "cost" && (
                                 <tr>
                                     <td colSpan="3"></td>
@@ -1117,7 +1115,7 @@ function UpdateDesign() {
                                     </td>
                                 </tr>
                             )}
-                            {/* <tr>
+                            <tr>
                                 <td colSpan="3"></td>
                                 <td colSpan="3">
                                     Manufacturer Sell Price / UNIT
@@ -1139,7 +1137,6 @@ function UpdateDesign() {
                             <tr>
                                 <td>.</td>
                             </tr>
-
                             <tr>
                                 <td colSpan="3"></td>
                                 <td colSpan="3">Finishing Charge / UNIT</td>
@@ -1245,7 +1242,7 @@ function UpdateDesign() {
                             </tr>
                             <tr>
                                 <td>.</td>
-                            </tr> */}
+                            </tr>{" "}
                             {designutility === "cost" && (
                                 <tr>
                                     <td colSpan="4"></td>
@@ -1258,7 +1255,7 @@ function UpdateDesign() {
                                     <td>{totalamountdesign}</td>
                                 </tr>
                             )}
-                            {/* <tr>
+                            <tr>
                                 <td colSpan="6"></td>
                                 <td>Selling Price :</td>
                                 <td>
@@ -1272,7 +1269,7 @@ function UpdateDesign() {
                                         }}
                                     />
                                 </td>
-                            </tr> */}
+                            </tr>{" "}
                         </tbody>
                     </table>
                     <button

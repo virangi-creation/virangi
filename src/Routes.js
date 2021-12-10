@@ -355,35 +355,35 @@ const BrowserRoutes = ({ setLoggedIn, loggedIn, user, setUser }) => {
                     )}
                 </Route>
                 <Route path="/machineprogram" exact>
-                    {user.matchingprogramp ? (
+                    {user.machineprogramp ? (
                         <MachineProgram />
                     ) : (
                         <Redirect to="/login" />
                     )}
                 </Route>
                 <Route path="/machineprogram/add" exact>
-                    {user.amatchingprogramp ? (
+                    {user.amachineprogramp ? (
                         <InputMachineProgram />
                     ) : (
                         <Redirect to="/login" />
                     )}
                 </Route>
                 <Route path="/machineprogram/close" exact>
-                    {user.cmatchingprogramp ? (
+                    {user.cmachineprogramp ? (
                         <CloseMachineProgram />
                     ) : (
                         <Redirect to="/login" />
                     )}
                 </Route>
                 <Route path="/machineprogram/print" exact>
-                    {user.pmatchingprogramp ? (
+                    {user.pmachineprogramp ? (
                         <PrintMachineProgram />
                     ) : (
                         <Redirect to="/login" />
                     )}
                 </Route>
                 <Route path="/machineprogram/update" exact>
-                    {user.umatchingprogramp ? (
+                    {user.umachineprogramp ? (
                         <UpdateMachineProgram />
                     ) : (
                         <Redirect to="/login" />

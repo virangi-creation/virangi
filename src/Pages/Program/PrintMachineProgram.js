@@ -148,7 +148,7 @@ function PrintMachineProgram() {
                                             <td>Colour</td>
                                         </tr>
                                         {machineProgram.program.map(
-                                            (program, index) => {
+                                            (program) => {
                                                 return (
                                                     <tr>
                                                         <td>
@@ -177,7 +177,24 @@ function PrintMachineProgram() {
                                             </td>
                                             <td>Estimated Start Time</td>
                                             <td>Estimated End Time</td>
-                                            <td>Estimated Time Period</td>
+                                            <td>
+                                                Est. Time Period :{" "}
+                                                <b>
+                                                    {" "}
+                                                    {(
+                                                        machineProgram.timeRequired -
+                                                        (machineProgram.timeRequired %
+                                                            1)
+                                                    ).toFixed(0)}
+                                                    H{" "}
+                                                    {(
+                                                        (machineProgram.timeRequired %
+                                                            1) *
+                                                        60
+                                                    ).toFixed(0)}
+                                                    M
+                                                </b>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>

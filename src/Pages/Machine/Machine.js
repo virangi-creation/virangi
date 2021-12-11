@@ -67,7 +67,6 @@ function Machine() {
         str = str.toUpperCase();
         let tempMachines = [];
         machines.map((machine) => {
-            console.log(machine.machineno);
             if (machine.machineno.toString().includes(str))
                 tempMachines.push(machine);
         });

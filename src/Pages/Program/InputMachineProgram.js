@@ -192,8 +192,8 @@ function InputMachineProgram() {
         let temp = null;
         await matchings.map((matching, index) => {
             let f = `${matching.matchingcode} - ${matching.bodycolour} - ${matching.bordercolour}`;
-            setKeyIndex(index);
             if (f === q) {
+                setKeyIndex(index);
                 temp = matching.designmatchingid;
                 setMatchingObject(matching);
             }
@@ -203,6 +203,7 @@ function InputMachineProgram() {
     useEffect(async () => {
         let tempSelecetedFeeders = [];
         let tempMatchingFeeders = matchingFeeders[keyIndex];
+        console.log(tempMatchingFeeders, keyIndex);
         await tempMatchingFeeders.map((matchingFeeder) => {
             if (
                 parseInt(matchingFeeder.designmatchingid) === designMatchingId
@@ -211,7 +212,7 @@ function InputMachineProgram() {
             }
         });
         setSelectedMatching(tempMatchingFeeders);
-    }, [designMatchingId]);
+    }, [designMatchingId, keyIndex]);
 
     useEffect(() => {
         if (selectedMatching.length > 0)

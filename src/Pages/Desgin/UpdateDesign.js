@@ -1099,7 +1099,6 @@ function UpdateDesign() {
                             <tr>
                                 <td>.</td>
                             </tr>{" "}
-                            {designutility === "cost" && (
                                 <tr>
                                     <td colSpan="3"></td>
                                     <td colSpan="3">Total Cost </td>
@@ -1114,7 +1113,6 @@ function UpdateDesign() {
                                         {(totalCharges * unitlength).toFixed(2)}
                                     </td>
                                 </tr>
-                            )}
                             <tr>
                                 <td colSpan="3"></td>
                                 <td colSpan="3">
@@ -1243,7 +1241,6 @@ function UpdateDesign() {
                             <tr>
                                 <td>.</td>
                             </tr>{" "}
-                            {designutility === "cost" && (
                                 <tr>
                                     <td colSpan="4"></td>
                                     <td colSpan="3">Total Amount :</td>
@@ -1254,7 +1251,6 @@ function UpdateDesign() {
                                     </td>
                                     <td>{totalamountdesign}</td>
                                 </tr>
-                            )}
                             <tr>
                                 <td colSpan="6"></td>
                                 <td>Selling Price :</td>

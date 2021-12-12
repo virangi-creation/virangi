@@ -235,6 +235,8 @@ function UpdateDesign() {
                         catchAxiosError(err);
                     });
                 document.title = "Update Design";
+                document.addEventListener("keydown", captureEnter, false);
+                document.addEventListener("focus", handleFocus, true);
                 document.addEventListener("wheel", function (event) {
                     if (document.activeElement.type === "number") {
                         document.activeElement.blur();
@@ -625,7 +627,7 @@ function UpdateDesign() {
     ]);
 
     useEffect(() => {
-        let tempTotalAmount = parseFloat(manufacturersellprice) / unitlength,
+        let tempTotalAmount = parseFloat(totalCharges),
             tempMarginAmount = 0,
             tempDiscountAmount = 0,
             tempAgentAmount = 0;
@@ -660,7 +662,7 @@ function UpdateDesign() {
         marketmargin,
         agentcharge,
         discount,
-        manufacturersellprice,
+        totalCharges,
         finishingcharge,
         valueadditioncharge,
     ]);

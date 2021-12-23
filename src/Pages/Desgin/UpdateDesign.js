@@ -235,6 +235,8 @@ function UpdateDesign() {
                         catchAxiosError(err);
                     });
                 document.title = "Update Design";
+                document.addEventListener("keydown", captureEnter, false);
+                document.addEventListener("focus", handleFocus, true);
                 document.addEventListener("wheel", function (event) {
                     if (document.activeElement.type === "number") {
                         document.activeElement.blur();
@@ -625,7 +627,7 @@ function UpdateDesign() {
     ]);
 
     useEffect(() => {
-        let tempTotalAmount = parseFloat(manufacturersellprice) / unitlength,
+        let tempTotalAmount = parseFloat(totalCharges),
             tempMarginAmount = 0,
             tempDiscountAmount = 0,
             tempAgentAmount = 0;
@@ -660,7 +662,7 @@ function UpdateDesign() {
         marketmargin,
         agentcharge,
         discount,
-        manufacturersellprice,
+        totalCharges,
         finishingcharge,
         valueadditioncharge,
     ]);
@@ -1099,7 +1101,6 @@ function UpdateDesign() {
                             <tr>
                                 <td>.</td>
                             </tr>{" "}
-                            {designutility === "cost" && (
                                 <tr>
                                     <td colSpan="3"></td>
                                     <td colSpan="3">Total Cost </td>
@@ -1114,7 +1115,6 @@ function UpdateDesign() {
                                         {(totalCharges * unitlength).toFixed(2)}
                                     </td>
                                 </tr>
-                            )}
                             <tr>
                                 <td colSpan="3"></td>
                                 <td colSpan="3">
@@ -1243,7 +1243,6 @@ function UpdateDesign() {
                             <tr>
                                 <td>.</td>
                             </tr>{" "}
-                            {designutility === "cost" && (
                                 <tr>
                                     <td colSpan="4"></td>
                                     <td colSpan="3">Total Amount :</td>
@@ -1254,7 +1253,6 @@ function UpdateDesign() {
                                     </td>
                                     <td>{totalamountdesign}</td>
                                 </tr>
-                            )}
                             <tr>
                                 <td colSpan="6"></td>
                                 <td>Selling Price :</td>

@@ -623,7 +623,7 @@ function AddSimilarDesign() {
     ]);
 
     useEffect(() => {
-        let tempTotalAmount = parseFloat(manufacturersellprice) / unitlength,
+        let tempTotalAmount = parseFloat(totalCharges),
             tempMarginAmount = 0,
             tempDiscountAmount = 0,
             tempAgentAmount = 0;
@@ -658,7 +658,7 @@ function AddSimilarDesign() {
         marketmargin,
         agentcharge,
         discount,
-        manufacturersellprice,
+        totalCharges,
         finishingcharge,
         valueadditioncharge,
     ]);

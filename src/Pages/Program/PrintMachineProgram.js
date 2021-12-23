@@ -40,7 +40,11 @@ function PrintMachineProgram() {
             {load && <div>Loading...</div>}
             {!load && (
                 <div>
-                    {machineProgram.map((machineProgram, index) => {
+                    {machineProgram.map((machineProgram) => {
+                        let tempPrograms = machineProgram.program.sort(
+                            (a, b) =>
+                                parseInt(a.feederno) - parseInt(b.feederno)
+                        );
                         let programno = machineProgram.programid;
                         if (machineProgram.programid < 10000)
                             programno = "S" + machineProgram.programid;
@@ -147,26 +151,20 @@ function PrintMachineProgram() {
                                             <td>Shade No</td>
                                             <td>Colour</td>
                                         </tr>
-                                        {machineProgram.program.map(
-                                            (program) => {
-                                                return (
-                                                    <tr>
-                                                        <td>
-                                                            {program.feederno}
-                                                        </td>
-                                                        <td>
-                                                            {
-                                                                program.yarnqualityname
-                                                            }
-                                                        </td>
-                                                        <td>{program.shade}</td>
-                                                        <td>
-                                                            {program.colour}
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            }
-                                        )}
+                                        {tempPrograms.map((program) => {
+                                            return (
+                                                <tr>
+                                                    <td>{program.feederno}</td>
+                                                    <td>
+                                                        {
+                                                            program.yarnqualityname
+                                                        }
+                                                    </td>
+                                                    <td>{program.shade}</td>
+                                                    <td>{program.colour}</td>
+                                                </tr>
+                                            );
+                                        })}
                                         <tr>
                                             <td>
                                                 Design Pick -{" "}

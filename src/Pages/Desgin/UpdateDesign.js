@@ -627,7 +627,7 @@ function UpdateDesign() {
     ]);
 
     useEffect(() => {
-        let tempTotalAmount = parseFloat(totalCharges),
+        let tempTotalAmount = parseFloat(manufacturersellprice) / unitlength,
             tempMarginAmount = 0,
             tempDiscountAmount = 0,
             tempAgentAmount = 0;
@@ -662,7 +662,7 @@ function UpdateDesign() {
         marketmargin,
         agentcharge,
         discount,
-        totalCharges,
+        manufacturersellprice,
         finishingcharge,
         valueadditioncharge,
     ]);
@@ -1101,20 +1101,20 @@ function UpdateDesign() {
                             <tr>
                                 <td>.</td>
                             </tr>{" "}
-                                <tr>
-                                    <td colSpan="3"></td>
-                                    <td colSpan="3">Total Cost </td>
-                                    <td></td>
-                                    <td>
-                                        {(isNaN(totalCharges)
-                                            ? 0
-                                            : totalCharges
-                                        ).toFixed(2)}
-                                    </td>
-                                    <td>
-                                        {(totalCharges * unitlength).toFixed(2)}
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td colSpan="3"></td>
+                                <td colSpan="3">Total Cost </td>
+                                <td></td>
+                                <td>
+                                    {(isNaN(totalCharges)
+                                        ? 0
+                                        : totalCharges
+                                    ).toFixed(2)}
+                                </td>
+                                <td>
+                                    {(totalCharges * unitlength).toFixed(2)}
+                                </td>
+                            </tr>
                             <tr>
                                 <td colSpan="3"></td>
                                 <td colSpan="3">
@@ -1243,16 +1243,16 @@ function UpdateDesign() {
                             <tr>
                                 <td>.</td>
                             </tr>{" "}
-                                <tr>
-                                    <td colSpan="4"></td>
-                                    <td colSpan="3">Total Amount :</td>
-                                    <td>
-                                        {(
-                                            totalamountdesign / unitlength
-                                        ).toFixed(2)}
-                                    </td>
-                                    <td>{totalamountdesign}</td>
-                                </tr>
+                            <tr>
+                                <td colSpan="4"></td>
+                                <td colSpan="3">Total Amount :</td>
+                                <td>
+                                    {(totalamountdesign / unitlength).toFixed(
+                                        2
+                                    )}
+                                </td>
+                                <td>{totalamountdesign}</td>
+                            </tr>
                             <tr>
                                 <td colSpan="6"></td>
                                 <td>Selling Price :</td>

@@ -21,9 +21,6 @@ const App = () => {
     return (
         <div>
             <Router>
-                {/* {pathname !== "print" ? (
-                    <Nav loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-                ) : null} */}
                 <Routes
                     setLoggedIn={setLoggedIn}
                     loggedIn={loggedIn}

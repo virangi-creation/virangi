@@ -9,7 +9,14 @@ function InputSalesOrder() {
     let yesDate = new Date();
     let [totalSarees, setTotalSarees] = useState(0);
 
-    let [salesOrderDesigns, setSalesOrderDesigns] = useState([]);
+    let [salesOrderDesigns, setSalesOrderDesigns] = useState([
+        {
+            catalogueno: "",
+            pieces: 0,
+            colour: "",
+            shades: [],
+        },
+    ]);
     let [orderId, setOrderId] = useState("");
     let [orderdate, setorderdate] = useState(
         yesDate.toISOString().substr(0, 10)
@@ -61,11 +68,11 @@ function InputSalesOrder() {
             await axios
                 .get(`/salesorder/add/`)
                 .then(({ data }) => {
-                    console.log(data);
                     setOrderId(data.orderid);
                     setParties(data.parties);
                     setAgents(data.agents);
                     setCatalogues(data.catalogue);
+                    console.log(data.catalogue);
                     setFirms(data.firms);
                     setLoad(false);
                 })
@@ -96,25 +103,31 @@ function InputSalesOrder() {
     const enterNew = () => {
         let tempSalesOrderDesigns = salesOrderDesigns;
         tempSalesOrderDesigns.push({
-            orderid: orderId,
             catalogueno: "",
             pieces: 0,
             colour: "",
+            shades: [],
         });
         setSalesOrderDesigns([...tempSalesOrderDesigns]);
     };
 
-    useEffect(async () => {
-        let tempSalesOrderDesigns = salesOrderDesigns;
-        await tempSalesOrderDesigns.map(
-            (salesOrderDesign) => (salesOrderDesign.orderid = orderId)
-        );
-        setSalesOrderDesigns([...tempSalesOrderDesigns]);
-    }, [orderId]);
-
     const onSubmitEvent = async () => {
         try {
             setLoad(true);
+
+            let designs = [];
+            await salesOrderDesigns.map((design) => {
+                designs.push({
+                    orderid: orderId,
+                    catalogueno: design.catalogueno,
+                    pieces: design.pieces,
+                    designmatchingid: design.designmatchingid,
+                    designfilename: design.designfilename,
+                    rate: design.rate,
+                });
+            });
+
+            console.log(designs);
 
             await axios
                 .post("/salesorder/", {
@@ -132,7 +145,7 @@ function InputSalesOrder() {
                     intereststart,
                     orderstatus,
                     remarks,
-                    designs: salesOrderDesigns,
+                    aDesigns: designs,
                 })
                 .then(() => {
                     if (window.confirm("Add new Order?"))
@@ -244,12 +257,47 @@ function InputSalesOrder() {
         let tempSalesOrderDesigns = salesOrderDesigns;
         tempSalesOrderDesigns[index].cataloguename = selectedCatalogueNo;
         await catalogues.map((catalogue) => {
-            if (catalogue.catalogueno === selectedCatalogueNo) {
+            console.log(
+                catalogue.catalogueno.toString() === selectedCatalogueNo,
+                catalogue.catalogueno.toString(),
+                selectedCatalogueNo
+            );
+            if (catalogue.catalogueno.toString() === selectedCatalogueNo) {
                 tempSalesOrderDesigns[index].catalogueno =
                     catalogue.catalogueno;
                 tempSalesOrderDesigns[index].rate = catalogue.manufacturerprice;
+                fetchShades(catalogue.catalogueno, index);
             }
         });
+        setSalesOrderDesigns([...tempSalesOrderDesigns]);
+    };
+
+    const fetchShades = async (catalogueNo, index) => {
+        await axios
+            .get(`/salesorder/catalogue/${catalogueNo}`)
+            .then((res) => {
+                let tempSalesOrderDesigns = salesOrderDesigns;
+                tempSalesOrderDesigns[index].shades = res.data;
+                console.log(res.data);
+                setSalesOrderDesigns([...tempSalesOrderDesigns]);
+            })
+            .catch((err) => {
+                catchAxiosError(err);
+            });
+    };
+
+    const onUpdateShade = async (e, index) => {
+        let tempSalesOrderDesigns = salesOrderDesigns;
+        tempSalesOrderDesigns[index].tempshade = e.target.value.toUpperCase();
+        if (tempSalesOrderDesigns[index].shades)
+            await tempSalesOrderDesigns[index].shades.map((shade) => {
+                if (shade.shadeno === e.target.value.toUpperCase()) {
+                    tempSalesOrderDesigns[index].designfilename =
+                        shade.designfilename;
+                    tempSalesOrderDesigns[index].designmatchingid =
+                        shade.designmatchingid;
+                }
+            });
         setSalesOrderDesigns([...tempSalesOrderDesigns]);
     };
 
@@ -419,7 +467,6 @@ function InputSalesOrder() {
                                             style={{
                                                 display: "flex",
                                                 justifyContent: "center",
-                                                margin: "20px auto",
                                             }}
                                             type="button"
                                             onClick={enterNew}
@@ -436,7 +483,7 @@ function InputSalesOrder() {
                                             style={{
                                                 display: "flex",
                                                 justifyContent: "center",
-                                                margin: "20px auto",
+                                                margin: "auto",
                                             }}
                                             type="button"
                                             onClick={enterNew}
@@ -473,9 +520,7 @@ function InputSalesOrder() {
                                                         catalogues.map(
                                                             (catalogue) => (
                                                                 <option
-                                                                    value={
-                                                                        catalogue.catalogueno
-                                                                    }
+                                                                    value={`${catalogue.catalogueno} / ${catalogue.designno}`}
                                                                 />
                                                             )
                                                         )}
@@ -483,18 +528,30 @@ function InputSalesOrder() {
                                             </td>
                                             <td>
                                                 <input
-                                                    placeholder="Enter Colour..."
-                                                    onChange={(e) =>
-                                                        updateCatalogue(
-                                                            e,
-                                                            index,
-                                                            "colour"
-                                                        )
-                                                    }
+                                                    id={`${index}shade`}
+                                                    list="shadelist"
+                                                    onChange={(e) => {
+                                                        onUpdateShade(e, index);
+                                                    }}
                                                     value={
-                                                        salesOrderDesign.colour
+                                                        salesOrderDesign.tempshade
                                                     }
+                                                    autoCapitalize
+                                                    placeholder="Shade No"
                                                 />
+
+                                                <datalist id="shadelist">
+                                                    {salesOrderDesign.shades &&
+                                                        salesOrderDesign.shades
+                                                            .length > 0 &&
+                                                        salesOrderDesign.shades.map(
+                                                            (singleShade) => (
+                                                                <option
+                                                                    value={`${singleShade.matchingcode} - ${singleShade.bodycolour} - ${singleShade.bordercolour}`}
+                                                                />
+                                                            )
+                                                        )}
+                                                </datalist>
                                             </td>
                                             <td>
                                                 <input
@@ -534,7 +591,6 @@ function InputSalesOrder() {
                                                         display: "flex",
                                                         justifyContent:
                                                             "center",
-                                                        margin: "20px auto",
                                                     }}
                                                     type="button"
                                                     onClick={() => {

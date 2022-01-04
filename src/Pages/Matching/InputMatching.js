@@ -241,7 +241,16 @@ function InputMatching() {
         if (q.length > 1) {
             let colour = q[1];
             let partyname = q[2];
+            console.log(shadeno, colour, partyname);
             await yarnShades.map((yarnShade) => {
+                console.log(
+                    yarnShade.shadeno === shadeno,
+                    yarnShade.colour === colour,
+                    yarnShade.partyname === partyname,
+                    yarnShade.shadeno,
+                    yarnShade.colour,
+                    yarnShade.partyname
+                );
                 if (
                     yarnShade.shadeno === shadeno &&
                     yarnShade.colour === colour &&

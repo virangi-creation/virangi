@@ -11,11 +11,13 @@ function UpdateMatching() {
 
     const [load, setLoad] = useState(false);
     const [designFileName, setDesignFileName] = useState("");
+    const [tempDesignFileName, setTempDesignFileName] = useState("");
     const [designMatchingId, setDesignMatchingId] = useState("");
     const [yarnShades, setYarnShades] = useState([]);
     const [yarnQualities, setYarnQualities] = useState([]);
     const [matchings, setMatchings] = useState([]);
     const [feederLayout, setFeederLayout] = useState([]);
+    const [designs, setDesigns] = useState([]);
     const [matchingCodes, setMatchingCodes] = useState([]);
 
     useEffect(() => {
@@ -25,6 +27,7 @@ function UpdateMatching() {
             document.title = "Update Yarn Quality";
             if (location.state) {
                 setDesignFileName(location.state.designfilename);
+                setTempDesignFileName(location.state.designfilename);
                 setDesignMatchingId(location.state.designmatchingid);
                 axios
                     .get(`/matching/${location.state.designmatchingid}`)
@@ -45,6 +48,7 @@ function UpdateMatching() {
                         setYarnQualities(data.yarnQualities);
                         setYarnShades(data.yarnShades);
                         setMatchings([...tempMatchings]);
+                        setDesigns(data.designs);
                         setFeederLayout([...tempFeederLayout]);
                         setMatchingCodes(data.matchingCodes);
                     })
@@ -179,8 +183,17 @@ function UpdateMatching() {
             });
         }
         tempMatchings[matchingIndex].feederLayout = tempFeeders;
-        console.log(tempMatchings);
         setMatchings([...tempMatchings]);
+    };
+
+    const onUpdateDesign = (e) => {
+        let q = e.target.value;
+        setTempDesignFileName(q);
+        setDesignFileName(null);
+        designs.map((design) => {
+            if (design.designfilename === q)
+                setDesignFileName(design.designfilename);
+        });
     };
 
     return (
@@ -204,7 +217,26 @@ function UpdateMatching() {
                         <tbody>
                             <tr>
                                 <td>Design no</td>
-                                <td>{designFileName}</td>
+                                <td>
+                                    <input
+                                        list="designlist"
+                                        onChange={onUpdateDesign}
+                                        value={tempDesignFileName}
+                                        autoFocus
+                                        autoCapitalize
+                                        placeholder="Design File name"
+                                    />
+                                    <datalist id="designlist">
+                                        {designs.length > 0 &&
+                                            designs.map((design) => (
+                                                <option
+                                                    value={
+                                                        design.designfilename
+                                                    }
+                                                />
+                                            ))}
+                                    </datalist>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

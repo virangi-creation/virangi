@@ -28,6 +28,7 @@ function InputMachineProgram() {
     const [orderno, setOrderno] = useState("");
     const [totalPick, setTotalPick] = useState(0);
     const [totalPicks, setTotalPicks] = useState(0);
+    const [pick, setPick] = useState(0);
     const [load, setLoad] = useState(true);
     const history = useHistory();
     const [harnessId, setHarnessId] = useState("");
@@ -71,6 +72,7 @@ function InputMachineProgram() {
                     orderno,
                     units,
                     totalPicks,
+                    pick,
                 })
                 .then(() => {
                     setLoad(false);
@@ -176,6 +178,7 @@ function InputMachineProgram() {
             if (design.designfilename === q) {
                 temp = design.designfilename;
                 setTotalPick(design.totalpick);
+                setPick(design.pickonloom);
             }
         });
         setDesignFileName(temp);
@@ -393,6 +396,21 @@ function InputMachineProgram() {
                                         <td>{units}</td>
                                     </tr>
                                 </>
+                            )}
+                            {selectedMatching.length > 0 && (
+                                <tr>
+                                    <td>Pick on Loom</td>
+                                    <td>
+                                        <input
+                                            id="pick"
+                                            value={pick}
+                                            onChange={(e) => {
+                                                setPick(e.target.value);
+                                            }}
+                                            placeholder="Pick on Loom"
+                                        />
+                                    </td>
+                                </tr>
                             )}
                             <tr>
                                 <td colSpan="2">

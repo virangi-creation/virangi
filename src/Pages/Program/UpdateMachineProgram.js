@@ -28,6 +28,7 @@ function UpdateMachineProgram() {
     const [panes, setPanes] = useState(0);
     const [totalPick, setTotalPick] = useState(0);
     const [totalPicks, setTotalPicks] = useState(0);
+    const [pick, setPick] = useState(0);
     const [load, setLoad] = useState(true);
     const [prevMachineNo, setPrevMachineNo] = useState("");
     const [prevProgramNo, setPrevProgramNo] = useState("");
@@ -69,7 +70,7 @@ function UpdateMachineProgram() {
                         setTempMachineNo(program.machineno);
                         setDesignFileName(program.designfilename);
                         setTempDesignFileName(program.designfilename);
-
+                        setPick(program.pickonloom);
                         setDesignMatchingId(program.designmatchingid);
 
                         setRepeats(program.totalrepeat);
@@ -105,6 +106,7 @@ function UpdateMachineProgram() {
                     units,
                     orderno,
                     totalPicks,
+                    pick,
                 })
                 .then(() => {
                     setLoad(false);
@@ -216,6 +218,7 @@ function UpdateMachineProgram() {
             if (design.designfilename === q) {
                 temp = design.designfilename;
                 setTotalPick(design.totalpick);
+                setPick(design.pickonloom);
             }
         });
         setDesignFileName(temp);
@@ -436,6 +439,21 @@ function UpdateMachineProgram() {
                                         <td>{units}</td>
                                     </tr>
                                 </>
+                            )}
+                            {selectedMatching.length > 0 && (
+                                <tr>
+                                    <td>Pick on Loom</td>
+                                    <td>
+                                        <input
+                                            id="pick"
+                                            value={pick}
+                                            onChange={(e) => {
+                                                setPick(e.target.value);
+                                            }}
+                                            placeholder="Pick on Loom"
+                                        />
+                                    </td>
+                                </tr>
                             )}
                             <tr>
                                 <td colSpan="2">

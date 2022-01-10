@@ -139,7 +139,10 @@ function PrintMachineProgram() {
                                                     }}
                                                 >
                                                     Repeat -{" "}
-                                                    {machineProgram.totalrepeat}
+                                                    {machineProgram.totalrepeat}{" "}
+                                                    / Pick -{" "}
+                                                    {machineProgram.pickonloom ||
+                                                        "______"}
                                                 </span>
                                             </td>
                                         </tr>

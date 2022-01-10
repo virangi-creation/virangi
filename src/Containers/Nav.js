@@ -112,7 +112,7 @@ const Nav = ({ loggedIn, setLoggedIn, user, setUser }) => {
                                         </Link>
                                     )}
                                     {user.amatchingp && (
-                                        <Link to="/matching/add">
+                                        <Link to="/matching">
                                             <button
                                                 className={styles.nav_button}
                                             >

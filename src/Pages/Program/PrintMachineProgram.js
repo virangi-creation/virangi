@@ -141,8 +141,9 @@ function PrintMachineProgram() {
                                                     Repeat -{" "}
                                                     {machineProgram.totalrepeat}{" "}
                                                     / Pick -{" "}
-                                                    {machineProgram.pickonloom ||
-                                                        "______"}
+                                                    {parseInt(
+                                                        machineProgram.pickonloom
+                                                    ) || "______"}
                                                 </span>
                                             </td>
                                         </tr>

@@ -48,7 +48,7 @@ import InputFirm from "./Pages/Firm/InputFirm";
 import UpdateFirm from "./Pages/Firm/UpdateFirm";
 import SalesOrder from "./Pages/SalesOrder/SalesOrder";
 import InputSalesOrder from "./Pages/SalesOrder/InputSalesOrder";
-import Matching from "./Pages/Matching/Matching";
+import SingleMatching from "./Pages/Matching/SingleMatching";
 import InputMatching from "./Pages/Matching/InputMatching";
 import UpdateMatching from "./Pages/Matching/UpdateMatching";
 import Machine from "./Pages/Machine/Machine";
@@ -62,6 +62,7 @@ import AddSimilarDesign from "./Pages/Desgin/AddSimilarDesign";
 import MachineProgram from "./Pages/Program/MachineProgram";
 import CloseMachineProgram from "./Pages/Program/CloseMachineProgram";
 import RegisterUser from "./Pages/User/RegisterUser";
+import DesignMatching from "./Pages/Matching/DesignMatching";
 
 const BrowserRoutes = ({ setLoggedIn, loggedIn, user, setUser }) => {
     let pathName = window.location.hash;
@@ -354,6 +355,13 @@ const BrowserRoutes = ({ setLoggedIn, loggedIn, user, setUser }) => {
                         <Redirect to="/login" />
                     )}
                 </Route>
+                <Route path="/matching/view" exact>
+                    {user.matchingp ? (
+                        <SingleMatching />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
                 <Route path="/machineprogram" exact>
                     {user.machineprogramp ? (
                         <MachineProgram />
@@ -392,7 +400,13 @@ const BrowserRoutes = ({ setLoggedIn, loggedIn, user, setUser }) => {
                 <Route path="/user/create" exact>
                     {user.auserp ? <RegisterUser /> : <Redirect to="/login" />}
                 </Route>
-                {/* <Route path="/matching" exact >{user.matchingp?<Matching/>:<Redirect to="/login"/>} </Route> */}
+                <Route path="/matching" exact>
+                    {user.matchingp ? (
+                        <DesignMatching />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}{" "}
+                </Route>
                 <Route path="/login" exact>
                     {loggedIn && <Redirect to="/" />}
                     {!loggedIn && (

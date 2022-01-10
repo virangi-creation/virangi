@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "react-bootstrap";
 import axios from "../../axios.js";
 import catchAxiosError from "../../Util/catchAxiosError.js";
 import InputMatchingTable from "./InputMatchingTable.js";
@@ -321,58 +320,11 @@ function InputMatching() {
                                 prevSavedFeederLayout &&
                                 prevSavedFeederLayout.length > 0 &&
                                 prevSavedMatchings.map((matching, index) => (
-                                    <table
-                                        className="table table-bordered table-hover table-responsive"
-                                        style={{
-                                            width: "80%",
-                                            margin: "50px 10%",
-                                        }}
-                                    >
-                                        <thead>
-                                            <tr>
-                                                <th>Matching Code</th>
-                                                <td>{matching.matchingcode}</td>
-
-                                                <td>
-                                                    Body -{matching.bodycolour}
-                                                </td>
-                                                <td>
-                                                    Border -
-                                                    {matching.bordercolour}
-                                                </td>
-                                                <td>
-                                                    <button className="btn btn-outline-primary">
-                                                        <Link
-                                                            to={{
-                                                                pathname:
-                                                                    "/matching/update",
-                                                                state: {
-                                                                    designmatchingid:
-                                                                        matching.designmatchingid,
-                                                                    designfilename:
-                                                                        designFileName,
-                                                                },
-                                                            }}
-                                                        >
-                                                            Update
-                                                        </Link>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Feeder no.</td>
-                                                <td>Type</td>
-                                                <td>Pick</td>
-                                                <td>Yarn Quality</td>
-                                                <td>Yarn Shade</td>
-                                            </tr>
-                                        </thead>
-                                        <MatchingTable
-                                            feeders={
-                                                prevSavedFeederLayout[index]
-                                            }
-                                        />
-                                    </table>
+                                    <MatchingTable
+                                        feeders={prevSavedFeederLayout[index]}
+                                        matching={matching}
+                                        designFileName={designFileName}
+                                    />
                                 ))}
                             {matchings.length > 0 &&
                                 matchings.map((matching, key) => {
@@ -409,51 +361,7 @@ function InputMatching() {
                                                             }
                                                         />
                                                     </td>
-
-                                                    <td>
-                                                        Body -
-                                                        <input
-                                                            value={
-                                                                matching.bodyColour
-                                                            }
-                                                            placeholder="Body Colour"
-                                                            onChange={(e) => {
-                                                                let tempMatchings =
-                                                                    [
-                                                                        ...matchings,
-                                                                    ];
-                                                                tempMatchings[
-                                                                    key
-                                                                ].bodyColour =
-                                                                    e.target.value.toUpperCase();
-                                                                setMatchings([
-                                                                    ...tempMatchings,
-                                                                ]);
-                                                            }}
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        Border -
-                                                        <input
-                                                            value={
-                                                                matching.borderColour
-                                                            }
-                                                            placeholder="Body Colour"
-                                                            onChange={(e) => {
-                                                                let tempMatchings =
-                                                                    [
-                                                                        ...matchings,
-                                                                    ];
-                                                                tempMatchings[
-                                                                    key
-                                                                ].borderColour =
-                                                                    e.target.value.toUpperCase();
-                                                                setMatchings([
-                                                                    ...tempMatchings,
-                                                                ]);
-                                                            }}
-                                                        />
-                                                    </td>
+                                                    <td colSpan="2"></td>
                                                     <td>
                                                         <button
                                                             className="btn btn-outline-danger"
@@ -490,6 +398,55 @@ function InputMatching() {
                                                     onUpdateYarnShade
                                                 }
                                             />
+                                            <thead>
+                                                <tr>
+                                                    <td></td>
+                                                    <td colSpan={2}>
+                                                        Body -{" "}
+                                                        <input
+                                                            value={
+                                                                matching.bodyColour
+                                                            }
+                                                            placeholder="Body Colour"
+                                                            onChange={(e) => {
+                                                                let tempMatchings =
+                                                                    [
+                                                                        ...matchings,
+                                                                    ];
+                                                                tempMatchings[
+                                                                    key
+                                                                ].bodyColour =
+                                                                    e.target.value.toUpperCase();
+                                                                setMatchings([
+                                                                    ...tempMatchings,
+                                                                ]);
+                                                            }}
+                                                        />
+                                                    </td>
+                                                    <td colSpan={2}>
+                                                        Border -{" "}
+                                                        <input
+                                                            value={
+                                                                matching.borderColour
+                                                            }
+                                                            placeholder="Border Colour"
+                                                            onChange={(e) => {
+                                                                let tempMatchings =
+                                                                    [
+                                                                        ...matchings,
+                                                                    ];
+                                                                tempMatchings[
+                                                                    key
+                                                                ].borderColour =
+                                                                    e.target.value.toUpperCase();
+                                                                setMatchings([
+                                                                    ...tempMatchings,
+                                                                ]);
+                                                            }}
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </thead>
                                         </table>
                                     );
                                 })}

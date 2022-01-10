@@ -16,8 +16,9 @@ function SalesOrder() {
             await axios
                 .get("/salesorder")
                 .then(({ data }) => {
-                    setOrders(data);
-                    setSearchedOrders(data);
+                    console.log(data);
+                    setOrders(data.orders);
+                    setSearchedOrders(data.orders);
                     setLoad(false);
                 })
                 .catch((err) => {

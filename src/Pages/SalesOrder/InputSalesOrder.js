@@ -8,6 +8,8 @@ import handleFocus from "../../Util/handleFocus";
 function InputSalesOrder() {
     let yesDate = new Date();
     let [totalSarees, setTotalSarees] = useState(0);
+    let [totalAmount, setTotalAmount] = useState(0);
+    let [totalProgram, setTotalProgram] = useState(0);
 
     let [salesOrderDesigns, setSalesOrderDesigns] = useState([
         {
@@ -15,6 +17,9 @@ function InputSalesOrder() {
             pieces: 0,
             colour: "",
             shades: [],
+            machines: [],
+            machine: "",
+            repeat: 0,
         },
     ]);
     let [orderId, setOrderId] = useState("");
@@ -45,7 +50,6 @@ function InputSalesOrder() {
     let [intereststart, setIntereststart] = useState(0);
     let [orderstatus, setOrderstatus] = useState("");
     let [remarks, setRemarks] = useState("");
-
     let [load, setLoad] = useState(true);
 
     const updateOrderDate = () => {
@@ -124,10 +128,11 @@ function InputSalesOrder() {
                     designmatchingid: design.designmatchingid,
                     designfilename: design.designfilename,
                     rate: design.rate,
+                    repeat: design.repeat,
+                    machineno: design.machine,
+                    units: design.units,
                 });
             });
-
-            console.log(designs);
 
             await axios
                 .post("/salesorder/", {
@@ -168,16 +173,33 @@ function InputSalesOrder() {
     };
 
     useEffect(async () => {
-        let tempTotalSarees = 0;
+        let tempTotalSarees = 0,
+            tempTotalProgram = 0,
+            tempTotalAmount = 0;
         await salesOrderDesigns.map((catalogue) => {
-            if (catalogue.pieces) tempTotalSarees += parseInt(catalogue.pieces);
+            if (catalogue.pieces) {
+                tempTotalSarees += parseInt(catalogue.pieces);
+                if (catalogue.rate)
+                    tempTotalAmount +=
+                        parseInt(catalogue.pieces) * parseInt(catalogue.rate);
+                if (catalogue.repeat && catalogue.panes) {
+                    tempTotalProgram +=
+                        parseInt(catalogue.repeat) * parseInt(catalogue.panes);
+                }
+            }
         });
+        setTotalProgram(tempTotalProgram);
         setTotalSarees(tempTotalSarees);
+        setTotalAmount(tempTotalAmount);
     }, [salesOrderDesigns]);
 
     const updateCatalogue = async (e, index, property) => {
         let tempSalesOrderDesigns = salesOrderDesigns;
-        tempSalesOrderDesigns[index][property] = e.target.value.toUpperCase();
+        tempSalesOrderDesigns[index][property] = e.target.value;
+        if (property === "repeat")
+            tempSalesOrderDesigns[index].units =
+                tempSalesOrderDesigns[index].repeat *
+                tempSalesOrderDesigns[index].panes;
         if (index === tempSalesOrderDesigns.length - 1) await enterNew();
         setSalesOrderDesigns([...tempSalesOrderDesigns]);
     };
@@ -213,7 +235,7 @@ function InputSalesOrder() {
         setFirmId(null);
         firms.map((firm) => {
             if (firm.firmname === q) {
-                setPartyId(firm.firmid);
+                setFirmId(firm.firmid);
             }
         });
     };
@@ -253,28 +275,27 @@ function InputSalesOrder() {
     }, [agentId]);
 
     const onUpdateCatalogueNo = async (e, index) => {
-        let selectedCatalogueNo = e.target.value.toUpperCase();
+        let selectedCatalogueNo = e.target.value;
+        selectedCatalogueNo = selectedCatalogueNo.split("/");
         let tempSalesOrderDesigns = salesOrderDesigns;
         tempSalesOrderDesigns[index].cataloguename = selectedCatalogueNo;
         await catalogues.map((catalogue) => {
-            console.log(
-                catalogue.catalogueno.toString() === selectedCatalogueNo,
-                catalogue.catalogueno.toString(),
-                selectedCatalogueNo
-            );
-            if (catalogue.catalogueno.toString() === selectedCatalogueNo) {
+            if (
+                catalogue.catalogueno.toString() ===
+                selectedCatalogueNo[0].trim()
+            ) {
                 tempSalesOrderDesigns[index].catalogueno =
                     catalogue.catalogueno;
                 tempSalesOrderDesigns[index].rate = catalogue.manufacturerprice;
-                fetchShades(catalogue.catalogueno, index);
+                fetchShades(catalogue.designno, index);
             }
         });
         setSalesOrderDesigns([...tempSalesOrderDesigns]);
     };
 
-    const fetchShades = async (catalogueNo, index) => {
+    const fetchShades = async (designno, index) => {
         await axios
-            .get(`/salesorder/catalogue/${catalogueNo}`)
+            .get(`/salesorder/catalogue/${designno}`)
             .then((res) => {
                 let tempSalesOrderDesigns = salesOrderDesigns;
                 tempSalesOrderDesigns[index].shades = res.data;
@@ -288,14 +309,48 @@ function InputSalesOrder() {
 
     const onUpdateShade = async (e, index) => {
         let tempSalesOrderDesigns = salesOrderDesigns;
-        tempSalesOrderDesigns[index].tempshade = e.target.value.toUpperCase();
+        let selectedShade = e.target.value;
+        tempSalesOrderDesigns[index].tempshade = selectedShade;
         if (tempSalesOrderDesigns[index].shades)
             await tempSalesOrderDesigns[index].shades.map((shade) => {
-                if (shade.shadeno === e.target.value.toUpperCase()) {
+                let str = `${shade.matchingcode} / ${shade.bodycolour} / ${shade.bordercolour} / ${shade.designfilename}`;
+                if (str === selectedShade) {
                     tempSalesOrderDesigns[index].designfilename =
                         shade.designfilename;
                     tempSalesOrderDesigns[index].designmatchingid =
                         shade.designmatchingid;
+                    fetchMachines(shade.designfilename, index);
+                }
+            });
+        setSalesOrderDesigns([...tempSalesOrderDesigns]);
+    };
+
+    const fetchMachines = async (designfilename, index) => {
+        await axios
+            .get(`/salesorder/machine/${designfilename}`)
+            .then((res) => {
+                let tempSalesOrderDesigns = salesOrderDesigns;
+                tempSalesOrderDesigns[index].machines = res.data;
+                console.log(res.data);
+                setSalesOrderDesigns([...tempSalesOrderDesigns]);
+            })
+            .catch((err) => {
+                catchAxiosError(err);
+            });
+    };
+
+    const onUpdateMachine = async (e, index) => {
+        let tempSalesOrderDesigns = salesOrderDesigns;
+        let selectedMachine = e.target.value;
+        tempSalesOrderDesigns[index].tempmachine = selectedMachine;
+        if (tempSalesOrderDesigns[index].machines)
+            await tempSalesOrderDesigns[index].machines.map((machine) => {
+                if (machine.machineno === parseInt(selectedMachine)) {
+                    tempSalesOrderDesigns[index].machine = machine.machineno;
+                    tempSalesOrderDesigns[index].panes = machine.panes;
+                    tempSalesOrderDesigns[index].units =
+                        tempSalesOrderDesigns[index].repeat *
+                        tempSalesOrderDesigns[index].panes;
                 }
             });
         setSalesOrderDesigns([...tempSalesOrderDesigns]);
@@ -452,22 +507,37 @@ function InputSalesOrder() {
 
                     <table
                         className="table table-bordered table-hover table-responsive"
-                        style={{ margin: "50px 10%", width: "80%" }}
+                        style={{ margin: "50px 5%", width: "90%" }}
                     >
+                        <colgroup>
+                            <col style={{ width: "2%" }} />
+                            <col style={{ width: "15%" }} />
+                            <col style={{ width: "15%" }} />
+                            <col style={{ width: "10%" }} />
+                            <col style={{ width: "10%" }} />
+                            <col style={{ width: "33%" }} />
+                            <col style={{ width: "3%" }} />
+                            <col style={{ width: "5%" }} />
+                            <col style={{ width: "5%" }} />
+                            <col style={{ width: "2%" }} />
+                            <col />
+                        </colgroup>
+
                         <tbody>
                             <tr>
-                                <th>Sr. No.</th>
+                                <th>Sr.</th>
                                 <th>Catalogue No.</th>
                                 <th>Colour</th>
                                 <th>Pieces</th>
                                 <th>Rate</th>
-                                <th>
+                                <th>Design File</th>
+                                <th>Machine</th>
+                                <th>Repeat</th>
+                                <th>Prod.</th>
+                                <th style={{ width: "2000px" }}>
                                     {salesOrderDesigns.length > 0 && (
                                         <button
-                                            style={{
-                                                display: "flex",
-                                                justifyContent: "center",
-                                            }}
+                                            className="btn btn-outline-primary"
                                             type="button"
                                             onClick={enterNew}
                                         >
@@ -478,8 +548,9 @@ function InputSalesOrder() {
                             </tr>
                             {salesOrderDesigns.length === 0 && (
                                 <tr>
-                                    <td colSpan="5">
+                                    <td colSpan="10">
                                         <button
+                                            className="btn btn-outline-primary"
                                             style={{
                                                 display: "flex",
                                                 justifyContent: "center",
@@ -500,6 +571,7 @@ function InputSalesOrder() {
                                             <td>{index + 1}</td>
                                             <td>
                                                 <input
+                                                    size="15"
                                                     id={`${index}catalogueno`}
                                                     list="cataloguelist"
                                                     onChange={(e) => {
@@ -547,7 +619,7 @@ function InputSalesOrder() {
                                                         salesOrderDesign.shades.map(
                                                             (singleShade) => (
                                                                 <option
-                                                                    value={`${singleShade.matchingcode} - ${singleShade.bodycolour} - ${singleShade.bordercolour}`}
+                                                                    value={`${singleShade.matchingcode} / ${singleShade.bodycolour} / ${singleShade.bordercolour} / ${singleShade.designfilename}`}
                                                                 />
                                                             )
                                                         )}
@@ -555,7 +627,8 @@ function InputSalesOrder() {
                                             </td>
                                             <td>
                                                 <input
-                                                    type="number"
+                                                    type="text"
+                                                    size="5"
                                                     placeholder="Enter Pieces..."
                                                     onChange={(e) =>
                                                         updateCatalogue(
@@ -571,7 +644,7 @@ function InputSalesOrder() {
                                             </td>
                                             <td>
                                                 <input
-                                                    type="number"
+                                                    size="10"
                                                     placeholder="Enter Rate..."
                                                     onChange={(e) =>
                                                         updateCatalogue(
@@ -586,12 +659,65 @@ function InputSalesOrder() {
                                                 />
                                             </td>
                                             <td>
-                                                <button
-                                                    style={{
-                                                        display: "flex",
-                                                        justifyContent:
-                                                            "center",
+                                                {
+                                                    salesOrderDesign.designfilename
+                                                }
+                                            </td>
+
+                                            <td>
+                                                <input
+                                                    size="5"
+                                                    id={`${index}machine`}
+                                                    list="machinelist"
+                                                    onChange={(e) => {
+                                                        onUpdateMachine(
+                                                            e,
+                                                            index
+                                                        );
                                                     }}
+                                                    value={
+                                                        salesOrderDesign.tempmachine
+                                                    }
+                                                    autoCapitalize
+                                                    placeholder="M/c"
+                                                />
+
+                                                <datalist id="machinelist">
+                                                    {salesOrderDesign.machines &&
+                                                        salesOrderDesign
+                                                            .machines.length >
+                                                            0 &&
+                                                        salesOrderDesign.machines.map(
+                                                            (machine) => (
+                                                                <option
+                                                                    value={
+                                                                        machine.machineno
+                                                                    }
+                                                                />
+                                                            )
+                                                        )}
+                                                </datalist>
+                                            </td>
+                                            <td>
+                                                <input
+                                                    size="5"
+                                                    placeholder="Repeat..."
+                                                    onChange={(e) =>
+                                                        updateCatalogue(
+                                                            e,
+                                                            index,
+                                                            "repeat"
+                                                        )
+                                                    }
+                                                    value={
+                                                        salesOrderDesign.repeat
+                                                    }
+                                                />
+                                            </td>
+                                            <td>{salesOrderDesign.units}</td>
+                                            <td>
+                                                <button
+                                                    className="btn btn-outline-danger"
                                                     type="button"
                                                     onClick={() => {
                                                         removeElement(index);
@@ -607,6 +733,7 @@ function InputSalesOrder() {
                             <tr>
                                 <td colSpan="3"></td>
                                 <td>{totalSarees}</td>
+                                <td>{totalAmount}</td>
                             </tr>
                         </tbody>
                     </table>

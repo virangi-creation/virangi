@@ -264,6 +264,7 @@ function UpdateMachineProgram() {
             }
         });
     }, [designMatchingId]);
+    let feederTypeList = ["", "Body", "Border", "Meena"];
 
     return (
         <div>
@@ -493,7 +494,22 @@ function UpdateMachineProgram() {
                                     <td>Yarn Shade</td>
                                 </tr>
                             </thead>
-                            <MatchingTable feeders={selectedMatching} />
+                            <tbody>
+                                {selectedMatching.map((feeder, index) => (
+                                    <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td>
+                                            {feederTypeList[feeder.feedertype]}
+                                        </td>
+                                        <td>{feeder.pick}</td>
+                                        <td>{feeder.yarnqualityname}</td>
+                                        <td>
+                                            {feeder.shade} / {feeder.colour} /{" "}
+                                            {feeder.partyname}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
                         </table>
                     )}
                 </form>

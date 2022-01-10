@@ -4,7 +4,6 @@ import buttonStyles from "../../Modules/Button.module.css";
 import { useHistory } from "react-router-dom";
 import catchAxiosError from "../../Util/catchAxiosError.js";
 import handleFocus from "../../Util/handleFocus.js";
-import MatchingTable from "../Matching/MatchingTable.js";
 
 function InputMachineProgram() {
     const [programType, setProgramType] = useState("production");
@@ -221,6 +220,7 @@ function InputMachineProgram() {
         if (selectedMatching.length > 0)
             document.getElementById("repeat").focus();
     }, [selectedMatching]);
+    let feederTypeList = ["", "Body", "Border", "Meena"];
 
     return (
         <div>
@@ -450,7 +450,23 @@ function InputMachineProgram() {
                                     <td>Yarn Shade</td>
                                 </tr>
                             </thead>
-                            <MatchingTable feeders={selectedMatching} />
+
+                            <tbody>
+                                {selectedMatching.map((feeder, index) => (
+                                    <tr key={index}>
+                                        <td>{index + 1}</td>
+                                        <td>
+                                            {feederTypeList[feeder.feedertype]}
+                                        </td>
+                                        <td>{feeder.pick}</td>
+                                        <td>{feeder.yarnqualityname}</td>
+                                        <td>
+                                            {feeder.shade} / {feeder.colour} /{" "}
+                                            {feeder.partyname}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
                         </table>
                     )}
                 </form>

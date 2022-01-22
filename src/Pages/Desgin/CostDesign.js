@@ -32,7 +32,7 @@ function CostDesign() {
                             >
                                 <Link
                                     to={{
-                                        pathname: "/design/add/similar",
+                                        pathname: "/design/update",
                                         state: {
                                             designfilename:
                                                 design.designfilename,

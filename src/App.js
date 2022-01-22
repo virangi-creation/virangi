@@ -6,12 +6,12 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [user, setUser] = useState({});
-    useEffect(() => {
-        setLoggedIn(JSON.parse(window.localStorage.getItem("loggedIn")));
-        setUser(JSON.parse(window.localStorage.getItem("rjuser")));
-    }, []);
+    const [loggedIn, setLoggedIn] = useState(
+        JSON.parse(window.localStorage.getItem("loggedIn"))
+    );
+    const [user, setUser] = useState(
+        JSON.parse(window.localStorage.getItem("rjuser"))
+    );
 
     useEffect(() => {
         window.localStorage.setItem("loggedIn", loggedIn);

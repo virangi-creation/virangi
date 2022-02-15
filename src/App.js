@@ -6,12 +6,15 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
-    const [loggedIn, setLoggedIn] = useState(
-        JSON.parse(window.localStorage.getItem("loggedIn"))
-    );
-    const [user, setUser] = useState(
-        JSON.parse(window.localStorage.getItem("rjuser"))
-    );
+    let loggedInObject = JSON.parse(window.localStorage.getItem("loggedIn"));
+    let rjUserObject = JSON.parse(window.localStorage.getItem("rjuser"));
+
+    if (!loggedInObject) loggedInObject = false;
+
+    if (!rjUserObject) rjUserObject = {};
+
+    const [loggedIn, setLoggedIn] = useState(loggedInObject);
+    const [user, setUser] = useState(rjUserObject);
 
     useEffect(() => {
         window.localStorage.setItem("loggedIn", loggedIn);

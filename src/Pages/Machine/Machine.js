@@ -122,8 +122,14 @@ function Machine() {
                         )}
                         {searchedMachines.length !== 0 &&
                             searchedMachines.map((machine) => {
+                                let styleObject = {};
+                                if (machine.timeRequired < 48)
+                                    styleObject = { backgroundColor: "orange" };
                                 return (
-                                    <tr key={machine.machineno}>
+                                    <tr
+                                        key={machine.machineno}
+                                        style={styleObject}
+                                    >
                                         <td>{machine.machineno}</td>
                                         <td>{machine.panes}</td>
                                         <td>{machine.jacquardhooks}</td>

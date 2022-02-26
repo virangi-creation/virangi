@@ -23,6 +23,7 @@ function CostDesign() {
                         <td>{design.designfilename}</td>
                         <td>{design.designdescription}</td>
                         <td>{design.qualityname}</td>
+                        <td>{design.manufacturersellprice}</td>
                         <td>{design.totalamountdesign}</td>
                         <td>{design.sellprice}</td>
                         <td className={tableStyles.tableButton}>
@@ -191,6 +192,7 @@ function CostDesign() {
                             <th>Design File Name</th>
                             <th>Description</th>
                             <th>Quality</th>
+                            <th>Manuf. Sell Price</th>
                             <th>Total Amount</th>
                             <th>Sell Price</th>
                             <th></th>

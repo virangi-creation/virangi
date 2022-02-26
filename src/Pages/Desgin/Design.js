@@ -16,6 +16,7 @@ function Design() {
         if (searchedDesigns.length > 0) {
             let tempContent = "";
             tempContent = await searchedDesigns.map((design) => {
+                console.log(design);
                 return (
                     <tr key={design.designfilename}>
                         <td>{design.catalogueno}</td>
@@ -23,6 +24,7 @@ function Design() {
                         <td>{design.designfilename}</td>
                         <td>{design.designdescription}</td>
                         <td>{design.qualityname}</td>
+                        <td>{design.manufacturersellprice}</td>
                         <td>{design.totalamountdesign}</td>
                         <td>{design.sellprice}</td>
                         <td className={tableStyles.tableButton}>
@@ -191,6 +193,7 @@ function Design() {
                             <th>Design File Name</th>
                             <th>Description</th>
                             <th>Quality</th>
+                            <th>Manuf. Sell Price</th>
                             <th>Total Amount</th>
                             <th>Sell Price</th>
                             <th></th>
